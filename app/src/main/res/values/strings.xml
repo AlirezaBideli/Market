@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Market</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="newest">جدیدترین ها</string>
+    <string name="most_visited">پربازدید ترین ها</string>
+    <string name="bests">بهترین ها</string>
+    <string name="default_userName">علیرضا بیدلی</string>
+
+
+    <string name="products_categories">دسته بندی محصولات</string>
+    <string name="digital_product">کالای دیجیتال</string>
+    <string name="camera">دوربین</string>
+    <string name="mobile">گوشی موبایل</string>
+    <string name="laptop">لپ تاپ</string>
+    <string name="cloths_and_fashion">مد و پوشاک</string>
+    <string name="feminine">زنانه</string>
+    <string name="sport">ورزش</string>
+    <string name="sport_shoes">کفش ورزشی</string>
+    <string name="bicycle_and_peripherals">دوچرخه و لوازم حانبی</string>
+    <string name="mountaineering_and_camping">کوه نوردی و کمپینگ</string>
+    <string name="home">خانه</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
