@@ -9,7 +9,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.CategoryFragment;
 import com.example.market.interfaces.ActivityStart;
-import com.example.market.model.Catagory;
+import com.example.market.model.Category;
 import com.example.market.model.ProductLab;
 import com.google.android.material.tabs.TabLayout;
 
@@ -28,7 +28,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     private TabLayout mTabLayout;
     private ViewPager mCatagoryPager;
     private List<String> mCatagoryTitles;
-    private List<Catagory> mCatagories;
+    private List<Category> mCatagories;
     private ProductLab mProductLab;
     private LottieAnimationView mLoading;
     private AsyncTask mCategoryTask = ProductLab.getInstance().getCategoryTask();

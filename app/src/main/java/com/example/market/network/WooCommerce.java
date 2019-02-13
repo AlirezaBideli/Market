@@ -2,7 +2,7 @@ package com.example.market.network;
 
 import android.util.Log;
 
-import com.example.market.model.Catagory;
+import com.example.market.model.Category;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -16,14 +16,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class WooCommerce {
 
     private static final String TAG = "NetworkClass";
 
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
+    public static byte[] getUrlBytes(String urlSpec) throws IOException {
 
         URL url = new URL(urlSpec);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -56,13 +55,13 @@ public class WooCommerce {
         return null;
     }
 
-    public String getUrlString(String urlSpec) throws IOException {
+    public static String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<Catagory> getCategories() throws IOException {
-        List<Catagory> catagories = new ArrayList<>();
-        String url = UrlHelper.CATAGORIES_URL;
+    public static List<Category> getCategories() throws IOException {
+        List<Category> catagories = new ArrayList<>();
+        String url = UrlHelper.CATEGORIES_URL;
         String result = getUrlString(url);
         try {
             JSONArray jsonBody = new JSONArray(result);
@@ -70,7 +69,7 @@ public class WooCommerce {
 
             Gson gson = new Gson();
 
-            catagories = Arrays.asList(gson.fromJson(jsonBody.toString(), Catagory[].class));
+            catagories = Arrays.asList(gson.fromJson(jsonBody.toString(), Category[].class));
 
 
         } catch (JSONException e) {
@@ -79,6 +78,26 @@ public class WooCommerce {
 
         return catagories;
     }
+    public static List<Category> getSubCategories() throws IOException {
+        List<Category> catagories = new ArrayList<>();
+        String url = UrlHelper.ALL_SUB_CATEGORIES_URL;
+        String result = getUrlString(url);
+        try {
+            JSONArray jsonBody = new JSONArray(result);
+
+
+            Gson gson = new Gson();
+
+            catagories = Arrays.asList(gson.fromJson(jsonBody.toString(), Category[].class));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return catagories;
+    }
+
 
 
 }
