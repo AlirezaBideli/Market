@@ -10,16 +10,20 @@ public class Category {
     @SerializedName("name")
     private String mName;
     @SerializedName("image")
-    private String mImage;
+    private Image mImage;
+
+    public Image getImage() {
+        return mImage;
+    }
+
+
 
     public int getParent() {
         return mParent;
     }
 
 
-    public String getImage() {
-        return mImage;
-    }
+
 
 
     public int getId() {
@@ -32,4 +36,7 @@ public class Category {
     }
 
 
+
 }
+
+

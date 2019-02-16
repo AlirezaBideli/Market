@@ -13,14 +13,14 @@ public class ProductLab {
     public static final byte mSubCatagoryNum = 1;
     private static final ProductLab ourInstance = new ProductLab();
     private final AsyncTask mCategoryTask = new CatagoryTask().execute();
+    private AsyncTask mProductTask;
     private List<Category> mCatagories;
     private List<Category> mSubCategories;
+    private List<Product> mProducts;
     private List<String> mCatagoryTitles;
-    private List<Category> mAllCatagories;
 
     private ProductLab() {
 
-        mAllCatagories = new ArrayList<>();
         mCatagoryTitles = new ArrayList<>();
         mCatagories = new ArrayList<>();
 
@@ -30,9 +30,19 @@ public class ProductLab {
         return ourInstance;
     }
 
+    public List<Product> getProducts() {
+        return mProducts;
+    }
 
     public AsyncTask getCategoryTask() {
         return mCategoryTask;
+    }
+
+    public AsyncTask getProductsTask(int subCatId) {
+
+
+        mProductTask = new ProductTask().execute(subCatId);
+        return mProductTask;
     }
 
     public List<String> getCatagoryTitles() {
@@ -41,23 +51,22 @@ public class ProductLab {
         return mCatagoryTitles;
     }
 
-    public int getParentId(int catIndex)
-    {
+    public int getParentId(int catIndex) {
         //because the first category name is Uncategorized
-        return mCatagories.get(catIndex+1).getId();
+        return mCatagories.get(catIndex).getId();
     }
-    public List<Category> getUniqueSubCategory(int parentId)
-    {
-        List<Category> result=new ArrayList<>();
 
-        for (int i=0;i<mSubCategories.size();i++)
-        {
-            Category subCategory=mSubCategories.get(i);
-            if (subCategory.getParent()==parentId)
+    public List<Category> getUniqueSubCategory(int parentId) {
+        List<Category> result = new ArrayList<>();
+
+        for (int i = 0; i < mSubCategories.size(); i++) {
+            Category subCategory = mSubCategories.get(i);
+            if (subCategory.getParent() == parentId)
                 result.add(subCategory);
         }
         return result;
     }
+
     public List<Category> getCategories() {
 
 
@@ -70,6 +79,28 @@ public class ProductLab {
         return mSubCategories;
     }
 
+    private class ProductTask extends AsyncTask<Integer, Void, List<Product>> {
+
+        @Override
+        protected List<Product> doInBackground(Integer... integers) {
+            int subCatId = integers[0];
+            List<Product> products = new ArrayList<>();
+            try {
+                products = WooCommerce.getProducts(subCatId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return products;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<Product> products) {
+            super.onPostExecute(products);
+            mProducts = products;
+
+        }
+    }
 
     private class CatagoryTask extends AsyncTask<Void, List<Category>, List<Category>> {
 
@@ -80,7 +111,7 @@ public class ProductLab {
             List<Category> sub_catagories = new ArrayList<>();
 
             try {
-                sub_catagories=WooCommerce.getSubCategories();
+                sub_catagories = WooCommerce.getSubCategories();
                 publishProgress(sub_catagories);
                 catagories = WooCommerce.getCategories();
             } catch (IOException e) {
@@ -92,16 +123,15 @@ public class ProductLab {
         @Override
         protected void onProgressUpdate(List<Category>... values) {
             super.onProgressUpdate(values);
-            mSubCategories=values[0];
+            mSubCategories = values[0];
         }
 
         @Override
         protected void onPostExecute(List<Category> catagories) {
             super.onPostExecute(catagories);
-            //The first index in Api in Uncategorized
-            //so it is not necessary
+
             String name;
-            for (int i = 1; i < catagories.size(); i++) {
+            for (int i = 0; i < catagories.size(); i++) {
                 name = catagories.get(i).getName();
                 mCatagoryTitles.add(name);
             }

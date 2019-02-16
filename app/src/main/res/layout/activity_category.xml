@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
+    android:layoutDirection="rtl"
+    android:id="@+id/container_CategoryA"
     tools:context=".controllers.activity.CategoryActivity">
 
 
@@ -57,6 +58,16 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"/>
 
+    <FrameLayout
+        android:id="@+id/container_frame_categoryA"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"></FrameLayout>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager_category_CategoryA"
         android:layout_width="0dp"

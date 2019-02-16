@@ -27,4 +27,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="untitled">Untitled</string>
+    <string name="details">مشخصات</string>
+    <string name="users_comments">نظرات کاربران</string>
+    <string name="description">توضیحات</string>
+    <string name="price">قیمت</string>
+    <string name="not_found">موردی یافت نشد!!!</string>
 </resources>

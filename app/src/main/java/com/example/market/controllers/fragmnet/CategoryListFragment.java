@@ -1,7 +1,9 @@
 package com.example.market.controllers.fragmnet;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.market.R;
-import com.example.market.interfaces.FragmentStart;
 import com.example.market.model.Category;
+import com.example.market.model.Image;
 import com.example.market.model.ProductLab;
 import com.squareup.picasso.Picasso;
 
@@ -24,33 +26,53 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoryFragment extends Fragment implements FragmentStart {
+public class CategoryListFragment extends ParentFragment {
 
     //Position of category tab
     private static final String ARG_TAB_POSITION = "tab_position";
+    private static final String TAG = "CategoryList";
     private ProductLab mProductLab = ProductLab.getInstance();
     private List<Category> mSubCatagories;
     private RecyclerView mRecyclerView;
-
-    public CategoryFragment() {
+    private CallBacks mCallBacks;
+    private CategoryAdapter mCategoryAdapter;
+    public CategoryListFragment() {
         // Required empty public constructor
     }
 
-    public static CategoryFragment newInstance(int tabPosition) {
+    public static CategoryListFragment newInstance(int tabPosition) {
 
         Bundle args = new Bundle();
         args.putInt(ARG_TAB_POSITION, tabPosition);
-        CategoryFragment fragment = new CategoryFragment();
+        CategoryListFragment fragment = new CategoryListFragment();
         fragment.setArguments(args);
 
         return fragment;
     }
 
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CallBacks)
+            mCallBacks = (CallBacks) context;
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBacks = null;
+        Log.i(TAG, "OnDetach");
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_category_list, container, false);
         findViewByIds(view);
         variableInit();
         setListeners();
@@ -78,10 +100,15 @@ public class CategoryFragment extends Fragment implements FragmentStart {
     }
 
     private void setUpRecyclerView() {
-        CategoryAdapter categoryAdapter = new CategoryAdapter(mSubCatagories);
+        mCategoryAdapter = new CategoryAdapter(mSubCatagories);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(categoryAdapter);
+        mRecyclerView.setAdapter(mCategoryAdapter);
+    }
+
+
+    public interface CallBacks {
+        void gotToProductList(int subCatId);
     }
 
     private class CategoryHolder extends RecyclerView.ViewHolder {
@@ -90,15 +117,32 @@ public class CategoryFragment extends Fragment implements FragmentStart {
 
         public CategoryHolder(@NonNull View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.image_img_Categoryitem);
-            mTxtCategory = itemView.findViewById(R.id.name_txt_Categoryitem);
+            mImageView = itemView.findViewById(R.id.image_img_Producttem);
+            mTxtCategory = itemView.findViewById(R.id.name_txt_Productitem);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Category category = mCategoryAdapter.getCategories()
+                            .get(getAdapterPosition());
+
+                    mCallBacks.gotToProductList(category.getId());
+
+                }
+            });
         }
 
         public void bind(Category category) {
             mTxtCategory.setText(category.getName());
-            Picasso.get().load(category.getImage())
-                    .placeholder(R.drawable.shop_placeholder)
-                    .into(mImageView);
+            Image image = category.getImage();
+
+
+            if (image != null) {
+                Picasso.get().load(category.getImage().getSrc())
+                        .placeholder(R.drawable.shop_placeholder)
+                        .into(mImageView);
+            } else
+                mImageView.setImageResource(R.drawable.shop_placeholder);
         }
     }
 
@@ -108,6 +152,10 @@ public class CategoryFragment extends Fragment implements FragmentStart {
 
         public CategoryAdapter(List<Category> categories) {
             mCategories = categories;
+        }
+
+        public List<Category> getCategories() {
+            return mCategories;
         }
 
         public void setCategories(List<Category> categories) {
@@ -133,6 +181,5 @@ public class CategoryFragment extends Fragment implements FragmentStart {
             return mCategories.size();
         }
     }
-
 
 }
