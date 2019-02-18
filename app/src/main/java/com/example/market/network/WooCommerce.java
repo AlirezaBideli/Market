@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.market.model.Category;
 import com.example.market.model.Product;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,19 +100,34 @@ public class WooCommerce {
         return catagories;
     }
 
-    public static List<Product> getProducts(int subCatId) throws IOException {
+    public static List<Product> getCatProducts(int subCatId) throws IOException {
         List<Product> productList = new ArrayList<>();
         String url = UrlHelper.getCategoryProducts(subCatId);
         String result = getUrlString(url);
         try {
-            JSONArray jsonBody=new JSONArray(result);
-            Gson gson=new Gson();
-            productList=Arrays.asList(gson.fromJson(jsonBody.toString(),Product[].class));
+            JSONArray jsonBody = new JSONArray(result);
+            Gson gson = new Gson();
+            productList = Arrays.asList(gson.fromJson(jsonBody.toString(), Product[].class));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return productList;
+    }
+
+    public static List<Product> getNewstProducts() throws IOException {
+        List<Product> newestProducts = new ArrayList<>();
+        String url = UrlHelper.NEWEST_PRODUCTS_URL;
+        String result = getUrlString(url);
+        try {
+            JSONArray jsonBody = new JSONArray(result);
+            Gson gson = new Gson();
+            newestProducts = Arrays.asList(gson.fromJson(jsonBody.toString(), Product[].class));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return newestProducts;
     }
 
 

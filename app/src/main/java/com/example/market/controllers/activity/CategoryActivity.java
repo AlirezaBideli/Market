@@ -49,9 +49,9 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_category);
-
-
         findViewByIds();
 
 
@@ -147,7 +147,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
         mHandler.removeCallbacks(mCategoriesRunable);
 
-        final AsyncTask productsTask = mProductLab.getProductsTask(subCatId);
+        final AsyncTask productsTask = mProductLab.getCatProductsTask(subCatId);
 
         final Runnable productsRunnable = new Runnable() {
             @Override

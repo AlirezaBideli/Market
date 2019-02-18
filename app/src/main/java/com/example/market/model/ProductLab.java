@@ -6,6 +6,8 @@ import com.example.market.network.WooCommerce;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ProductLab {
@@ -13,10 +15,17 @@ public class ProductLab {
     public static final byte mSubCatagoryNum = 1;
     private static final ProductLab ourInstance = new ProductLab();
     private final AsyncTask mCategoryTask = new CatagoryTask().execute();
+
+    //AsyncTasks
+    private AsyncTask mCatProductTask;
     private AsyncTask mProductTask;
+    //Lists
     private List<Category> mCatagories;
     private List<Category> mSubCategories;
     private List<Product> mProducts;
+    private List<Product> mNewestProducts;//newest products list
+    private List<Product> mMVisitedProducts;//most visited products list
+    private List<Product> mBProducts;//best products list
     private List<String> mCatagoryTitles;
 
     private ProductLab() {
@@ -30,6 +39,11 @@ public class ProductLab {
         return ourInstance;
     }
 
+    public AsyncTask getProductTask() {
+        mProductTask = new ProductsTask().execute();
+        return mProductTask;
+    }
+
     public List<Product> getProducts() {
         return mProducts;
     }
@@ -38,11 +52,11 @@ public class ProductLab {
         return mCategoryTask;
     }
 
-    public AsyncTask getProductsTask(int subCatId) {
+    public AsyncTask getCatProductsTask(int subCatId) {
 
 
-        mProductTask = new ProductTask().execute(subCatId);
-        return mProductTask;
+        mCatProductTask = new CatProductsTask().execute(subCatId);
+        return mCatProductTask;
     }
 
     public List<String> getCatagoryTitles() {
@@ -79,14 +93,63 @@ public class ProductLab {
         return mSubCategories;
     }
 
-    private class ProductTask extends AsyncTask<Integer, Void, List<Product>> {
+    public List<Product> getNewestProducts() {
+        return mNewestProducts;
+    }
+
+    public List<Product> getMVisitedProducts() {
+        mMVisitedProducts=new ArrayList<>();
+        mMVisitedProducts.addAll(mNewestProducts);
+
+        Collections.sort(mMVisitedProducts,new Comparator<Product>() {
+            @Override
+            public int compare(Product product, Product t1) {
+                int count1=Integer.parseInt(product.getRating_count());
+                int count2=Integer.parseInt(t1.getRating_count());
+                if (count1>count2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+        });
+
+         return mMVisitedProducts;
+    }
+
+    public List<Product> getBProducts() {
+        mBProducts=new ArrayList<>();
+        mBProducts.addAll(mNewestProducts);
+        Collections.sort(mBProducts, new Comparator<Product>() {
+            @Override
+            public int compare(Product product, Product t1) {
+                float count1=Float.parseFloat(product.getAverage_rating());
+                float count2=Float.parseFloat(t1.getAverage_rating());
+                if (count1>count2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+        });
+        return mBProducts;
+    }
+
+    public enum ProductType {
+
+        NEWEST,
+        MOST_VISITED,
+        BEST_SELLERS
+    }
+
+    private class CatProductsTask extends AsyncTask<Integer, Void, List<Product>> {
 
         @Override
         protected List<Product> doInBackground(Integer... integers) {
             int subCatId = integers[0];
             List<Product> products = new ArrayList<>();
             try {
-                products = WooCommerce.getProducts(subCatId);
+                products = WooCommerce.getCatProducts(subCatId);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -100,6 +163,31 @@ public class ProductLab {
             mProducts = products;
 
         }
+    }
+
+    private class ProductsTask extends AsyncTask<Void, Void, Void> {
+
+        private List<Product> newestProducts;//newest products list
+        private List<Product> mVisitedProducts;//most visited products list
+        private List<Product> bProducts;//best products list
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+
+                newestProducts = WooCommerce.getNewstProducts();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mNewestProducts = newestProducts;
+        }
+
     }
 
     private class CatagoryTask extends AsyncTask<Void, List<Category>, List<Category>> {
@@ -140,5 +228,6 @@ public class ProductLab {
 
         }
     }
-
 }
+
+

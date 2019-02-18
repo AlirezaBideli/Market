@@ -24,6 +24,18 @@ public class UrlHelper {
     //URLs
 
 
+    //because the default order is descending
+    //and default order_by is according to Date
+    //we don't append order and order_by QueryParameters
+    public static final String NEWEST_PRODUCTS_URL = Uri.parse(MAIN_URL)
+            .buildUpon()
+            .appendEncodedPath("products")
+            .appendQueryParameter(CONSUMER_KEY_K, CONSUMER_KEY_V)
+            .appendQueryParameter(CONSUMER_SECRET_K, CONSUMER_SECRET_V)
+            .appendQueryParameter(COUNT_CONDITION_K, COUNT_CONDITION_V)
+            .build().toString();
+
+
     public static final String CATEGORIES_URL = Uri.parse(MAIN_URL)
             .buildUpon()
             .appendEncodedPath("products/categories")
@@ -41,16 +53,6 @@ public class UrlHelper {
             .appendQueryParameter(COUNT_CONDITION_K, COUNT_CONDITION_V)
             .build().toString() + "&" + CATEGORY_CONDITION_K + "!=0";
 
-
-
-    public static final String PRODUCTS_URL = Uri.parse(MAIN_URL)
-            .buildUpon()
-            .appendEncodedPath("products")
-            .appendQueryParameter(CONSUMER_KEY_K, CONSUMER_KEY_V)
-            .appendQueryParameter(CONSUMER_SECRET_K, CONSUMER_SECRET_V)
-            .build().toString();
-
-
     public static String getCategoryProducts(int subCatId) {
         return Uri.parse(MAIN_URL).buildUpon()
                 .appendEncodedPath("products")
@@ -59,6 +61,7 @@ public class UrlHelper {
                 .appendQueryParameter(PRODUCT_CATEGORY_K, subCatId + "")
                 .build().toString();
     }
+
 
 
 }
