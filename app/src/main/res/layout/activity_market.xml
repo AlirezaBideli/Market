@@ -9,10 +9,16 @@
     tools:openDrawer="start"
     android:layoutDirection="rtl">
 
-    <include
-        layout="@layout/app_bar_main"
+
+    <include layout="@layout/app_bar_main">
+
+    </include>
+    <FrameLayout
+        android:id="@+id/container_MarkerA"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
