@@ -17,6 +17,7 @@
         <activity
             android:name=".controllers.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +27,11 @@
         </activity>
         <activity
             android:name=".controllers.activity.CategoryActivity"
-            android:exported="false"
             android:parentActivityName=".controllers.activity.MarketActivity" />
-        <activity android:name=".controllers.activity.MarketActivity"
-            android:exported="false"></activity>
+        <activity android:name=".controllers.activity.MarketActivity" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".controllers.activity.MarketActivity" />
     </application>
 
 </manifest>
