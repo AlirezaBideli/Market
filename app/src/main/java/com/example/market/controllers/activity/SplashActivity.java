@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity implements ActivityStart {
         setContentView(R.layout.activity_splash);
 
         mAsyncTask = ProductLab.getInstance()
-                .getProductTask();
+                .getProductsTask();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

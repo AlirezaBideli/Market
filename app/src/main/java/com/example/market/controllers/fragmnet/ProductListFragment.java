@@ -1,7 +1,9 @@
 package com.example.market.controllers.fragmnet;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.market.R;
+import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.squareup.picasso.Picasso;
@@ -27,6 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ProductListFragment extends ParentFragment {
 
 
+    //CallBack
+    private CallBacks mCallBacks;
+    //Arguments Tag
     private static final String ARG_SUBCAT_ID = "subCatId";
     //Widgets variables
     private RecyclerView mRecyProducts;
@@ -49,11 +55,22 @@ public class ProductListFragment extends ParentFragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CategoryActivity)
+            mCallBacks= (CallBacks) context;
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBacks=null;
+    }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,6 +136,16 @@ public class ProductListFragment extends ParentFragment {
             super(itemView);
             mTxtName = itemView.findViewById(R.id.name_txt_Productitem);
             mImgProduct = itemView.findViewById(R.id.image_img_Producttem);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Product product=mProducts.get(getAdapterPosition());
+                    final int id=product.getId();
+                    mCallBacks.showProductDetails(id);
+                }
+            });
         }
 
         public void bind(Product product) {
@@ -167,6 +194,12 @@ public class ProductListFragment extends ParentFragment {
         public int getItemCount() {
             return mProducts.size();
         }
+    }
+
+
+    public interface CallBacks
+    {
+        void showProductDetails(int id);
     }
 
 }

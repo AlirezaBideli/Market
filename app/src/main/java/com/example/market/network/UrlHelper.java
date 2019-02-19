@@ -53,12 +53,21 @@ public class UrlHelper {
             .appendQueryParameter(COUNT_CONDITION_K, COUNT_CONDITION_V)
             .build().toString() + "&" + CATEGORY_CONDITION_K + "!=0";
 
-    public static String getCategoryProducts(int subCatId) {
+    public static String getCatProductsURL(int subCatId) {
         return Uri.parse(MAIN_URL).buildUpon()
                 .appendEncodedPath("products")
                 .appendQueryParameter(CONSUMER_KEY_K, CONSUMER_KEY_V)
                 .appendQueryParameter(CONSUMER_SECRET_K, CONSUMER_SECRET_V)
                 .appendQueryParameter(PRODUCT_CATEGORY_K, subCatId + "")
+                .build().toString();
+    }
+
+
+    public static String getProductURL(int id) {
+        return Uri.parse(MAIN_URL).buildUpon()
+                .appendEncodedPath("products/"+id)
+                .appendQueryParameter(CONSUMER_KEY_K, CONSUMER_KEY_V)
+                .appendQueryParameter(CONSUMER_SECRET_K, CONSUMER_SECRET_V)
                 .build().toString();
     }
 

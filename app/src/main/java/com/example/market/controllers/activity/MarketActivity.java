@@ -1,38 +1,31 @@
 package com.example.market.controllers.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.market.R;
+import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
+import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.interfaces.ActivityStart;
 import com.example.market.interfaces.NetworkControll;
-import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.utils.ActivityHeper;
 import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
-        , NetworkControll, NavigationView.OnNavigationItemSelectedListener {
+        , NetworkControll, NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks,ProductFragment.CallBacks {
 
 
     //Widgets Variables
@@ -65,7 +58,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
 
     }
-
 
 
     @Override
@@ -129,4 +121,28 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     }
 
 
+    @Override
+    public void showProductDetails(int id) {
+        AsyncTask productTask= ProductLab.getInstance().getProductTask(id);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ProductFragment fragment = ProductFragment.newInstance(id);
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_MarkerA,fragment)
+                .commit();
+    }
+
+    @Override
+    public void showDetails(int id) {
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_MarkerA, DetailFragment.newInstance(id))
+                .commit();
+
+
+    }
 }

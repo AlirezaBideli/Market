@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class WooCommerce {
 
     public static List<Product> getCatProducts(int subCatId) throws IOException {
         List<Product> productList = new ArrayList<>();
-        String url = UrlHelper.getCategoryProducts(subCatId);
+        String url = UrlHelper.getCatProductsURL(subCatId);
         String result = getUrlString(url);
         try {
             JSONArray jsonBody = new JSONArray(result);
@@ -128,6 +129,22 @@ public class WooCommerce {
         }
 
         return newestProducts;
+    }
+
+    public static Product getUniqueProducts(int id) throws IOException {
+
+        Product product=null;
+        String url=UrlHelper.getProductURL(id);
+        String result=getUrlString(url);
+        try {
+            JSONObject jsonBody=new JSONObject(result);
+            Gson gson=new Gson();
+            product=gson.fromJson(jsonBody.toString(),Product.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return product;
     }
 
 

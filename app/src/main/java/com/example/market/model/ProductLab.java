@@ -16,8 +16,10 @@ public class ProductLab {
     private static final ProductLab ourInstance = new ProductLab();
     private final AsyncTask mCategoryTask = new CatagoryTask().execute();
 
+
     //AsyncTasks
     private AsyncTask mCatProductTask;
+    private AsyncTask mProductsTask;
     private AsyncTask mProductTask;
     //Lists
     private List<Category> mCatagories;
@@ -27,6 +29,9 @@ public class ProductLab {
     private List<Product> mMVisitedProducts;//most visited products list
     private List<Product> mBProducts;//best products list
     private List<String> mCatagoryTitles;
+
+    //Uniques
+    private Product mProduct;
 
     private ProductLab() {
 
@@ -39,9 +44,18 @@ public class ProductLab {
         return ourInstance;
     }
 
-    public AsyncTask getProductTask() {
-        mProductTask = new ProductsTask().execute();
+    public AsyncTask getProductTask(int id) {
+        mProductTask=new ProductTask().execute(id);
         return mProductTask;
+    }
+
+    public Product getUniqueProduct(int id) {
+        return mProduct;
+    }
+
+    public AsyncTask getProductsTask() {
+        mProductsTask = new ProductsTask().execute();
+        return mProductsTask;
     }
 
     public List<Product> getProducts() {
@@ -98,15 +112,15 @@ public class ProductLab {
     }
 
     public List<Product> getMVisitedProducts() {
-        mMVisitedProducts=new ArrayList<>();
+        mMVisitedProducts = new ArrayList<>();
         mMVisitedProducts.addAll(mNewestProducts);
 
-        Collections.sort(mMVisitedProducts,new Comparator<Product>() {
+        Collections.sort(mMVisitedProducts, new Comparator<Product>() {
             @Override
             public int compare(Product product, Product t1) {
-                int count1=Integer.parseInt(product.getRating_count());
-                int count2=Integer.parseInt(t1.getRating_count());
-                if (count1>count2)
+                int count1 = Integer.parseInt(product.getRating_count());
+                int count2 = Integer.parseInt(t1.getRating_count());
+                if (count1 > count2)
                     return 1;
                 else
                     return 0;
@@ -114,18 +128,18 @@ public class ProductLab {
             }
         });
 
-         return mMVisitedProducts;
+        return mMVisitedProducts;
     }
 
     public List<Product> getBProducts() {
-        mBProducts=new ArrayList<>();
+        mBProducts = new ArrayList<>();
         mBProducts.addAll(mNewestProducts);
         Collections.sort(mBProducts, new Comparator<Product>() {
             @Override
             public int compare(Product product, Product t1) {
-                float count1=Float.parseFloat(product.getAverage_rating());
-                float count2=Float.parseFloat(t1.getAverage_rating());
-                if (count1>count2)
+                float count1 = Float.parseFloat(product.getAverage_rating());
+                float count2 = Float.parseFloat(t1.getAverage_rating());
+                if (count1 > count2)
                     return 1;
                 else
                     return 0;
@@ -142,28 +156,6 @@ public class ProductLab {
         BEST_SELLERS
     }
 
-    private class CatProductsTask extends AsyncTask<Integer, Void, List<Product>> {
-
-        @Override
-        protected List<Product> doInBackground(Integer... integers) {
-            int subCatId = integers[0];
-            List<Product> products = new ArrayList<>();
-            try {
-                products = WooCommerce.getCatProducts(subCatId);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return products;
-        }
-
-
-        @Override
-        protected void onPostExecute(List<Product> products) {
-            super.onPostExecute(products);
-            mProducts = products;
-
-        }
-    }
 
     private class ProductsTask extends AsyncTask<Void, Void, Void> {
 
@@ -188,6 +180,50 @@ public class ProductLab {
             mNewestProducts = newestProducts;
         }
 
+    }
+
+    private class ProductTask extends AsyncTask<Integer, Void, Product> {
+
+        @Override
+        protected Product doInBackground(Integer... integers) {
+            int id = integers[0];
+            Product product = null;
+            try {
+                product = WooCommerce.getUniqueProducts(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return product;
+        }
+
+        @Override
+        protected void onPostExecute(Product product) {
+            super.onPostExecute(product);
+            mProduct = product;
+        }
+    }
+
+    private class CatProductsTask extends AsyncTask<Integer, Void, List<Product>> {
+
+        @Override
+        protected List<Product> doInBackground(Integer... integers) {
+            int subCatId = integers[0];
+            List<Product> products = new ArrayList<>();
+            try {
+                products = WooCommerce.getCatProducts(subCatId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return products;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<Product> products) {
+            super.onPostExecute(products);
+            mProducts = products;
+
+        }
     }
 
     private class CatagoryTask extends AsyncTask<Void, List<Category>, List<Category>> {

@@ -8,6 +8,8 @@ import android.view.View;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.CategoryListFragment;
+import com.example.market.controllers.fragmnet.DetailFragment;
+import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
 import com.example.market.interfaces.ActivityStart;
 import com.example.market.model.Category;
@@ -23,7 +25,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class CategoryActivity extends AppCompatActivity implements ActivityStart, CategoryListFragment.CallBacks {
+public class CategoryActivity extends AppCompatActivity implements ActivityStart
+        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks, ProductFragment.CallBacks {
 
     public static final String TAG = "CategoryActivity";
     Handler mHandler;
@@ -144,9 +147,12 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
 
         mHandler.removeCallbacks(mCategoriesRunable);
-
         final AsyncTask productsTask = mProductLab.getCatProductsTask(subCatId);
+        Fragment fragment = ProductListFragment.newInstance();
+        changePage(productsTask, fragment);
+    }
 
+    private void changePage(final AsyncTask productsTask, final Fragment fragment) {
         final Runnable productsRunnable = new Runnable() {
             @Override
             public void run() {
@@ -154,13 +160,15 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
                     mLoading.setVisibility(View.INVISIBLE);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.container_frame_categoryA, ProductListFragment.newInstance())
+                            .replace(R.id.container_frame_categoryA, fragment)
                             .commitAllowingStateLoss();
+
                 } else {
                     mLoading.setVisibility(View.VISIBLE);
+                    mHandler.postDelayed(this, 500);
                 }
 
-                mHandler.postDelayed(this, 500);
+
             }
         };
 
@@ -168,6 +176,26 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         mHandler.postDelayed(productsRunnable, 500);
         mCatagoryPager.setVisibility(View.INVISIBLE);
         mTabLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showProductDetails(int id) {
+
+
+        AsyncTask productTask = mProductLab.getProductTask(id);
+        Fragment fragment = ProductFragment.newInstance(id);
+        changePage(productTask, fragment);
+
+    }
+
+    @Override
+    public void showDetails(int id) {
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_frame_categoryA, DetailFragment.newInstance(id))
+                .commit();
+
+
     }
 /*
     @Override

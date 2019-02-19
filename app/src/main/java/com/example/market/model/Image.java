@@ -1,6 +1,6 @@
 package com.example.market.model;
 
-public class Image {
+ public class Image {
     private String src;
 
     public Image(String src) {

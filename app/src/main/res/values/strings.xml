@@ -26,8 +26,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="untitled">Untitled</string>
-    <string name="details">مشخصات</string>
+    <string name="untitled">بدون عنوان</string>
+    <string name="attributes">مشخصات</string>
     <string name="users_comments">نظرات کاربران</string>
     <string name="description">توضیحات</string>
     <string name="price">قیمت</string>
@@ -37,4 +37,9 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="market">Market</string>
+    <string name="product_name">نام محصول</string>
+    <string name="header_main_detail">مشخصات اصلی</string>
+    <string name="header_other_detail">سایر مشخصات</string>
+    <string name="weight">وزن</string>
+    <string name="dimensions_text">ابعاد</string>
 </resources>
