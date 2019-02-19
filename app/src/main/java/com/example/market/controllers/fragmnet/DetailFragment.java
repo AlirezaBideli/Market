@@ -92,14 +92,15 @@ public class DetailFragment extends ParentFragment {
     private class DetailHolder extends RecyclerView.ViewHolder {
 
         private TextView mTxtTitle, mTxtValue;
-        private TextView mTxtHeader, mTxtWeight, mTxtDimens;
+        private TextView mTxtMainHeader, mTxtOtherHeader, mTxtWeight, mTxtDimens;
 
         public DetailHolder(@NonNull View itemView) {
             super(itemView);
             if (mViewType == mMainHeader) {
-                mTxtHeader = itemView.findViewById(R.id.header_detaillItem);
+                mTxtMainHeader = itemView.findViewById(R.id.mainHeader_detaillItem);
                 mTxtWeight = itemView.findViewById(R.id.weight_detailItem);
                 mTxtDimens = itemView.findViewById(R.id.dimensions_detailItem);
+                mTxtOtherHeader =itemView.findViewById(R.id.otherHeader_detailFragmnet);
 
             } else {
                 mTxtTitle = itemView.findViewById(R.id.tittle_detailItem);
@@ -112,7 +113,8 @@ public class DetailFragment extends ParentFragment {
 
             if (mViewType == mMainHeader) {
 
-                mTxtHeader.setText(mHeaders[0]);
+                mTxtMainHeader.setText(mHeaders[0]);
+                mTxtOtherHeader.setText(mHeaders[1]);
                 mTxtWeight.setText(product.getWeight());
                 String length = product.getDimensions().getLength();
                 String width = product.getDimensions().getWidth();

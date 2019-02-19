@@ -42,4 +42,5 @@
     <string name="header_other_detail">سایر مشخصات</string>
     <string name="weight">وزن</string>
     <string name="dimensions_text">ابعاد</string>
+    <string name="add_to_shops">افزودن به سبد خرید</string>
 </resources>

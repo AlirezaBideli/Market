@@ -31,7 +31,7 @@
                 android:layout_marginBottom="8dp"
                 android:scaleType="fitXY"
 
-                android:src="@drawable/online_shoping"
+                android:src="@drawable/poster"
                 app:layout_constraintBottom_toTopOf="@+id/textView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
