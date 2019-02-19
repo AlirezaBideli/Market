@@ -3,18 +3,22 @@ package com.example.market.controllers.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
+import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.interfaces.ActivityStart;
-import com.example.market.interfaces.NetworkControll;
 import com.example.market.model.ProductLab;
 import com.example.market.utils.ActivityHeper;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,14 +29,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
-        , NetworkControll, NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks,ProductFragment.CallBacks {
+        , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
+        , ProductFragment.CallBacks {
 
 
+    //simple Variables
+    Handler mHandler=new Handler();
     //Widgets Variables
     private Toolbar mToolbar;
+    private FrameLayout mLoadingCover;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-
 
     @Override
     public Fragment createFragment() {
@@ -85,19 +92,24 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    @Override
-    public void checkConnection() {
-
-    }
 
     @Override
     public void onBackPressed() {
 
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            Fragment currentFragmnet = fragments.get(fragments.size() - 1);
+            if (currentFragmnet instanceof MarketFragment)
+                super.onBackPressed();
+            else
+                fragmentManager.beginTransaction()
+                        .remove(currentFragmnet)
+                        .commit();
+
     }
 
     @Override
@@ -123,26 +135,49 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showProductDetails(int id) {
-        AsyncTask productTask= ProductLab.getInstance().getProductTask(id);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ProductFragment fragment = ProductFragment.newInstance(id);
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container_MarkerA,fragment)
-                .commit();
+        mLoadingCover=findViewById(R.id.cover_marketA);
+        AsyncTask productTask = ProductLab.getInstance().getProductTask(id);
+        changePage(productTask,ProductFragment.newInstance(id));
     }
 
     @Override
     public void showDetails(int id) {
-        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container_MarkerA, DetailFragment.newInstance(id))
+                .add(R.id.container_MarkerA, DetailFragment.newInstance(id))
                 .commit();
 
 
+
     }
+
+
+    private void changePage(final AsyncTask productsTask, final Fragment fragment) {
+        final Runnable productsRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (productsTask.getStatus() == AsyncTask.Status.FINISHED) {
+                    mLoadingCover.setVisibility(View.INVISIBLE);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.container_MarkerA, fragment)
+                            .commitAllowingStateLoss();
+                    mHandler.removeCallbacks(this);
+
+                } else {
+                    mLoadingCover.setVisibility(View.VISIBLE);
+                    mHandler.postDelayed(this, 500);
+                }
+
+
+            }
+        };
+
+
+        mHandler.postDelayed(productsRunnable, 500);
+
+    }
+
+
+
 }

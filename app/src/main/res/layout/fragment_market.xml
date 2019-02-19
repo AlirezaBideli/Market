@@ -8,13 +8,12 @@
     tools:context=".controllers.activity.MarketActivity">
 
 
-
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:layout_marginTop="@dimen/app_bar"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +42,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/bests"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/recy_bests_MarketA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,9 +68,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/most_visited"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/recy_mostVisited_MarketA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +91,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/newest"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/recy_newest_MarketA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,5 +114,28 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/cover_marketA"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/app_bar"
+        android:background="@color/primaryTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loading_marketA"
+            android:layout_width="@dimen/loading"
+            android:layout_height="@dimen/loading"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
