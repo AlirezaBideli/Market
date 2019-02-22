@@ -1,12 +1,6 @@
 package com.example.market.controllers.activity;
-
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.widget.FrameLayout;
-
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.CategoryListFragment;
 import com.example.market.controllers.fragmnet.DetailFragment;
@@ -14,11 +8,9 @@ import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
 import com.example.market.interfaces.ActivityStart;
-import com.example.market.interfaces.NetworkControll;
+import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
-
 import java.util.List;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,8 +22,6 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
-    //Simple Variables
-    Handler mHandler;
     //widgets Variables
     private Toolbar mToolbar;
     //Widgets Variables
@@ -39,7 +29,6 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     private ProductLab mProductLab;
     private boolean mIsDownloadable = true;
     //AsyncTasks
-    private AsyncTask mCategoryTask = ProductLab.getInstance().getCategoryTask();
     private Runnable mCategoriesRunnable;
 
     @Override
@@ -53,32 +42,8 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mHandler = new Handler();
-        mHandler.postDelayed(mCategoriesRunnable, 500);
-    }
-
-    private void checkDataDownLoading(AsyncTask asyncTask, Fragment fragment) {
-        if (mIsDownloadable) {
-            if (asyncTask.getStatus() == AsyncTask.Status.FINISHED) {
 
 
-                variableInit();
-                mLoadingCover.setVisibility(View.INVISIBLE);
-                mIsDownloadable = false;
-                changePage(asyncTask, fragment);
-
-
-            } else {
-
-                mLoadingCover.setVisibility(View.VISIBLE);
-            }
-
-
-        }
-    }
 
     @Override
     public void findViewByIds() {
@@ -90,18 +55,11 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     @Override
     public void variableInit() {
+        FragmentManager fragmentManager=getSupportFragmentManager();
 
-
-        final Fragment fragment = ParentCatFragment.newInstance();
-        mProductLab = ProductLab.getInstance();
-        mCategoriesRunnable = new Runnable() {
-            @Override
-            public void run() {
-                checkDataDownLoading(mCategoryTask, fragment);
-                mHandler.postDelayed(this, 500);
-            }
-        };
-
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_CategoryA,ParentCatFragment.newInstance())
+                .commit();
         setUpNavigation();
 
     }
@@ -123,39 +81,18 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
 
     @Override
-    public void gotToProductList(final int subCatId) {
+    public void gotToProductList(int subCatId) {
 
-
-        mHandler.removeCallbacks(mCategoriesRunnable);
-        final AsyncTask productsTask = mProductLab.getCatProductsTask(subCatId);
-        Fragment fragment = ProductListFragment.newInstance();
-        changePage(productsTask, fragment);
+        Fragment fragment = ProductListFragment.newInstance(subCatId);
+        changePage(fragment);
     }
 
-    private void changePage(final AsyncTask productsTask, final Fragment fragment) {
-        final Runnable productsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (productsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                    mLoadingCover.setVisibility(View.INVISIBLE);
+    private void changePage( Fragment fragment) {
+
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .add(R.id.container_CategoryA, fragment)
-                            .commitAllowingStateLoss();
-                    mHandler.removeCallbacks(this);
-
-                } else {
-                    mLoadingCover.setVisibility(View.VISIBLE);
-                    mHandler.postDelayed(this, 500);
-                }
-
-
-            }
-        };
-
-
-        mHandler.postDelayed(productsRunnable, 500);
-
+                            .commit();
     }
 
     @Override
@@ -163,17 +100,16 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
 
         Fragment fragment = ProductFragment.newInstance(id);
-        AsyncTask productTask = mProductLab.getProductTask(id);
-        changePage(productTask, fragment);
+        changePage(fragment);
 
     }
 
     @Override
-    public void showDetails(int id) {
+    public void showDetails(Product product) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.container_CategoryA, DetailFragment.newInstance(id))
+                .add(R.id.container_CategoryA, DetailFragment.newInstance(product))
                 .commit();
 
 

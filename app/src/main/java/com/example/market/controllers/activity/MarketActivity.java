@@ -1,20 +1,17 @@
 package com.example.market.controllers.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
-import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.interfaces.ActivityStart;
-import com.example.market.model.ProductLab;
+import com.example.market.model.Product;
 import com.example.market.utils.ActivityHeper;
 import com.google.android.material.navigation.NavigationView;
 
@@ -34,7 +31,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
 
     //simple Variables
-    Handler mHandler=new Handler();
+    Handler mHandler = new Handler();
     //Widgets Variables
     private Toolbar mToolbar;
     private FrameLayout mLoadingCover;
@@ -100,15 +97,15 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            List<Fragment> fragments = fragmentManager.getFragments();
-            Fragment currentFragmnet = fragments.get(fragments.size() - 1);
-            if (currentFragmnet instanceof MarketFragment)
-                super.onBackPressed();
-            else
-                fragmentManager.beginTransaction()
-                        .remove(currentFragmnet)
-                        .commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        Fragment currentFragmnet = fragments.get(fragments.size() - 1);
+        if (currentFragmnet instanceof MarketFragment)
+            super.onBackPressed();
+        else
+            fragmentManager.beginTransaction()
+                    .remove(currentFragmnet)
+                    .commit();
 
     }
 
@@ -135,49 +132,25 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showProductDetails(int id) {
-        mLoadingCover=findViewById(R.id.cover_marketA);
-        AsyncTask productTask = ProductLab.getInstance().getProductTask(id);
-        changePage(productTask,ProductFragment.newInstance(id));
+        //mLoadingCover = findViewById(R.id.cover_marketA);
+        changePage(ProductFragment.newInstance(id));
     }
 
     @Override
-    public void showDetails(int id) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container_MarkerA, DetailFragment.newInstance(id))
-                .commit();
-
-
+    public void showDetails(Product product) {
+        changePage(DetailFragment.newInstance(product));
 
     }
 
 
-    private void changePage(final AsyncTask productsTask, final Fragment fragment) {
-        final Runnable productsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (productsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                    mLoadingCover.setVisibility(View.INVISIBLE);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.container_MarkerA, fragment)
-                            .commitAllowingStateLoss();
-                    mHandler.removeCallbacks(this);
+    private void changePage(Fragment fragment) {
 
-                } else {
-                    mLoadingCover.setVisibility(View.VISIBLE);
-                    mHandler.postDelayed(this, 500);
-                }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container_MarkerA, fragment)
+                .commitAllowingStateLoss();
 
-
-            }
-        };
-
-
-        mHandler.postDelayed(productsRunnable, 500);
 
     }
-
 
 
 }

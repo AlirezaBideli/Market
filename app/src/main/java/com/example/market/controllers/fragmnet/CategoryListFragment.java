@@ -3,7 +3,6 @@ package com.example.market.controllers.fragmnet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -32,10 +33,11 @@ public class CategoryListFragment extends ParentFragment {
     private static final String ARG_TAB_POSITION = "tab_position";
     private static final String TAG = "CategoryList";
     private ProductLab mProductLab = ProductLab.getInstance();
-    private List<Category> mSubCatagories;
+    private List<Category> mSubCategories;
     private RecyclerView mRecyclerView;
     private CallBacks mCallBacks;
     private CategoryAdapter mCategoryAdapter;
+
     public CategoryListFragment() {
         // Required empty public constructor
     }
@@ -51,7 +53,6 @@ public class CategoryListFragment extends ParentFragment {
     }
 
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -64,7 +65,6 @@ public class CategoryListFragment extends ParentFragment {
     public void onDetach() {
         super.onDetach();
         mCallBacks = null;
-        Log.i(TAG, "OnDetach");
     }
 
 
@@ -77,6 +77,8 @@ public class CategoryListFragment extends ParentFragment {
         variableInit();
         setListeners();
 
+        int tabPostion = getArguments().getInt(ARG_TAB_POSITION);
+        mSubCategories = mProductLab.getUniqueSubCategory(tabPostion);
         setUpRecyclerView();
         return view;
     }
@@ -88,9 +90,7 @@ public class CategoryListFragment extends ParentFragment {
 
     @Override
     public void variableInit() {
-        int tabPostion = getArguments().getInt(ARG_TAB_POSITION);
-        int parenId = mProductLab.getParentId(tabPostion);
-        mSubCatagories = mProductLab.getUniqueSubCategory(parenId);
+
 
     }
 
@@ -100,15 +100,10 @@ public class CategoryListFragment extends ParentFragment {
     }
 
     private void setUpRecyclerView() {
-        mCategoryAdapter = new CategoryAdapter(mSubCatagories);
+        mCategoryAdapter = new CategoryAdapter(mSubCategories);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mCategoryAdapter);
-    }
-
-
-    public interface CallBacks {
-        void gotToProductList(int subCatId);
     }
 
     private class CategoryHolder extends RecyclerView.ViewHolder {
@@ -180,6 +175,9 @@ public class CategoryListFragment extends ParentFragment {
         public int getItemCount() {
             return mCategories.size();
         }
+    }
+    public interface CallBacks {
+        void gotToProductList(int subCatId);
     }
 
 }

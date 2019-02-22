@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class DetailFragment extends ParentFragment {
 
 
-    private static final String ARG_ID = "productId";
+    private static final String ARG_PRODUCT = "product";
     String[] mHeaders;
 
     private RecyclerView mRecyDetail;
@@ -38,10 +38,10 @@ public class DetailFragment extends ParentFragment {
         // Required empty public constructor
     }
 
-    public static DetailFragment newInstance(int id) {
+    public static DetailFragment newInstance(Product product) {
 
         Bundle args = new Bundle();
-        args.putInt(ARG_ID, id);
+        args.putSerializable(ARG_PRODUCT,product);
         DetailFragment fragment = new DetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,8 +67,7 @@ public class DetailFragment extends ParentFragment {
     }
 
     private void setUpRecyclerView() {
-        int id = getArguments().getInt(ARG_ID);
-        Product product = ProductLab.getInstance().getUniqueProduct(id);
+        Product product = (Product) getArguments().getSerializable(ARG_PRODUCT);
         List<Product.Attributes> attributes = product.getAttributes();
 
         mDetailAdapter = new DetailAdapter(attributes,product);
@@ -126,7 +125,7 @@ public class DetailFragment extends ParentFragment {
 
             } else {
                 mTxtTitle.setText(attributes.getName());
-                mTxtValue.setText(attributes.getAttributes());
+                mTxtValue.setText(attributes.getOptions());
             }
         }
     }

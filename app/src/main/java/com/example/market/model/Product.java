@@ -2,9 +2,10 @@ package com.example.market.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Product {
+public class Product  implements Serializable{
 
     @SerializedName("id")
     private int mId;
@@ -95,21 +96,21 @@ public class Product {
         @SerializedName("name")
         private String mName;
         @SerializedName("options")
-        private List<String> mAttributes;
+        private List<String> mOptions;
 
         public int getId() {
             return mId;
         }
 
 
-        public String getAttributes() {
+        public String getOptions() {
             StringBuilder result = new StringBuilder();
-            int size = mAttributes.size();
+            int size = mOptions.size();
             for (byte i = 0; i < size; i++) {
                 if (i != size - 1)
-                    result.append(mAttributes.get(i) + ",");
+                    result.append(mOptions.get(i) + ",");
                 else
-                    result.append(mAttributes.get(i));
+                    result.append(mOptions.get(i));
 
             }
             return result.toString();

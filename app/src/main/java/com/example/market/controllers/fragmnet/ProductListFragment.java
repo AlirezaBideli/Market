@@ -1,9 +1,9 @@
 package com.example.market.controllers.fragmnet;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +14,20 @@ import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+import com.example.market.network.Api;
+import com.example.market.network.RetrofitClientInstance;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,10 +35,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ProductListFragment extends ParentFragment {
 
 
-    //CallBack
-    private CallBacks mCallBacks;
     //Arguments Tag
     private static final String ARG_SUBCAT_ID = "subCatId";
+    private static final String STATE_PAGE = "page";
+    //CallBack
+    private CallBacks mCallBacks;
     //Widgets variables
     private RecyclerView mRecyProducts;
     private TextView mTxtNotFound;
@@ -41,15 +47,17 @@ public class ProductListFragment extends ParentFragment {
     private List<Product> mProducts;
     private ProductLab mProductLab;
     private ProductAdapter mProductAdapter;
-
+    private ProgressDialog mProgressDialog;
+    private int mPage = 1;
 
     public ProductListFragment() {
         // Required empty public constructor
     }
 
-    public static ProductListFragment newInstance() {
+    public static ProductListFragment newInstance(int subCatId) {
 
         Bundle args = new Bundle();
+        args.putInt(ARG_SUBCAT_ID, subCatId);
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,22 +68,21 @@ public class ProductListFragment extends ParentFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof CategoryActivity)
-            mCallBacks= (CallBacks) context;
+            mCallBacks = (CallBacks) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBacks=null;
+        mCallBacks = null;
     }
-
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
 
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         findViewByIds(view);
@@ -88,20 +95,47 @@ public class ProductListFragment extends ParentFragment {
     protected void findViewByIds(View view) {
 
         mRecyProducts = view.findViewById(R.id.recy_product_list);
-        mTxtNotFound=view.findViewById(R.id.notFound_txt_productListF);
+        mTxtNotFound = view.findViewById(R.id.notFound_txt_productListF);
     }
 
     @Override
     protected void variableInit() {
-
+        mProducts = new ArrayList<>();
         mProductLab = ProductLab.getInstance();
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.show();
+        int subCatId = getArguments().getInt(ARG_SUBCAT_ID);
+        getProducts(subCatId);
 
 
-        mProducts = mProductLab.getProducts();
-        checkCount();
-        setUpRecyclerView();
+    }
 
+    private void getProducts(int subCatId) {
+        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                .getCatProducts(subCatId, mPage).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    List<Product> result = response.body();
+                    if (result != null && result.size() > 0) {
+                        mProducts.addAll(result);
+                        getProducts(++mPage);
 
+                    } else if (mProducts != null) {
+                        checkCount();
+                        setUpRecyclerView();
+                        if (mProgressDialog != null)
+                            mProgressDialog.cancel();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -109,13 +143,13 @@ public class ProductListFragment extends ParentFragment {
 
     }
 
-    private void checkCount()
-    {
-        if (mProducts.size()==0)
+    private void checkCount() {
+        if (mProducts.size() == 0)
             mTxtNotFound.setVisibility(View.VISIBLE);
         else
             mTxtNotFound.setVisibility(View.INVISIBLE);
     }
+
     private void setUpRecyclerView() {
 
         mProductAdapter = new ProductAdapter(mProducts);
@@ -126,6 +160,11 @@ public class ProductListFragment extends ParentFragment {
 
     }
 
+
+
+    public interface CallBacks {
+        void showProductDetails(int id);
+    }
 
     private class ProductHolder extends RecyclerView.ViewHolder {
 
@@ -141,8 +180,8 @@ public class ProductListFragment extends ParentFragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Product product=mProducts.get(getAdapterPosition());
-                    final int id=product.getId();
+                    Product product = mProducts.get(getAdapterPosition());
+                    final int id = product.getId();
                     mCallBacks.showProductDetails(id);
                 }
             });
@@ -162,7 +201,6 @@ public class ProductListFragment extends ParentFragment {
 
         }
     }
-
 
     private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
 
@@ -195,11 +233,4 @@ public class ProductListFragment extends ParentFragment {
             return mProducts.size();
         }
     }
-
-
-    public interface CallBacks
-    {
-        void showProductDetails(int id);
-    }
-
 }

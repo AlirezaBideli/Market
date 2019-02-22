@@ -16,7 +16,6 @@ import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.squareup.picasso.Picasso;
 
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +36,9 @@ public class MarketFragment extends ParentFragment {
     private RecyclerView mRecyNewest;
     private RecyclerView mRecyMostVisited;
     private RecyclerView mRectBestSellers;
-    //Simple Variables
-    private ProductAdapter mRecyAdapter;
     private int mDeafaultCount = 20;
     private List<Product> mProducts;
+    private ProductAdapter mRecyAdapter;
 
     public static MarketFragment newInstance() {
 
@@ -92,32 +90,32 @@ public class MarketFragment extends ParentFragment {
         //Newest RecyclerView
         fillRecyclerView(layoutManager, ProductType.NEWEST, mRecyNewest);
         //Best Sellers
-        fillRecyclerView(layoutManager3, ProductType.MOST_VISITED, mRectBestSellers);
+        fillRecyclerView(layoutManager2, ProductType.MOST_VISITED, mRecyMostVisited);
         //Most Visited RecyclerView
-        fillRecyclerView(layoutManager2, ProductType.BESTS, mRecyMostVisited);
+        fillRecyclerView(layoutManager3, ProductType.BESTS, mRectBestSellers);
 
     }
 
-    private void fillRecyclerView(LinearLayoutManager layoutManager2
-            , ProductType type, RecyclerView recyMostVisited) {
+    private void fillRecyclerView(LinearLayoutManager layoutManager
+            , ProductType type, RecyclerView recyclerView) {
 
         ProductLab productLab = ProductLab.getInstance();
-        List<Product> products = new ArrayList<>();
-        products = getProducts(type, productLab, products);
-        recyMostVisited.setLayoutManager(layoutManager2);
-        recyMostVisited.setHasFixedSize(true);
+        List<Product> products = getProducts(type, productLab);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
         mRecyAdapter = new ProductAdapter(products);
-        recyMostVisited.setAdapter(mRecyAdapter);
+        recyclerView.setAdapter(mRecyAdapter);
     }
 
-    private List<Product> getProducts(ProductType type, ProductLab productLab
-            , List<Product> products) {
+    private List<Product> getProducts(ProductType type, ProductLab productLab) {
+        List<Product> products=new ArrayList<>();
         switch (type) {
             case NEWEST:
                 products = productLab.getNewestProducts();
                 break;
             case MOST_VISITED:
                 products = productLab.getMVisitedProducts();
+                break;
             case BESTS:
                 products = productLab.getBProducts();
                 break;
@@ -171,8 +169,8 @@ public class MarketFragment extends ParentFragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position=getAdapterPosition();
-                    int id =mProducts.get(position).getId();
+                    int position = getAdapterPosition();
+                    int id = mRecyAdapter.getProducts().get(position).getId();
                     mCallBacks.showProductDetails(id);
                 }
             });
@@ -198,17 +196,17 @@ public class MarketFragment extends ParentFragment {
     private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
 
 
-
+        List<Product> mProductList;
         public ProductAdapter(List<Product> products) {
-            mProducts = products;
+            mProductList=products;
         }
 
         public List<Product> getProducts() {
-            return mProducts;
+            return mProductList;
         }
 
         public void setProducts(List<Product> products) {
-            mProducts = products;
+            mProductList = products;
         }
 
         @NonNull
@@ -223,13 +221,13 @@ public class MarketFragment extends ParentFragment {
         @Override
         public void onBindViewHolder(ProductHolder holder, int position) {
 
-            holder.bind(mProducts.get(position));
+            holder.bind(mProductList.get(position));
         }
 
         @Override
         public int getItemCount() {
-            if (mProducts.size() < mDeafaultCount)
-                return mProducts.size();
+            if (mProductList.size() < mDeafaultCount)
+                return mProductList.size();
 
             return mDeafaultCount;
         }

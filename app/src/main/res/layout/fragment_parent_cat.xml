@@ -20,7 +20,8 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/category_tab_parentCatF"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
 
 
         </com.google.android.material.tabs.TabLayout>

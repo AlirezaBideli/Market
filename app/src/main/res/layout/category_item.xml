@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    app:cardElevation="8dp"
-    app:strokeColor="@android:color/darker_gray"
+    style="?android:attr/listSeparatorTextViewStyle"
+
+
 
     app:strokeWidth="1dp">
 
