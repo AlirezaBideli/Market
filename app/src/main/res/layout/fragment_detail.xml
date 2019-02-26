@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
-    android:layoutDirection="ltr"
     tools:context=".controllers.fragmnet.DetailFragment">
 
     <androidx.recyclerview.widget.RecyclerView

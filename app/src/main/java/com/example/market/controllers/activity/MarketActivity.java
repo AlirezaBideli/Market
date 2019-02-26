@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
@@ -11,6 +12,7 @@ import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.interfaces.ActivityStart;
+import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.utils.ActivityHeper;
 import com.google.android.material.navigation.NavigationView;
@@ -27,7 +29,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
-        , ProductFragment.CallBacks {
+        , ProductFragment.CallBacks, LoadingCallBack {
 
 
     //simple Variables
@@ -69,6 +71,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         mToolbar = findViewById(R.id.toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
+        mLoadingCover = findViewById(R.id.cover_marketA);
+
     }
 
     @Override
@@ -102,11 +106,14 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
         if (currentFragmnet instanceof MarketFragment)
             super.onBackPressed();
-        else
+        else {
+            getSupportActionBar().show();
             fragmentManager.beginTransaction()
                     .remove(currentFragmnet)
                     .commit();
 
+
+        }
     }
 
     @Override
@@ -132,7 +139,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showProductDetails(int id) {
-        //mLoadingCover = findViewById(R.id.cover_marketA);
         changePage(ProductFragment.newInstance(id));
     }
 
@@ -153,4 +159,17 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     }
 
 
+    @Override
+    public void showLoading() {
+        mLoadingCover.setVisibility(View.VISIBLE);
+        getSupportActionBar().hide();
+
+    }
+
+    @Override
+    public void hideLoading() {
+        mLoadingCover.setVisibility(View.INVISIBLE);
+        getSupportActionBar().hide();
+
+    }
 }

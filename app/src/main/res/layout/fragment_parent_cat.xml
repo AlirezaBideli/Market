@@ -7,36 +7,34 @@
     android:background="@color/primaryTextColor"
     tools:context=".controllers.fragmnet.ParentCatFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
-        android:layout_width="match_parent"
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/category_tab_parentCatF"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/PrimaryColor"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/pager_category_ParentCategoryF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabSelectedTextColor="@color/primaryTextColor">
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/category_tab_parentCatF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
+    </com.google.android.material.tabs.TabLayout>
 
-
-        </com.google.android.material.tabs.TabLayout>
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager_category_ParentCategoryF"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/category_tab_parentCatF" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

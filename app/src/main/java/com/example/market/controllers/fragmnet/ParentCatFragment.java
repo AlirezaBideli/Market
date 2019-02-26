@@ -2,12 +2,15 @@ package com.example.market.controllers.fragmnet;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.market.R;
+import com.example.market.controllers.activity.CategoryActivity;
+import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Category;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -28,13 +31,15 @@ import retrofit2.Response;
 
 public class ParentCatFragment extends ParentFragment {
 
+
     public static final String TAG = "CategoryActivity";
+    //CallBacks
+    private LoadingCallBack mLoadingCallBack;
     private int mCatPage = 1;
     private int mSubCatPage = 1;
     private TabLayout mTabLayout;
     private ViewPager mCategoryPager;
     private List<String> mCategoryTitles;
-    private ProgressDialog mProgressDialog;
     private int mTabPosition;
     private List<Category> mCategories;
     private List<Category> mSubCategories;
@@ -48,13 +53,27 @@ public class ParentCatFragment extends ParentFragment {
         return fragment;
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CategoryActivity)
+            mLoadingCallBack = (LoadingCallBack) context;
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mLoadingCallBack = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_parent_cat, container, false);
         findViewByIds(view);
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.show();
+
 
 
         return view;
@@ -79,13 +98,14 @@ public class ParentCatFragment extends ParentFragment {
     public void variableInit() {
         mCategories = new ArrayList<>();
         mCategoryTitles = new ArrayList<>();
-        mSubCategories=new ArrayList<>();
+        mSubCategories = new ArrayList<>();
         getCategories(mCatPage);
 
 
     }
 
     private void getCategories(int page) {
+        mLoadingCallBack.showLoading();
         RetrofitClientInstance.getRetrofitInstance()
                 .create(Api.class)
                 .getCategories(page)
@@ -100,6 +120,7 @@ public class ParentCatFragment extends ParentFragment {
                             } else if (mCategories != null) {
                                 ProductLab.getInstance().setCatagories(mCategories);
                                 getSubCategory(mSubCatPage);
+
                             }
                         }
                     }
@@ -120,14 +141,15 @@ public class ParentCatFragment extends ParentFragment {
                     public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                         if (response.isSuccessful()) {
                             List<Category> result = response.body();
-                            if (result!=null && result.size() > 0) {
+                            if (result != null && result.size() > 0) {
                                 mSubCategories.addAll(result);
                                 getSubCategory(++mSubCatPage);
-                            }
-                            else if (mSubCategories!=null ){
+                            } else if (mSubCategories != null) {
+                                mLoadingCallBack.hideLoading();
                                 ProductLab.getInstance().setSubCategories(mSubCategories);
                                 setPagerWithTabLayout(mCategories);
-                                mProgressDialog.cancel();
+
+
                             }
 
 
@@ -176,7 +198,6 @@ public class ParentCatFragment extends ParentFragment {
 
 
     }
-
 
 
 }

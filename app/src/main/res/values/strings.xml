@@ -43,4 +43,8 @@
     <string name="weight">وزن</string>
     <string name="dimensions_text">ابعاد</string>
     <string name="add_to_shops">افزودن به سبد خرید</string>
+    <string name="connection_error">عدم دسترسی به اینترنت !!!</string>
+    <string name="text_remaining">ادامه مطلب</string>
+    <string name="close">بستن</string>
+    <string name="currency">تومان</string>
 </resources>

@@ -7,25 +7,20 @@
     tools:context=".controllers.activity.CategoryActivity">
 
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_CategoryA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/pager_category_ParentCategoryF"
+        android:background="@color/PrimaryColor"
+        app:layout_constraintBottom_toTopOf="@+id/cover_CategoryA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/products_categories"
+        app:titleTextColor="@color/primaryTextColor">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_CategoryA"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/products_categories"
-            app:titleTextColor="@color/primaryTextColor">
+    </androidx.appcompat.widget.Toolbar>
 
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/container_CategoryA"
@@ -47,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_CategoryA">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading_categoryA"
@@ -56,9 +51,9 @@
             android:layout_gravity="center"
             app:lottie_autoPlay="true"
             app:lottie_fileName="loading.json"
-            android:visibility="invisible"
             app:lottie_loop="true" />
     </FrameLayout>
+
 
 
 

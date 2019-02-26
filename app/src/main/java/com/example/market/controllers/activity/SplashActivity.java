@@ -95,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
                         mMVisitedProducts.addAll(result);
                         getBests(++mVisitedPage);
                     } else if (mMVisitedProducts != null) {
-                        mProductLab.setMVisitedProducts(mMVisitedProducts);
+                       mProductLab.setMVisitedProducts(mMVisitedProducts);
                         getBests(mBestPage);
 
                     }

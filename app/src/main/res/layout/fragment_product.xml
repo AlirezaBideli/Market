@@ -5,41 +5,70 @@
     android:id="@+id/scrollView3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:background="@color/primaryTextColor"
-    android:padding="16dp">
+    android:background="@color/background"
+    android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr">
+        android:layout_height="wrap_content">
 
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/image_pager_productF"
-            android:layout_width="0dp"
-            android:layout_height="330dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:scaleType="fitXY"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/background_light"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/materialCardView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/image_pager_productF"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+
+                android:scaleType="fitXY"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <com.rd.PageIndicatorView
+                android:id="@+id/pageIndicatorView_ProductF"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:foregroundGravity="center_horizontal"
+                app:piv_animationType="thinWorm"
+                app:piv_dynamicCount="true"
+                android:scrollIndicators="start"
+                app:piv_interactiveAnimation="true"
+                app:piv_padding="16dp"
+                app:piv_radius="2dp"
+                app:piv_selectedColor="@color/PrimaryColor"
+                app:piv_unselectedColor="@color/gray_300"
+                app:piv_viewPager="@id/image_pager_productF"
+                tools:layout_editor_absoluteY="272dp" />
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
 
             android:id="@+id/materialCardView3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_pager_productF">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -99,11 +128,17 @@
             android:id="@+id/materialCardView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
-            tools:layout_editor_absoluteX="8dp">
+            app:layout_constraintBottom_toTopOf="@+id/review_layout_ProductF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -151,16 +186,24 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
+            android:id="@+id/review_layout_ProductF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:animateLayoutChanges="true"
             app:cardCornerRadius="4dp"
             app:cardElevation="8dp"
             app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView2">
 
             <LinearLayout
+                android:id="@+id/text_container_ProductF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -174,14 +217,36 @@
 
                     android:textSize="20sp" />
 
+
                 <TextView
                     android:id="@+id/desc_txt_productF"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/product_view"
                     android:padding="8dp"
 
                     android:textAlignment="textEnd"
                     android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/separator_ProductF"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/background">
+
+                </View>
+
+                <TextView
+                    android:id="@+id/text_remaining_ProductF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/text_remaining"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/background" />
+
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

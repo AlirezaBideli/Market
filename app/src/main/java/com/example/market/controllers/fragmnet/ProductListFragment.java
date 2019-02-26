@@ -1,7 +1,6 @@
 package com.example.market.controllers.fragmnet;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
+import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -40,6 +40,7 @@ public class ProductListFragment extends ParentFragment {
     private static final String STATE_PAGE = "page";
     //CallBack
     private CallBacks mCallBacks;
+    private LoadingCallBack mLoadingCallBack;
     //Widgets variables
     private RecyclerView mRecyProducts;
     private TextView mTxtNotFound;
@@ -47,7 +48,6 @@ public class ProductListFragment extends ParentFragment {
     private List<Product> mProducts;
     private ProductLab mProductLab;
     private ProductAdapter mProductAdapter;
-    private ProgressDialog mProgressDialog;
     private int mPage = 1;
 
     public ProductListFragment() {
@@ -67,14 +67,17 @@ public class ProductListFragment extends ParentFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CategoryActivity)
+        if (context instanceof CategoryActivity) {
             mCallBacks = (CallBacks) context;
+            mLoadingCallBack = (LoadingCallBack) context;
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mCallBacks = null;
+        mLoadingCallBack = null;
     }
 
 
@@ -102,8 +105,7 @@ public class ProductListFragment extends ParentFragment {
     protected void variableInit() {
         mProducts = new ArrayList<>();
         mProductLab = ProductLab.getInstance();
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.show();
+
         int subCatId = getArguments().getInt(ARG_SUBCAT_ID);
         getProducts(subCatId);
 
@@ -111,6 +113,9 @@ public class ProductListFragment extends ParentFragment {
     }
 
     private void getProducts(int subCatId) {
+
+        mLoadingCallBack.showLoading();
+
         RetrofitClientInstance.getRetrofitInstance().create(Api.class)
                 .getCatProducts(subCatId, mPage).enqueue(new Callback<List<Product>>() {
             @Override
@@ -124,8 +129,7 @@ public class ProductListFragment extends ParentFragment {
                     } else if (mProducts != null) {
                         checkCount();
                         setUpRecyclerView();
-                        if (mProgressDialog != null)
-                            mProgressDialog.cancel();
+                        mLoadingCallBack.hideLoading();
 
                     }
                 }
@@ -159,7 +163,6 @@ public class ProductListFragment extends ParentFragment {
 
 
     }
-
 
 
     public interface CallBacks {

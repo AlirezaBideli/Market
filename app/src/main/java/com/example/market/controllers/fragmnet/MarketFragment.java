@@ -14,7 +14,9 @@ import com.example.market.R;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+import com.example.market.utils.PriceUtils;
 import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,9 +40,13 @@ public class MarketFragment extends ParentFragment {
     private RecyclerView mRecyNewest;
     private RecyclerView mRecyMostVisited;
     private RecyclerView mRectBestSellers;
-    private int mDeafaultCount = 20;
     private List<Product> mProducts;
     private ProductAdapter mRecyAdapter;
+    //Simple Variables
+    private int mDeafaultCount = 20;
+
+
+
 
     public static MarketFragment newInstance() {
 
@@ -108,7 +116,7 @@ public class MarketFragment extends ParentFragment {
     }
 
     private List<Product> getProducts(ProductType type, ProductLab productLab) {
-        List<Product> products=new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         switch (type) {
             case NEWEST:
                 products = productLab.getNewestProducts();
@@ -135,6 +143,7 @@ public class MarketFragment extends ParentFragment {
     @Override
     public void variableInit() {
 
+
     }
 
     @Override
@@ -143,12 +152,13 @@ public class MarketFragment extends ParentFragment {
     }
 
 
+
+
     private enum ProductType {
         NEWEST,
         MOST_VISITED,
         BESTS,
     }
-
 
     public interface CallBacks {
         void showProductDetails(int id);
@@ -178,8 +188,12 @@ public class MarketFragment extends ParentFragment {
 
         public void bind(Product product) {
 
+
+            String rawPrice = product.getPrice();
+            String formatedPrice = PriceUtils.getCurrencyFormat(rawPrice,getActivity());
+            mTxtPrice.setText(formatedPrice);
             mTxtName.setText(product.getName());
-            mTxtPrice.setText(product.getPrice());
+
 
             if (product.getImages() == null)
                 mImgProduct.setImageResource(R.drawable.shop_placeholder);
@@ -197,8 +211,9 @@ public class MarketFragment extends ParentFragment {
 
 
         List<Product> mProductList;
+
         public ProductAdapter(List<Product> products) {
-            mProductList=products;
+            mProductList = products;
         }
 
         public List<Product> getProducts() {

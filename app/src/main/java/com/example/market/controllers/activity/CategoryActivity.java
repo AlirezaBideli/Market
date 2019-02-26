@@ -1,6 +1,9 @@
 package com.example.market.controllers.activity;
+
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
+
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.CategoryListFragment;
 import com.example.market.controllers.fragmnet.DetailFragment;
@@ -8,9 +11,12 @@ import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
 import com.example.market.interfaces.ActivityStart;
+import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+
 import java.util.List;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
-        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks, ProductFragment.CallBacks  {
+        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks, ProductFragment.CallBacks, LoadingCallBack {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -43,22 +49,21 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     }
 
 
-
-
     @Override
     public void findViewByIds() {
 
 
         mLoadingCover = findViewById(R.id.cover_CategoryA);
         mToolbar = findViewById(R.id.toolbar_CategoryA);
+
     }
 
     @Override
     public void variableInit() {
-        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container_CategoryA,ParentCatFragment.newInstance())
+                .replace(R.id.container_CategoryA, ParentCatFragment.newInstance())
                 .commit();
         setUpNavigation();
 
@@ -87,12 +92,12 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         changePage(fragment);
     }
 
-    private void changePage( Fragment fragment) {
+    private void changePage(Fragment fragment) {
 
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.container_CategoryA, fragment)
-                            .commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container_CategoryA, fragment)
+                .commit();
     }
 
     @Override
@@ -129,4 +134,14 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     }
 
 
+    @Override
+    public void showLoading() {
+        mLoadingCover.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        mLoadingCover.setVisibility(View.INVISIBLE);
+
+    }
 }
