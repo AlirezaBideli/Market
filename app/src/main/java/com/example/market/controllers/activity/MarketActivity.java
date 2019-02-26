@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
+import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
@@ -15,6 +16,7 @@ import com.example.market.interfaces.ActivityStart;
 import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.utils.ActivityHeper;
+import com.example.market.utils.NetworkConnection;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -29,7 +31,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
-        , ProductFragment.CallBacks, LoadingCallBack {
+        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks {
 
 
     //simple Variables
@@ -104,16 +106,20 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
-        if (currentFragmnet instanceof MarketFragment)
-            super.onBackPressed();
-        else {
-            getSupportActionBar().show();
-            fragmentManager.beginTransaction()
-                    .remove(currentFragmnet)
-                    .commit();
 
 
-        }
+            if (currentFragmnet instanceof MarketFragment)
+                super.onBackPressed();
+            else {
+                getSupportActionBar().show();
+                fragmentManager.beginTransaction()
+                        .remove(currentFragmnet)
+                        .commit();
+
+
+            }
+
+
     }
 
     @Override
@@ -170,6 +176,19 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     public void hideLoading() {
         mLoadingCover.setVisibility(View.INVISIBLE);
         getSupportActionBar().hide();
+
+    }
+
+
+    @Override
+    public void goPreviousFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container_MarkerA);
+
+        fragmentManager.beginTransaction()
+                .detach(fragment)
+                .attach(fragment)
+                .commit();
 
     }
 }

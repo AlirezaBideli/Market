@@ -1,11 +1,13 @@
 package com.example.market.controllers.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.CategoryListFragment;
+import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
@@ -14,6 +16,7 @@ import com.example.market.interfaces.ActivityStart;
 import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+import com.example.market.utils.NetworkConnection;
 
 import java.util.List;
 
@@ -24,7 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
-        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks, ProductFragment.CallBacks, LoadingCallBack {
+        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks,
+        ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -125,12 +129,17 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
-        if (currentFragmnet instanceof ParentCatFragment)
-            super.onBackPressed();
-        else
-            fragmentManager.beginTransaction()
-                    .remove(currentFragmnet)
-                    .commit();
+
+
+
+            if (currentFragmnet instanceof ParentCatFragment)
+                super.onBackPressed();
+            else
+                fragmentManager.beginTransaction()
+                        .remove(currentFragmnet)
+                        .commit();
+
+
     }
 
 
@@ -142,6 +151,18 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     @Override
     public void hideLoading() {
         mLoadingCover.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
+    public void goPreviousFragment() {
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        Fragment fragment=fragmentManager.findFragmentById(R.id.container_CategoryA);
+
+        fragmentManager.beginTransaction()
+                .detach(fragment)
+                .attach(fragment)
+                .commit();
 
     }
 }

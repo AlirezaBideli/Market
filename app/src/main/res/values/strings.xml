@@ -47,4 +47,6 @@
     <string name="text_remaining">ادامه مطلب</string>
     <string name="close">بستن</string>
     <string name="currency">تومان</string>
+    <string name="connections_error">خطا در اتصال به اینترنت !!</string>
+    <string name="try_again_text">تلاش دوباره</string>
 </resources>

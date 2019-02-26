@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
+import com.example.market.controllers.activity.SplashActivity;
 
 public class ActivityHeper {
 
@@ -21,6 +22,11 @@ public class ActivityHeper {
     public static  Intent Intent_MarketA(Context context)
     {
         Intent intent=new Intent(context, MarketActivity.class);
+        return intent;
+    }
+    public static  Intent Intent_SplashA(Context context)
+    {
+        Intent intent=new Intent(context, SplashActivity.class);
         return intent;
     }
 }

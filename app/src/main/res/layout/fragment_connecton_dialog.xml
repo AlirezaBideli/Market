@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".controllers.fragmnet.ConnectionDialog"
+    android:gravity="center">
+
+
+
+    <ImageView
+        android:layout_width="@dimen/image_item"
+        android:layout_height="@dimen/image_item"
+        android:src="@drawable/connections_error">
+
+    </ImageView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connections_error"
+   />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tryAgain_btn_ConnectionD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:background="@color/PrimaryColor"
+        android:text="@string/try_again_text"
+        app:backgroundTint="@color/PrimaryColor" />
+
+</LinearLayout>

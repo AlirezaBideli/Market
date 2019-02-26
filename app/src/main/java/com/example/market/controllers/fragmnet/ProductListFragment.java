@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
@@ -16,6 +17,7 @@ import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
+import com.example.market.utils.NetworkConnection;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -133,11 +135,16 @@ public class ProductListFragment extends ParentFragment {
 
                     }
                 }
+
+                else
+                    NetworkConnection.warnConnection
+                            (getActivity(), getFragmentManager());
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                NetworkConnection.warnConnection
+                        (getActivity(), getFragmentManager());
             }
         });
     }

@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
+import com.example.market.controllers.activity.SplashActivity;
 import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Category;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
+import com.example.market.utils.NetworkConnection;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -123,11 +125,15 @@ public class ParentCatFragment extends ParentFragment {
 
                             }
                         }
+                        else
+                            NetworkConnection.warnConnection
+                                    (getActivity(), getFragmentManager());
                     }
 
                     @Override
                     public void onFailure(Call<List<Category>> call, Throwable t) {
-
+                        NetworkConnection.warnConnection
+                                (getActivity(), getFragmentManager());
                     }
                 });
     }
@@ -148,17 +154,19 @@ public class ParentCatFragment extends ParentFragment {
                                 mLoadingCallBack.hideLoading();
                                 ProductLab.getInstance().setSubCategories(mSubCategories);
                                 setPagerWithTabLayout(mCategories);
-
-
                             }
-
-
+                        }
+                        else
+                        {
+                            NetworkConnection.warnConnection
+                                    (getActivity(), getFragmentManager());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<Category>> call, Throwable t) {
-
+                        NetworkConnection.warnConnection
+                                (getActivity(), getFragmentManager());
                     }
                 });
     }

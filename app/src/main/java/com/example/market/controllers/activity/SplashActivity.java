@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.market.R;
+import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.ActivityHeper;
+import com.example.market.utils.NetworkConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +21,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements ConnectionDialog.CallBacks {
 
 
     private ProductLab mProductLab = ProductLab.getInstance();
-    private int mNewPage=1;
-    private int mBestPage=1;
-    private int mVisitedPage=1;
-    private int mDefaultPageNum=2;
-    private boolean isStarted=false;
-    private List<Product> mBProducts=new ArrayList<>();
-    private List<Product> mMVisitedProducts=new ArrayList<>();
-    private List<Product> mNewestProducts=new ArrayList<>();
+    private int mNewPage = 1;
+    private int mBestPage = 1;
+    private int mVisitedPage = 1;
+    private int mDefaultPageNum = 2;
+    private boolean isStarted = false;
+    private List<Product> mBProducts = new ArrayList<>();
+    private List<Product> mMVisitedProducts = new ArrayList<>();
+    private List<Product> mNewestProducts = new ArrayList<>();
 
 
     @Override
@@ -53,7 +55,6 @@ public class SplashActivity extends AppCompatActivity {
         //it means if downLoad action finished by downloading best products
 
 
-
     }
 
     private void getNewest(int newPage) {
@@ -62,24 +63,28 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
-                    List<Product> result=response.body();
-                    if (result!=null && mNewPage<=mDefaultPageNum) {
+                    List<Product> result = response.body();
+                    if (result != null && mNewPage <= mDefaultPageNum) {
                         mNewestProducts.addAll(result);
                         getNewest(++mNewPage);
-                    }
-                    else if (mNewestProducts!=null)
+                    } else if (mNewestProducts != null)
                         mProductLab.setNewestProducts(mNewestProducts);
-                        getMostVisited(mVisitedPage);
+                    getMostVisited(mVisitedPage);
 
 
-                    }
+                } else {
+                    NetworkConnection.warnConnection
+                            (SplashActivity.this, getSupportFragmentManager());
+
+                }
 
 
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                NetworkConnection.warnConnection
+                        (SplashActivity.this, getSupportFragmentManager());
             }
         });
     }
@@ -91,21 +96,26 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
                     List<Product> result = response.body();
-                    if (result != null && mVisitedPage<=mDefaultPageNum) {
+                    if (result != null && mVisitedPage <= mDefaultPageNum) {
                         mMVisitedProducts.addAll(result);
                         getBests(++mVisitedPage);
                     } else if (mMVisitedProducts != null) {
-                       mProductLab.setMVisitedProducts(mMVisitedProducts);
+                        mProductLab.setMVisitedProducts(mMVisitedProducts);
                         getBests(mBestPage);
 
                     }
                 }
+                else
+                    NetworkConnection.warnConnection
+                            (SplashActivity.this, getSupportFragmentManager());
 
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
 
+                NetworkConnection.warnConnection
+                        (SplashActivity.this, getSupportFragmentManager());
             }
         });
     }
@@ -117,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
                     List<Product> result = response.body();
-                    if (result != null  && mBestPage<=mDefaultPageNum) {
+                    if (result != null && mBestPage <= mDefaultPageNum) {
                         mBProducts.addAll(result);
                         getBests(++mBestPage);
                     } else if (mBProducts != null) {
@@ -125,11 +135,17 @@ public class SplashActivity extends AppCompatActivity {
                         startApp();
                     }
                 }
+                else
+                {
+                    NetworkConnection.warnConnection
+                            (SplashActivity.this, getSupportFragmentManager());
+                }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                NetworkConnection.warnConnection
+                        (SplashActivity.this, getSupportFragmentManager());
             }
 
         });
@@ -138,7 +154,7 @@ public class SplashActivity extends AppCompatActivity {
     private void startApp() {
 
         if (!isStarted) {
-            isStarted=true;
+            isStarted = true;
             Intent intent = ActivityHeper.Intent_MarketA(SplashActivity.this);
             startActivity(intent);
             this.finish();
@@ -147,4 +163,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void goPreviousFragment() {
+        Intent intent=ActivityHeper.Intent_SplashA(this);
+        startActivity(intent);
+    }
 }

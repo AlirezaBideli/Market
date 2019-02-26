@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
@@ -15,13 +16,13 @@ import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
+import com.example.market.utils.NetworkConnection;
 import com.example.market.utils.PriceUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.rd.PageIndicatorView;
 import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -97,12 +98,6 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -148,10 +143,15 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
                     }
                     mLoadingCallBack.hideLoading();
                 }
+                else {
+                    NetworkConnection.warnConnection(getActivity(),getFragmentManager());
+
+                }
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
+               NetworkConnection.warnConnection(getActivity(),getFragmentManager());
 
             }
         });
