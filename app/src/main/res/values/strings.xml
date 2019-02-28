@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Market</string>
+    <string name="app_name">Shop</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -49,4 +49,5 @@
     <string name="currency">تومان</string>
     <string name="connections_error">خطا در اتصال به اینترنت !!</string>
     <string name="try_again_text">تلاش دوباره</string>
+    <string name="splash_message">فروشگاه آنلاین</string>
 </resources>

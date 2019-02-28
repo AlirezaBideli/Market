@@ -3,6 +3,8 @@ package com.example.market.controllers.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -112,6 +114,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
                 super.onBackPressed();
             else {
                 getSupportActionBar().show();
+                mLoadingCover.setVisibility(View.INVISIBLE);
                 fragmentManager.beginTransaction()
                         .remove(currentFragmnet)
                         .commit();
@@ -167,18 +170,42 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showLoading() {
-        mLoadingCover.setVisibility(View.VISIBLE);
-        getSupportActionBar().hide();
+        if (mLoadingCover!=null) {
+            mLoadingCover.setVisibility(View.VISIBLE);
+            getSupportActionBar().hide();
+        }
 
     }
 
     @Override
     public void hideLoading() {
-        mLoadingCover.setVisibility(View.INVISIBLE);
-        getSupportActionBar().hide();
+        if (mLoadingCover!=null) {
+            mLoadingCover.setVisibility(View.INVISIBLE);
+            getSupportActionBar().hide();
+        }
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.market_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.search_marketA:
+                break;
+            case R.id.shop_marketA:
+                break;
+        }
+        return true;
+
+    }
 
     @Override
     public void goPreviousFragment() {

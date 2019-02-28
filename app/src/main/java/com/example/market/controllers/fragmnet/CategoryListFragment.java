@@ -120,7 +120,6 @@ public class CategoryListFragment extends ParentFragment {
                 public void onClick(View view) {
                     Category category = mCategoryAdapter.getCategories()
                             .get(getAdapterPosition());
-
                     mCallBacks.gotToProductList(category.getId());
 
                 }

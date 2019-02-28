@@ -129,15 +129,15 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
-
-
-
             if (currentFragmnet instanceof ParentCatFragment)
                 super.onBackPressed();
-            else
+            else {
+                mLoadingCover.setVisibility(View.INVISIBLE);
                 fragmentManager.beginTransaction()
                         .remove(currentFragmnet)
                         .commit();
+
+            }
 
 
     }
@@ -145,12 +145,14 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     @Override
     public void showLoading() {
+        if (mLoadingCover!=null)
         mLoadingCover.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        mLoadingCover.setVisibility(View.INVISIBLE);
+        if (mLoadingCover!=null)
+            mLoadingCover.setVisibility(View.INVISIBLE);
 
     }
 

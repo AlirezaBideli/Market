@@ -4,13 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
-    tools:context=".controllers.fragmnet.ProductListFragment">
+    tools:context=".controllers.fragmnet.ProductListFragment"
+    style="?android:attr/listSeparatorTextViewStyle"
+
+    >
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recy_product_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 
     <TextView
         android:id="@+id/notFound_txt_productListF"

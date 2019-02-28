@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
@@ -116,37 +115,37 @@ public class ProductListFragment extends ParentFragment {
 
     private void getProducts(int subCatId) {
 
-        mLoadingCallBack.showLoading();
+        if (mLoadingCallBack != null) {
+            mLoadingCallBack.showLoading();
 
-        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                .getCatProducts(subCatId, mPage).enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    List<Product> result = response.body();
-                    if (result != null && result.size() > 0) {
-                        mProducts.addAll(result);
-                        getProducts(++mPage);
+            RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                    .getCatProducts(subCatId, mPage).enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    if (response.isSuccessful()) {
+                        List<Product> result = response.body();
+                        if (result != null && result.size() > 0) {
+                            mProducts.addAll(result);
+                            getProducts(++mPage);
 
-                    } else if (mProducts != null) {
-                        checkCount();
-                        setUpRecyclerView();
-                        mLoadingCallBack.hideLoading();
+                        } else if (mProducts != null && mLoadingCallBack != null) {
+                            checkCount();
+                            setUpRecyclerView();
+                            mLoadingCallBack.hideLoading();
 
-                    }
+                        }
+                    } else
+                        NetworkConnection.warnConnection
+                                (getActivity(), getFragmentManager());
                 }
 
-                else
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
                     NetworkConnection.warnConnection
                             (getActivity(), getFragmentManager());
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                NetworkConnection.warnConnection
-                        (getActivity(), getFragmentManager());
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override

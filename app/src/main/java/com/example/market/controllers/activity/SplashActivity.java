@@ -33,6 +33,9 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     private List<Product> mBProducts = new ArrayList<>();
     private List<Product> mMVisitedProducts = new ArrayList<>();
     private List<Product> mNewestProducts = new ArrayList<>();
+    private Call mBestPRetrofit;
+    private Call mMostViitedPRetrofit;
+    private Call mNewestPRetrofit;
 
 
     @Override
@@ -58,8 +61,9 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     }
 
     private void getNewest(int newPage) {
-        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                .getNewestProduct(mNewPage).enqueue(new Callback<List<Product>>() {
+        mNewestPRetrofit = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                .getNewestProduct(mNewPage);
+        mNewestPRetrofit.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
@@ -90,8 +94,11 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     }
 
     private void getMostVisited(int visitedPage) {
-        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                .getMVisitedProducts(mVisitedPage).enqueue(new Callback<List<Product>>() {
+
+        mMostViitedPRetrofit = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                .getMVisitedProducts(mVisitedPage);
+
+        mMostViitedPRetrofit.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
@@ -104,8 +111,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                         getBests(mBestPage);
 
                     }
-                }
-                else
+                } else
                     NetworkConnection.warnConnection
                             (SplashActivity.this, getSupportFragmentManager());
 
@@ -121,8 +127,10 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     }
 
     private void getBests(int bestPage) {
-        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                .getBestProducts(mBestPage).enqueue(new Callback<List<Product>>() {
+        mBestPRetrofit = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                .getBestProducts(mBestPage);
+
+        mBestPRetrofit.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
@@ -134,9 +142,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                         mProductLab.setBProducts(mBProducts);
                         startApp();
                     }
-                }
-                else
-                {
+                } else {
                     NetworkConnection.warnConnection
                             (SplashActivity.this, getSupportFragmentManager());
                 }
@@ -162,10 +168,20 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMostViitedPRetrofit != null)
+            mMostViitedPRetrofit.cancel();
+        if (mNewestPRetrofit != null)
+            mNewestPRetrofit.cancel();
+        if (mBestPRetrofit != null)
+            mBestPRetrofit.cancel();
+    }
 
     @Override
     public void goPreviousFragment() {
-        Intent intent=ActivityHeper.Intent_SplashA(this);
+        Intent intent = ActivityHeper.Intent_SplashA(this);
         startActivity(intent);
     }
 }

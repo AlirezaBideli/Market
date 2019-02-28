@@ -22,6 +22,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.rd.PageIndicatorView;
 import com.squareup.picasso.Picasso;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
@@ -37,11 +38,13 @@ import retrofit2.Response;
 public class ProductFragment extends ParentFragment implements View.OnClickListener {
 
 
-
-    //CallBacks
-    private LoadingCallBack mLoadingCallBack;
     //Argument Tags
     private static final String ARG_ID = "productId";
+    //simple Variables
+    private static final int DEFAULT_CHAR_COUNT = 300;
+    private static final int WRAP_CONTENT_SIZE = -1;
+    //CallBacks
+    private LoadingCallBack mLoadingCallBack;
     //CallBack
     private CallBacks mCallBacks;
     //Widgets Variables
@@ -52,10 +55,6 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     private MaterialCardView mReviewLayout;
     private PageIndicatorView mIndicatorView;
     private View mSeperator;
-
-    //simple Variables
-    private static final int DEFAULT_CHAR_COUNT =300;
-    private static final int WRAP_CONTENT_SIZE=-1;
     private Product mProduct;
     private int mId;
     private boolean mIsDescCompleted;
@@ -84,7 +83,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         if ((context instanceof CategoryActivity)
                 || (context instanceof MarketActivity)) {
             mCallBacks = (CallBacks) context;
-            mLoadingCallBack=(LoadingCallBack) context;
+            mLoadingCallBack = (LoadingCallBack) context;
         }
 
 
@@ -94,7 +93,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     public void onDetach() {
         super.onDetach();
         mCallBacks = null;
-        mLoadingCallBack=null;
+        mLoadingCallBack = null;
     }
 
     @Override
@@ -109,7 +108,6 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     }
 
 
-
     @Override
     protected void findViewByIds(View view) {
 
@@ -118,51 +116,53 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mTxtDesc = view.findViewById(R.id.desc_txt_productF);
         mImgPager = view.findViewById(R.id.image_pager_productF);
         mBtnDetail = view.findViewById(R.id.detail_btn_productF);
-        mBtnRemain=view.findViewById(R.id.text_remaining_ProductF);
-        mReviewLayout=view.findViewById(R.id.review_layout_ProductF);
-        mIndicatorView=view.findViewById(R.id.pageIndicatorView_ProductF);
-        mSeperator=view.findViewById(R.id.separator_ProductF);
+        mBtnRemain = view.findViewById(R.id.text_remaining_ProductF);
+        mReviewLayout = view.findViewById(R.id.review_layout_ProductF);
+        mIndicatorView = view.findViewById(R.id.pageIndicatorView_ProductF);
+        mSeperator = view.findViewById(R.id.separator_ProductF);
     }
 
     @Override
     protected void variableInit() {
 
 
-        mId = getArguments().getInt(ARG_ID);
-        mLoadingCallBack.showLoading();
+        if (mLoadingCallBack != null) {
+            mId = getArguments().getInt(ARG_ID);
+            mLoadingCallBack.showLoading();
 
-        RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                .getProduct(mId).enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
+            RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                    .getProduct(mId).enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
+                    if (response.isSuccessful()) {
+                        if (mLoadingCallBack != null) {
+                            mProduct = response.body();
+                            if (mProduct != null) {
+                                fillPage(mProduct);
+                            }
+                            mLoadingCallBack.hideLoading();
+                        }
+                    } else {
+                        NetworkConnection.warnConnection(getActivity(), getFragmentManager());
 
-                    mProduct= response.body();
-                    if (mProduct != null) {
-                        fillPage(mProduct);
                     }
-                    mLoadingCallBack.hideLoading();
                 }
-                else {
-                    NetworkConnection.warnConnection(getActivity(),getFragmentManager());
+
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
+                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
 
                 }
-            }
-
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-               NetworkConnection.warnConnection(getActivity(),getFragmentManager());
-
-            }
-        });
+            });
+        }
 
     }
 
     private void fillPage(Product product) {
-        String productName=product.getName();
-        String productDescription=product.getDescription();
-        String productPrice=product.getPrice();
-        String formatedPrice = PriceUtils.getCurrencyFormat(productPrice,getActivity());
+        String productName = product.getName();
+        String productDescription = product.getDescription();
+        String productPrice = product.getPrice();
+        String formatedPrice = PriceUtils.getCurrencyFormat(productPrice, getActivity());
         mTxtName.setText(productName);
         mTxtPrice.setText(formatedPrice);
         checkProductDesc(productDescription);
@@ -182,7 +182,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
             @Override
             public int getCount() {
-                if (mProduct.getImages() == null )
+                if (mProduct.getImages() == null)
                     return 0;
                 else return mProduct.getImages().size();
             }
@@ -200,11 +200,11 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mImgPager.setAdapter(pagerAdapter);
 
 
-
         //Sync PAgeIndicatorView with ViewPager
         mImgPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
@@ -232,48 +232,43 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
             case R.id.detail_btn_productF:
                 mCallBacks.showDetails(mProduct);
                 break;
-            case  R.id.text_remaining_ProductF:
-                ViewGroup.LayoutParams layoutParams=mTxtDesc.getLayoutParams();
+            case R.id.text_remaining_ProductF:
+                ViewGroup.LayoutParams layoutParams = mTxtDesc.getLayoutParams();
 
                 String buttonText;
                 if (!mIsDescCompleted) {
-                    buttonText=getString(R.string.close);
-                    layoutParams.height =WRAP_CONTENT_SIZE;
+                    buttonText = getString(R.string.close);
+                    layoutParams.height = WRAP_CONTENT_SIZE;
                     mTxtDesc.setLayoutParams(layoutParams);
                     mBtnRemain.setText(buttonText);
-                    mIsDescCompleted =true;
-                }
-                else
-                {
+                    mIsDescCompleted = true;
+                } else {
 
-                    buttonText=getString(R.string.text_remaining);
-                    int height= (int) getResources().getDimension(R.dimen.product_view);
-                    layoutParams.height=height;
+                    buttonText = getString(R.string.text_remaining);
+                    int height = (int) getResources().getDimension(R.dimen.product_view);
+                    layoutParams.height = height;
                     mTxtDesc.setLayoutParams(layoutParams);
                     mBtnRemain.setText(buttonText);
-                    mIsDescCompleted =false;
+                    mIsDescCompleted = false;
                 }
                 break;
         }
     }
 
-    public interface CallBacks {
-        void showDetails(Product product);
-    }
-
-    private void checkProductDesc(String review)
-    {
+    private void checkProductDesc(String review) {
         if (review.isEmpty())
             mReviewLayout.setVisibility(View.INVISIBLE);
-        else if (review.length()<= DEFAULT_CHAR_COUNT)
-        {
-            ViewGroup.LayoutParams layoutParams=mTxtDesc.getLayoutParams();
-            layoutParams.height=WRAP_CONTENT_SIZE;
+        else if (review.length() <= DEFAULT_CHAR_COUNT) {
+            ViewGroup.LayoutParams layoutParams = mTxtDesc.getLayoutParams();
+            layoutParams.height = WRAP_CONTENT_SIZE;
             mBtnRemain.setVisibility(View.INVISIBLE);
             mSeperator.setVisibility(View.INVISIBLE);
         }
 
 
+    }
 
+    public interface CallBacks {
+        void showDetails(Product product);
     }
 }
