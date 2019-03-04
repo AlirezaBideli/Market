@@ -21,6 +21,7 @@ public interface Api {
 
 
 
+
     @GET("products/categories?"+CONSUMER_KEY+"&"+CONSUMER_SECRET+"&"+CATEGORY_CONDITION+"=0")
     Call<List<Category>> getCategories(@Query("page") int page);
     @GET("products/categories?"+CONSUMER_KEY+"&"+CONSUMER_SECRET+"&"+CATEGORY_CONDITION+"!=0")

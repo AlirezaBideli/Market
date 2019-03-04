@@ -50,4 +50,11 @@
     <string name="connections_error">خطا در اتصال به اینترنت !!</string>
     <string name="try_again_text">تلاش دوباره</string>
     <string name="splash_message">فروشگاه آنلاین</string>
+    <string name="total_shopping_sum">جمع کل خرید</string>
+    <string name="shoping_cart_warning">این محصول قبلاً به سبد خرید شما اضافه شده است</string>
+    <string name="count">تعداد</string>
+    <string name="delete">حدف</string>
+    <string name="total_price">قیمت کلی</string>
+    <string name="final_price">قیمت نهایی</string>
+    <string name="bu_productsmessage">خرید حود را نهایی کنید</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.example.market.controllers.fragmnet;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
-import com.example.market.controllers.activity.SplashActivity;
 import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Category;
 import com.example.market.model.ProductLab;
@@ -45,6 +43,8 @@ public class ParentCatFragment extends ParentFragment {
     private int mTabPosition;
     private List<Category> mCategories;
     private List<Category> mSubCategories;
+    private Call<List<Category>> mCallCategory;
+    private Call<List<Category>> mCallSubCategory;
 
     public static ParentCatFragment newInstance() {
 
@@ -77,7 +77,6 @@ public class ParentCatFragment extends ParentFragment {
         findViewByIds(view);
 
 
-
         return view;
     }
 
@@ -107,12 +106,12 @@ public class ParentCatFragment extends ParentFragment {
     }
 
     private void getCategories(int page) {
-        if (mLoadingCallBack!=null) {
+        if (mLoadingCallBack != null) {
             mLoadingCallBack.showLoading();
-            RetrofitClientInstance.getRetrofitInstance()
+            mCallCategory=RetrofitClientInstance.getRetrofitInstance()
                     .create(Api.class)
-                    .getCategories(page)
-                    .enqueue(new Callback<List<Category>>() {
+                    .getCategories(page);
+            mCallCategory.enqueue(new Callback<List<Category>>() {
                         @Override
                         public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                             if (response.isSuccessful()) {
@@ -121,12 +120,13 @@ public class ParentCatFragment extends ParentFragment {
                                 if (result != null && result.size() > 0) {
                                     mCategories.addAll(result);
                                     getCategories(++mCatPage);
-                                } else if (mCategories != null && mLoadingCallBack!=null) {
+                                } else if (mCategories != null && mLoadingCallBack != null) {
                                     ProductLab.getInstance().setCatagories(mCategories);
                                     getSubCategory(mSubCatPage);
 
                                 }
                             } else
+                                if (getActivity()!=null)
                                 NetworkConnection.warnConnection
                                         (getActivity(), getFragmentManager());
                         }
@@ -142,36 +142,46 @@ public class ParentCatFragment extends ParentFragment {
 
     private void getSubCategory(int page) {
 
-        if (mLoadingCallBack!=null) {
-            RetrofitClientInstance.getRetrofitInstance()
+        if (mLoadingCallBack != null) {
+            mCallSubCategory = RetrofitClientInstance.getRetrofitInstance()
                     .create(Api.class)
-                    .getSubCategories(mSubCatPage).
-                    enqueue(new Callback<List<Category>>() {
-                        @Override
-                        public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                            if (response.isSuccessful()) {
-                                List<Category> result = response.body();
-                                if (result != null && result.size() > 0) {
-                                    mSubCategories.addAll(result);
-                                    getSubCategory(++mSubCatPage);
-                                } else if (mSubCategories != null && mLoadingCallBack!=null) {
-                                    mLoadingCallBack.hideLoading();
-                                    ProductLab.getInstance().setSubCategories(mSubCategories);
-                                    setPagerWithTabLayout(mCategories);
-                                }
-                            } else {
-                                NetworkConnection.warnConnection
-                                        (getActivity(), getFragmentManager());
-                            }
-                        }
+                    .getSubCategories(mSubCatPage);
 
-                        @Override
-                        public void onFailure(Call<List<Category>> call, Throwable t) {
+            mCallSubCategory.enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                    if (response.isSuccessful()) {
+                        List<Category> result = response.body();
+                        if (result != null && result.size() > 0) {
+                            mSubCategories.addAll(result);
+                            getSubCategory(++mSubCatPage);
+                        } else if (mSubCategories != null && mLoadingCallBack != null) {
+                            mLoadingCallBack.hideLoading();
+                            ProductLab.getInstance().setSubCategories(mSubCategories);
+                            setPagerWithTabLayout(mCategories);
+                        }
+                    } else {
+                        if (getActivity() != null)
                             NetworkConnection.warnConnection
                                     (getActivity(), getFragmentManager());
-                        }
-                    });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+                    NetworkConnection.warnConnection
+                            (getActivity(), getFragmentManager());
+                }
+            });
         }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCallCategory.cancel();
+        mCallSubCategory.cancel();
     }
 
     private void setPagerWithTabLayout(List<Category> categories) {

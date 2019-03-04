@@ -1,5 +1,7 @@
 package com.example.market.model;
 
+import com.example.market.App;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,10 @@ public class ProductLab {
     private List<Product> mMVisitedProducts;
     private List<Product> mBProducts;
     private List<String> mCatagoryTitles;
+    private ProductDao mProductDao = (new App()).getDaoSession().getProductDao();
     //Uniques
-    private Product mProduct;
+    private Product CurrentProduct;
+
     private ProductLab() {
 
         mNewestProducts = new ArrayList<>();
@@ -32,6 +36,16 @@ public class ProductLab {
         return ourInstance;
     }
 
+    public Product getCurrentProduct() {
+        return CurrentProduct;
+    }
+
+    public void setCurrentProduct(Product currentProduct) {
+        CurrentProduct = currentProduct;
+    }
+
+
+    //Products List Methods
     public List<Category> getCatagories() {
         return mCatagories;
     }
@@ -41,7 +55,7 @@ public class ProductLab {
     }
 
     public Product getUniqueProduct(int id) {
-        return mProduct;
+        return CurrentProduct;
     }
 
     public List<Product> getProducts() {
@@ -60,7 +74,7 @@ public class ProductLab {
     }
 
     public List<Category> getUniqueSubCategory(int catIndex) {
-        int parentId=getParentId(catIndex);
+        int parentId = getParentId(catIndex);
         List<Category> result = new ArrayList<>();
         for (int i = 0; i < mSubCategories.size(); i++) {
             Category subCategory = mSubCategories.get(i);
@@ -110,6 +124,38 @@ public class ProductLab {
         mBProducts = BProducts;
     }
 
+
+    //Products Shopping Cart Methods
+
+    public void insertShoppingCart(Product product) {
+        if (product.getImages() != null) {
+            String url=product.getImages().get(0).getSrc();
+            product.setFirstImgUrl(url);
+        }
+        mProductDao.insertOrReplace(product);
+    }
+
+    public List<Product> getShopingCartPro() {
+
+        return mProductDao.queryBuilder().list();
+    }
+
+    public boolean checkProductExist(int apiId) {
+
+        Product result = mProductDao.queryBuilder().
+                where(ProductDao.Properties.MId.eq(apiId))
+                .unique();
+
+        return result != null;
+
+    }
+
+    public void deleteOrderedProduct(Product product)
+    {
+        mProductDao.delete(product);
+    }
+
+    //Product enums
     public enum ProductType {
 
         NEWEST,

@@ -6,14 +6,16 @@
         <item name="colorPrimary">@color/PrimaryColor</item>
         <item name="colorPrimaryDark">@color/PrimaryDarkColor</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:layoutDirection">rtl</item>
+        <item name="android:fontFamily">@font/iran_sans</item>
     </style>
 
 
     <!--items-->
     <style name="Txt_items">
-        <item name="android:textSize">18sp</item>
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 
@@ -27,9 +29,11 @@
 
     <!--Splash Screen-->
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
+        <item name="android:layoutDirection">rtl</item>
         <item name="android:background">@color/black_overlay</item>
     </style>
     <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:layoutDirection">rtl</item>
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>

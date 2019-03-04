@@ -3,6 +3,7 @@ package com.example.market.controllers.fragmnet;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class ProductListFragment extends ParentFragment {
     //Arguments Tag
     private static final String ARG_SUBCAT_ID = "subCatId";
     private static final String STATE_PAGE = "page";
+    private static final String TAG = "ProductListFragment";
     //CallBack
     private CallBacks mCallBacks;
     private LoadingCallBack mLoadingCallBack;
@@ -50,6 +52,7 @@ public class ProductListFragment extends ParentFragment {
     private ProductLab mProductLab;
     private ProductAdapter mProductAdapter;
     private int mPage = 1;
+    private Call<List<Product>> mProductCall;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -107,10 +110,23 @@ public class ProductListFragment extends ParentFragment {
         mProducts = new ArrayList<>();
         mProductLab = ProductLab.getInstance();
 
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
         int subCatId = getArguments().getInt(ARG_SUBCAT_ID);
         getProducts(subCatId);
+        Log.i(TAG,"on Resume");
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        mProductCall.cancel();
+        Log.i(TAG,"on Pause");
     }
 
     private void getProducts(int subCatId) {
@@ -118,8 +134,9 @@ public class ProductListFragment extends ParentFragment {
         if (mLoadingCallBack != null) {
             mLoadingCallBack.showLoading();
 
-            RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                    .getCatProducts(subCatId, mPage).enqueue(new Callback<List<Product>>() {
+            mProductCall = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                    .getCatProducts(subCatId, mPage);
+            mProductCall.enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
@@ -141,6 +158,7 @@ public class ProductListFragment extends ParentFragment {
 
                 @Override
                 public void onFailure(Call<List<Product>> call, Throwable t) {
+                    if (getActivity()!=null)
                     NetworkConnection.warnConnection
                             (getActivity(), getFragmentManager());
                 }

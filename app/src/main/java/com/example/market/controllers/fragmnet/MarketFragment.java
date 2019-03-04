@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.market.R;
@@ -25,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
 
 /**
@@ -41,7 +41,6 @@ public class MarketFragment extends ParentFragment {
     private RecyclerView mRecyMostVisited;
     private RecyclerView mRectBestSellers;
     private List<Product> mProducts;
-    private ProductAdapter mRecyAdapter;
     //Simple Variables
     private int mDeafaultCount = 20;
 
@@ -111,8 +110,8 @@ public class MarketFragment extends ParentFragment {
         List<Product> products = getProducts(type, productLab);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        mRecyAdapter = new ProductAdapter(products);
-        recyclerView.setAdapter(mRecyAdapter);
+        ProductAdapter adapter = new ProductAdapter(products);
+        recyclerView.setAdapter(adapter);
     }
 
     private List<Product> getProducts(ProductType type, ProductLab productLab) {
@@ -171,7 +170,7 @@ public class MarketFragment extends ParentFragment {
         private TextView mTxtPrice;
         private ImageView mImgProduct;
 
-        public ProductHolder(@NonNull View itemView) {
+        public ProductHolder(@NonNull View itemView, final List<Product> products) {
             super(itemView);
             mTxtName = itemView.findViewById(R.id.name_txt_specialItem);
             mTxtPrice = itemView.findViewById(R.id.price_txt_specialItem);
@@ -180,7 +179,7 @@ public class MarketFragment extends ParentFragment {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    int id = mRecyAdapter.getProducts().get(position).getId();
+                    int id =products.get(position).getId();
                     mCallBacks.showProductDetails(id);
                 }
             });
@@ -230,7 +229,7 @@ public class MarketFragment extends ParentFragment {
 
             View view = LayoutInflater.from(getActivity())
                     .inflate(R.layout.special_product_item, parent, false);
-            return new ProductHolder(view);
+            return new ProductHolder(view,mProductList);
         }
 
         @Override
@@ -246,6 +245,11 @@ public class MarketFragment extends ParentFragment {
 
             return mDeafaultCount;
         }
+
+
+
     }
+
+
 
 }

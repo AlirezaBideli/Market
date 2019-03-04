@@ -1,6 +1,5 @@
 package com.example.market.controllers.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,11 +11,10 @@ import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
+import com.example.market.controllers.fragmnet.ShoppingCartFragment;
 import com.example.market.interfaces.ActivityStart;
 import com.example.market.interfaces.LoadingCallBack;
-import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
-import com.example.market.utils.NetworkConnection;
 
 import java.util.List;
 
@@ -114,52 +112,63 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     }
 
     @Override
-    public void showDetails(Product product) {
+    public void showDetails() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.container_CategoryA, DetailFragment.newInstance(product))
+                .add(R.id.container_CategoryA, DetailFragment.newInstance())
                 .commit();
 
 
     }
 
     @Override
+    public void showShoppingCart() {
+
+
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_CategoryA, ShoppingCartFragment.newInstance())
+                .commit();
+
+    }
+
+    @Override
     public void onBackPressed() {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
-            if (currentFragmnet instanceof ParentCatFragment)
-                super.onBackPressed();
-            else {
-                mLoadingCover.setVisibility(View.INVISIBLE);
-                fragmentManager.beginTransaction()
-                        .remove(currentFragmnet)
-                        .commit();
+        if (currentFragmnet instanceof ParentCatFragment)
+            super.onBackPressed();
+        else {
+            mLoadingCover.setVisibility(View.INVISIBLE);
+            fragmentManager.beginTransaction()
+                    .remove(currentFragmnet)
+                    .commit();
 
-            }
-
+        }
 
     }
 
 
     @Override
     public void showLoading() {
-        if (mLoadingCover!=null)
-        mLoadingCover.setVisibility(View.VISIBLE);
+        if (mLoadingCover != null)
+            mLoadingCover.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        if (mLoadingCover!=null)
+        if (mLoadingCover != null)
             mLoadingCover.setVisibility(View.INVISIBLE);
 
     }
 
     @Override
     public void goPreviousFragment() {
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        Fragment fragment=fragmentManager.findFragmentById(R.id.container_CategoryA);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container_CategoryA);
 
         fragmentManager.beginTransaction()
                 .detach(fragment)

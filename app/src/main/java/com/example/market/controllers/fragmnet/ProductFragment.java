@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.interfaces.LoadingCallBack;
 import com.example.market.model.Product;
+import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -57,10 +59,13 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     private View mSeperator;
     private Product mProduct;
     private int mId;
+    private Call<Product> mCallProduct;
     private boolean mIsDescCompleted;
 
 
     //Widgets Variables
+    private MaterialButton mBtnAddCart;
+
 
     public ProductFragment() {
         // Required empty public constructor
@@ -120,18 +125,34 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mReviewLayout = view.findViewById(R.id.review_layout_ProductF);
         mIndicatorView = view.findViewById(R.id.pageIndicatorView_ProductF);
         mSeperator = view.findViewById(R.id.separator_ProductF);
+        mBtnAddCart = view.findViewById(R.id.btn_add_cart);
     }
 
     @Override
     protected void variableInit() {
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getProducts();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCallProduct.cancel();
+    }
+
+    private void getProducts() {
         if (mLoadingCallBack != null) {
             mId = getArguments().getInt(ARG_ID);
             mLoadingCallBack.showLoading();
 
-            RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                    .getProduct(mId).enqueue(new Callback<Product>() {
+            mCallProduct = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
+                    .getProduct(mId);
+            mCallProduct.enqueue(new Callback<Product>() {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
                     if (response.isSuccessful()) {
@@ -150,15 +171,18 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<Product> call, Throwable t) {
-                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
+                    if (getActivity() != null)
+                        NetworkConnection.warnConnection(getActivity(), getFragmentManager());
 
                 }
             });
         }
-
     }
 
+
     private void fillPage(Product product) {
+        ProductLab.getInstance().setCurrentProduct(product);
+
         String productName = product.getName();
         String productDescription = product.getDescription();
         String productPrice = product.getPrice();
@@ -223,6 +247,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
         mBtnDetail.setOnClickListener(this);
         mBtnRemain.setOnClickListener(this);
+        mBtnAddCart.setOnClickListener(this);
     }
 
     @Override
@@ -230,28 +255,47 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.detail_btn_productF:
-                mCallBacks.showDetails(mProduct);
+                mCallBacks.showDetails();
+                break;
+            case R.id.btn_add_cart:
+                addToShoppingCart();
                 break;
             case R.id.text_remaining_ProductF:
-                ViewGroup.LayoutParams layoutParams = mTxtDesc.getLayoutParams();
-
-                String buttonText;
-                if (!mIsDescCompleted) {
-                    buttonText = getString(R.string.close);
-                    layoutParams.height = WRAP_CONTENT_SIZE;
-                    mTxtDesc.setLayoutParams(layoutParams);
-                    mBtnRemain.setText(buttonText);
-                    mIsDescCompleted = true;
-                } else {
-
-                    buttonText = getString(R.string.text_remaining);
-                    int height = (int) getResources().getDimension(R.dimen.product_view);
-                    layoutParams.height = height;
-                    mTxtDesc.setLayoutParams(layoutParams);
-                    mBtnRemain.setText(buttonText);
-                    mIsDescCompleted = false;
-                }
+                handleDescription();
                 break;
+
+        }
+    }
+
+    private void addToShoppingCart() {
+        ProductLab productLab = ProductLab.getInstance();
+        boolean isExsisted = productLab.checkProductExist(mProduct.getMId());
+        if (isExsisted)
+            Toast.makeText(getActivity(), R.string.shoping_cart_warning, Toast.LENGTH_SHORT).show();
+        else {
+            ProductLab.getInstance().insertShoppingCart(mProduct);
+            mCallBacks.showShoppingCart();
+        }
+    }
+
+    private void handleDescription() {
+        ViewGroup.LayoutParams layoutParams = mTxtDesc.getLayoutParams();
+
+        String buttonText;
+        if (!mIsDescCompleted) {
+            buttonText = getString(R.string.close);
+            layoutParams.height = WRAP_CONTENT_SIZE;
+            mTxtDesc.setLayoutParams(layoutParams);
+            mBtnRemain.setText(buttonText);
+            mIsDescCompleted = true;
+        } else {
+
+            buttonText = getString(R.string.text_remaining);
+            int height = (int) getResources().getDimension(R.dimen.product_view);
+            layoutParams.height = height;
+            mTxtDesc.setLayoutParams(layoutParams);
+            mBtnRemain.setText(buttonText);
+            mIsDescCompleted = false;
         }
     }
 
@@ -268,7 +312,14 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
     }
 
+    private void checkProduct(int productId) {
+
+
+    }
+
     public interface CallBacks {
-        void showDetails(Product product);
+        void showDetails();
+
+        void showShoppingCart();
     }
 }

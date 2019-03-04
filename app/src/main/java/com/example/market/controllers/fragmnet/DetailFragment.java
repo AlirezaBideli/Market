@@ -38,10 +38,9 @@ public class DetailFragment extends ParentFragment {
         // Required empty public constructor
     }
 
-    public static DetailFragment newInstance(Product product) {
+    public static DetailFragment newInstance() {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PRODUCT,product);
         DetailFragment fragment = new DetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,7 +66,7 @@ public class DetailFragment extends ParentFragment {
     }
 
     private void setUpRecyclerView() {
-        Product product = (Product) getArguments().getSerializable(ARG_PRODUCT);
+        Product product =ProductLab.getInstance().getCurrentProduct();
         List<Product.Attributes> attributes = product.getAttributes();
 
         mDetailAdapter = new DetailAdapter(attributes,product);

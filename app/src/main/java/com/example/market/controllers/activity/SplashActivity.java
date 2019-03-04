@@ -45,8 +45,8 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         checkDownloadDatas();
     }
 
@@ -56,8 +56,6 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
         //getNewest>getMostVisited>getBests
         getNewest(mNewPage);
         //it means if downLoad action finished by downloading best products
-
-
     }
 
     private void getNewest(int newPage) {
@@ -164,7 +162,6 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
             Intent intent = ActivityHeper.Intent_MarketA(SplashActivity.this);
             startActivity(intent);
             this.finish();
-
         }
     }
 

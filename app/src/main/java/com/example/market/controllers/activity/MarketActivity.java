@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,11 +13,10 @@ import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
+import com.example.market.controllers.fragmnet.ShoppingCartFragment;
 import com.example.market.interfaces.ActivityStart;
 import com.example.market.interfaces.LoadingCallBack;
-import com.example.market.model.Product;
 import com.example.market.utils.ActivityHeper;
-import com.example.market.utils.NetworkConnection;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -110,17 +108,17 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
 
 
-            if (currentFragmnet instanceof MarketFragment)
-                super.onBackPressed();
-            else {
-                getSupportActionBar().show();
-                mLoadingCover.setVisibility(View.INVISIBLE);
-                fragmentManager.beginTransaction()
-                        .remove(currentFragmnet)
-                        .commit();
+        if (currentFragmnet instanceof MarketFragment)
+            super.onBackPressed();
+        else {
+            getSupportActionBar().show();
+            mLoadingCover.setVisibility(View.INVISIBLE);
+            fragmentManager.beginTransaction()
+                    .remove(currentFragmnet)
+                    .commit();
 
 
-            }
+        }
 
 
     }
@@ -152,9 +150,18 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     }
 
     @Override
-    public void showDetails(Product product) {
-        changePage(DetailFragment.newInstance(product));
+    public void showDetails() {
+        changePage(DetailFragment.newInstance());
 
+    }
+
+    @Override
+    public void showShoppingCart() {
+        getSupportActionBar().hide();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container_MarkerA, ShoppingCartFragment.newInstance())
+                .commit();
     }
 
 
@@ -170,7 +177,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showLoading() {
-        if (mLoadingCover!=null) {
+        if (mLoadingCover != null) {
             mLoadingCover.setVisibility(View.VISIBLE);
             getSupportActionBar().hide();
         }
@@ -179,7 +186,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void hideLoading() {
-        if (mLoadingCover!=null) {
+        if (mLoadingCover != null) {
             mLoadingCover.setVisibility(View.INVISIBLE);
             getSupportActionBar().hide();
         }
@@ -189,23 +196,25 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.market_menu,menu);
+        getMenuInflater().inflate(R.menu.market_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.search_marketA:
                 break;
             case R.id.shop_marketA:
+
+                showShoppingCart();
                 break;
         }
         return true;
 
     }
+
 
     @Override
     public void goPreviousFragment() {
