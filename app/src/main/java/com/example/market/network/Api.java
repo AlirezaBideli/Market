@@ -37,6 +37,8 @@ public interface Api {
     Call<List<Product>> getMVisitedProducts(@Query("page") int page);
     @GET("products?"+CONSUMER_KEY+"&"+CONSUMER_SECRET+"&"+TYPE_CONDITION_K+"=rating")
     Call<List<Product>> getBestProducts(@Query("page") int page);
+    @GET("products?"+CONSUMER_KEY+"&"+CONSUMER_SECRET+"&"+"featured=true")
+    Call<List<Product>> getFeaturedProducts();
 
 
 

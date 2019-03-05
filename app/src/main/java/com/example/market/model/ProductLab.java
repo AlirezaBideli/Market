@@ -20,6 +20,7 @@ public class ProductLab {
     private ProductDao mProductDao = (new App()).getDaoSession().getProductDao();
     //Uniques
     private Product CurrentProduct;
+    private List<String> mFeaturedProductImg=new ArrayList<>();
 
     private ProductLab() {
 
@@ -153,6 +154,14 @@ public class ProductLab {
     public void deleteOrderedProduct(Product product)
     {
         mProductDao.delete(product);
+    }
+
+    public void setFeaturedProductsImgs(List<String> featuredProducts) {
+        mFeaturedProductImg=featuredProducts;
+    }
+    public List<String> getFeaturedProductImg()
+    {
+        return mFeaturedProductImg;
     }
 
     //Product enums

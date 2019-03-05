@@ -8,16 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+import com.example.market.network.Api;
+import com.example.market.network.RetrofitClientInstance;
+import com.example.market.utils.NetworkConnection;
 import com.example.market.utils.PriceUtils;
+import com.rd.PageIndicatorView;
 import com.squareup.picasso.Picasso;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -34,17 +41,18 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MarketFragment extends ParentFragment {
 
 
+    List<String> mFeaturedProductImages = new ArrayList<>();
     //CallBacks
     private CallBacks mCallBacks;
     //Widgets Variables
     private RecyclerView mRecyNewest;
     private RecyclerView mRecyMostVisited;
     private RecyclerView mRectBestSellers;
-    private List<Product> mProducts;
+    private ViewPager mPagerFeaturesProducts;
+    private PageIndicatorView mPageIndicatorView;
     //Simple Variables
     private int mDeafaultCount = 20;
-
-
+    private List<Product> mProducts;
 
 
     public static MarketFragment newInstance() {
@@ -70,6 +78,59 @@ public class MarketFragment extends ParentFragment {
         mCallBacks = null;
     }
 
+
+
+
+    private void setUpViewPager() {
+        mFeaturedProductImages=ProductLab.getInstance().getFeaturedProductImg();
+        PagerAdapter pagerAdapter = new PagerAdapter() {
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                ImageView imageView = new ImageView(getActivity());
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                String src = mFeaturedProductImages.get(position);
+                Picasso.get().load(src).placeholder(R.drawable.shop_placeholder).into(imageView);
+                container.addView(imageView);
+                return imageView;
+            }
+
+            @Override
+            public int getCount() {
+                return mFeaturedProductImages.size();
+            }
+
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                return view == object;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView((View) object);
+            }
+        };
+        mPagerFeaturesProducts.setAdapter(pagerAdapter);
+        mPagerFeaturesProducts.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPageIndicatorView.setSelection(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,6 +140,7 @@ public class MarketFragment extends ParentFragment {
         variableInit();
         setListeners();
         setUpRecyclerView();
+        setUpViewPager();
         return view;
     }
 
@@ -137,6 +199,8 @@ public class MarketFragment extends ParentFragment {
         mRecyNewest = view.findViewById(R.id.recy_newest_MarketA);
         mRecyMostVisited = view.findViewById(R.id.recy_mostVisited_MarketA);
         mRectBestSellers = view.findViewById(R.id.recy_bests_MarketA);
+        mPageIndicatorView = view.findViewById(R.id.pageIndicatorView_MarketA);
+        mPagerFeaturesProducts = view.findViewById(R.id.pager_featured_products);
     }
 
     @Override
@@ -149,8 +213,6 @@ public class MarketFragment extends ParentFragment {
     public void setListeners() {
 
     }
-
-
 
 
     private enum ProductType {
@@ -179,7 +241,7 @@ public class MarketFragment extends ParentFragment {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    int id =products.get(position).getId();
+                    int id = products.get(position).getId();
                     mCallBacks.showProductDetails(id);
                 }
             });
@@ -189,7 +251,7 @@ public class MarketFragment extends ParentFragment {
 
 
             String rawPrice = product.getPrice();
-            String formatedPrice = PriceUtils.getCurrencyFormat(rawPrice,getActivity());
+            String formatedPrice = PriceUtils.getCurrencyFormat(rawPrice, getActivity());
             mTxtPrice.setText(formatedPrice);
             mTxtName.setText(product.getName());
 
@@ -229,7 +291,7 @@ public class MarketFragment extends ParentFragment {
 
             View view = LayoutInflater.from(getActivity())
                     .inflate(R.layout.special_product_item, parent, false);
-            return new ProductHolder(view,mProductList);
+            return new ProductHolder(view, mProductList);
         }
 
         @Override
@@ -247,9 +309,7 @@ public class MarketFragment extends ParentFragment {
         }
 
 
-
     }
-
 
 
 }
