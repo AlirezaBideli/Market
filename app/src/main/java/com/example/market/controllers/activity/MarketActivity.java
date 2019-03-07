@@ -13,10 +13,13 @@ import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.controllers.fragmnet.DetailFragment;
 import com.example.market.controllers.fragmnet.MarketFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
+import com.example.market.controllers.fragmnet.SearchProductFragment;
 import com.example.market.controllers.fragmnet.ShoppingCartFragment;
-import com.example.market.interfaces.ActivityStart;
-import com.example.market.interfaces.LoadingCallBack;
+import com.example.market.model.ActivityStart;
+import com.example.market.model.DetailCallBack;
+import com.example.market.model.LoadingCallBack;
 import com.example.market.utils.ActivityHeper;
+import com.example.market.utils.KeyBoardUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -31,7 +34,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
-        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks {
+        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, DetailCallBack {
 
 
     //simple Variables
@@ -41,6 +44,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     private FrameLayout mLoadingCover;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private FragmentManager mFragmentManager;
 
     @Override
     public Fragment createFragment() {
@@ -86,6 +90,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
                 R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        mFragmentManager = getSupportFragmentManager();
 
 
     }
@@ -103,24 +108,35 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
-        Fragment currentFragmnet = fragments.get(fragments.size() - 1);
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        Fragment currentFragment = fragments.get(fragments.size() - 1);
 
 
-        if (currentFragmnet instanceof MarketFragment)
+        if (currentFragment instanceof MarketFragment)
             super.onBackPressed();
         else {
-            getSupportActionBar().show();
+
+
+            int size = fragments.size();
+            int onBeforeTheLAstFragment = size - 2;
+            if (size >= 2) {
+                if (fragments.get(onBeforeTheLAstFragment) instanceof MarketFragment)
+                    getSupportActionBar().show();
+            } else
+                getSupportActionBar().hide();
+
             mLoadingCover.setVisibility(View.INVISIBLE);
-            fragmentManager.beginTransaction()
-                    .remove(currentFragmnet)
-                    .commit();
 
 
         }
 
 
+    }
+
+    private void removeCurrentFragment(Fragment currentFragment) {
+        mFragmentManager.beginTransaction()
+                .remove(currentFragment)
+                .commit();
     }
 
     @Override
@@ -158,8 +174,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     @Override
     public void showShoppingCart() {
         getSupportActionBar().hide();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .add(R.id.container_MarkerA, ShoppingCartFragment.newInstance())
                 .commit();
     }
@@ -167,7 +182,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     private void changePage(Fragment fragment) {
 
-        getSupportFragmentManager().beginTransaction()
+        mFragmentManager.beginTransaction()
                 .add(R.id.container_MarkerA, fragment)
                 .commitAllowingStateLoss();
 
@@ -180,6 +195,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         if (mLoadingCover != null) {
             mLoadingCover.setVisibility(View.VISIBLE);
             getSupportActionBar().hide();
+            KeyBoardUtils.hideKeyboard(MarketActivity.this);
+
         }
 
     }
@@ -189,6 +206,9 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         if (mLoadingCover != null) {
             mLoadingCover.setVisibility(View.INVISIBLE);
             getSupportActionBar().hide();
+            KeyBoardUtils.hideKeyboard(MarketActivity.this);
+
+
         }
 
     }
@@ -205,6 +225,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
         switch (item.getItemId()) {
             case R.id.search_marketA:
+
+                changePage(SearchProductFragment.newInstance());
                 break;
             case R.id.shop_marketA:
 
@@ -218,10 +240,9 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void goPreviousFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.container_MarkerA);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.container_MarkerA);
 
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .detach(fragment)
                 .attach(fragment)
                 .commit();

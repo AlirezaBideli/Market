@@ -30,7 +30,9 @@
         <activity
             android:name=".controllers.activity.CategoryActivity"
             android:parentActivityName=".controllers.activity.MarketActivity" />
-        <activity android:name=".controllers.activity.MarketActivity" />
+        <activity android:name=".controllers.activity.MarketActivity">
+
+        </activity>
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"

@@ -12,8 +12,9 @@ import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
 import com.example.market.controllers.fragmnet.ShoppingCartFragment;
-import com.example.market.interfaces.ActivityStart;
-import com.example.market.interfaces.LoadingCallBack;
+import com.example.market.model.ActivityStart;
+import com.example.market.model.LoadingCallBack;
+import com.example.market.model.DetailCallBack;
 import com.example.market.model.ProductLab;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
-        , CategoryListFragment.CallBacks, ProductListFragment.CallBacks,
+        , CategoryListFragment.CallBacks, DetailCallBack,
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks {
 
     //Argument Tags

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
-import com.example.market.interfaces.LoadingCallBack;
+import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Category;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -33,7 +33,7 @@ public class ParentCatFragment extends ParentFragment {
 
 
     public static final String TAG = "CategoryActivity";
-    //CallBacks
+    //DetailCallBack
     private LoadingCallBack mLoadingCallBack;
     private int mCatPage = 1;
     private int mSubCatPage = 1;

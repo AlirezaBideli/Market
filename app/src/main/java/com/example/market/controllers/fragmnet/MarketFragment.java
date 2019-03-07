@@ -42,7 +42,7 @@ public class MarketFragment extends ParentFragment {
 
 
     List<String> mFeaturedProductImages = new ArrayList<>();
-    //CallBacks
+    //DetailCallBack
     private CallBacks mCallBacks;
     //Widgets Variables
     private RecyclerView mRecyNewest;

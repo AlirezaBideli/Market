@@ -11,6 +11,5 @@
         android:id="@+id/search_marketA"
         android:icon="@drawable/search"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
 </menu>

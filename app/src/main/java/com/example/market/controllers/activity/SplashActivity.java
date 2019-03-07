@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,12 +38,14 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
     private Call mMostVisitedPCall;
     private Call mNewestPCalll;
     private Call<List<Product>> mFeaturedProductCall;
+    FragmentManager mFragmentManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        mFragmentManager=getSupportFragmentManager();
     }
 
     @Override
@@ -71,25 +74,29 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                     List<Product> products = response.body();
                     int size = products.size();
                     List<String> featuredProducts = new ArrayList<>();
-                    for (byte i = 0; i < size; i++) {
-                        String img = products.get(i).getImages().get(0).getSrc();
-                        featuredProducts.add(img);
-                    }
+                    getProductImages(products, size, featuredProducts);
                     mProductLab.setFeaturedProductsImgs(featuredProducts);
                     getNewest(mNewPage);
 
                 } else {
                     if (SplashActivity.this != null)
-                        NetworkConnection.checkConnection(SplashActivity.this);
+                        NetworkConnection.warnConnection(SplashActivity.this,mFragmentManager);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 if (SplashActivity.this != null)
-                    NetworkConnection.checkConnection(SplashActivity.this);
+                    NetworkConnection.warnConnection(SplashActivity.this,mFragmentManager);
             }
         });
+    }
+
+    private void getProductImages(List<Product> products, int size, List<String> featuredProducts) {
+        for (byte i = 0; i < size; i++) {
+            String img = products.get(i).getImages().get(0).getSrc();
+            featuredProducts.add(img);
+        }
     }
 
     private void getNewest(int newPage) {
@@ -103,13 +110,15 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                     if (result != null && mNewPage <= mDefaultPageNum) {
                         mNewestProducts.addAll(result);
                         getNewest(++mNewPage);
-                    } else if (mNewestProducts != null)
+                    } else if (mNewestProducts != null) {
                         mProductLab.setNewestProducts(mNewestProducts);
-                    getMostVisited(mVisitedPage);
+                        getMostVisited(mVisitedPage);
+                    }
 
 
                 } else {
-                    NetworkConnection.warnConnection
+                    if (SplashActivity.this != null)
+                        NetworkConnection.warnConnection
                             (SplashActivity.this, getSupportFragmentManager());
 
                 }
@@ -119,8 +128,10 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                NetworkConnection.warnConnection
-                        (SplashActivity.this, getSupportFragmentManager());
+                if (SplashActivity.this != null) {
+                    NetworkConnection.warnConnection
+                            (SplashActivity.this, getSupportFragmentManager());
+                }
             }
         });
     }
@@ -137,13 +148,14 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                     List<Product> result = response.body();
                     if (result != null && mVisitedPage <= mDefaultPageNum) {
                         mMVisitedProducts.addAll(result);
-                        getBests(++mVisitedPage);
+                        getMostVisited(++mVisitedPage);
                     } else if (mMVisitedProducts != null) {
                         mProductLab.setMVisitedProducts(mMVisitedProducts);
                         getBests(mBestPage);
 
                     }
                 } else
+                if (SplashActivity.this != null)
                     NetworkConnection.warnConnection
                             (SplashActivity.this, getSupportFragmentManager());
 
@@ -152,7 +164,8 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
 
-                NetworkConnection.warnConnection
+                if (SplashActivity.this != null)
+                    NetworkConnection.warnConnection
                         (SplashActivity.this, getSupportFragmentManager());
             }
         });
@@ -175,7 +188,8 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                         startApp();
                     }
                 } else {
-                    NetworkConnection.warnConnection
+                    if (SplashActivity.this != null)
+                        NetworkConnection.warnConnection
                             (SplashActivity.this, getSupportFragmentManager());
                 }
             }

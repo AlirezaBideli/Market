@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
-import com.example.market.interfaces.LoadingCallBack;
+import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -45,7 +45,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     //simple Variables
     private static final int DEFAULT_CHAR_COUNT = 300;
     private static final int WRAP_CONTENT_SIZE = -1;
-    //CallBacks
+    //DetailCallBack
     private LoadingCallBack mLoadingCallBack;
     //CallBack
     private CallBacks mCallBacks;
@@ -164,7 +164,8 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
                             mLoadingCallBack.hideLoading();
                         }
                     } else {
-                        NetworkConnection.warnConnection(getActivity(), getFragmentManager());
+                        if (getActivity() != null)
+                            NetworkConnection.warnConnection(getActivity(), getFragmentManager());
 
                     }
                 }

@@ -23,11 +23,10 @@ public class NetworkConnection {
     }
 
     public static boolean checkConnection(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+   ConnectivityManager cm =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
+        boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
+        return isNetworkConnected;
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
     }
 }

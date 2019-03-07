@@ -1,4 +1,4 @@
-package com.example.market.interfaces;
+package com.example.market.model;
 import android.view.View;
 
 public interface ActivityStart {

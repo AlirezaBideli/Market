@@ -12,7 +12,8 @@ import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
-import com.example.market.interfaces.LoadingCallBack;
+import com.example.market.model.LoadingCallBack;
+import com.example.market.model.DetailCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -42,7 +43,7 @@ public class ProductListFragment extends ParentFragment {
     private static final String STATE_PAGE = "page";
     private static final String TAG = "ProductListFragment";
     //CallBack
-    private CallBacks mCallBacks;
+    private DetailCallBack mDetailCallBack;
     private LoadingCallBack mLoadingCallBack;
     //Widgets variables
     private RecyclerView mRecyProducts;
@@ -72,7 +73,7 @@ public class ProductListFragment extends ParentFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof CategoryActivity) {
-            mCallBacks = (CallBacks) context;
+            mDetailCallBack = (DetailCallBack) context;
             mLoadingCallBack = (LoadingCallBack) context;
         }
     }
@@ -80,7 +81,7 @@ public class ProductListFragment extends ParentFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBacks = null;
+        mDetailCallBack = null;
         mLoadingCallBack = null;
     }
 
@@ -189,9 +190,7 @@ public class ProductListFragment extends ParentFragment {
     }
 
 
-    public interface CallBacks {
-        void showProductDetails(int id);
-    }
+
 
     private class ProductHolder extends RecyclerView.ViewHolder {
 
@@ -209,7 +208,7 @@ public class ProductListFragment extends ParentFragment {
                 public void onClick(View view) {
                     Product product = mProducts.get(getAdapterPosition());
                     final int id = product.getId();
-                    mCallBacks.showProductDetails(id);
+                    mDetailCallBack.showProductDetails(id);
                 }
             });
         }

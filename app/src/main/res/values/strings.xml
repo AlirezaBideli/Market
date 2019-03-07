@@ -57,4 +57,5 @@
     <string name="total_price">قیمت کلی</string>
     <string name="final_price">قیمت نهایی</string>
     <string name="bu_productsmessage">خرید حود را نهایی کنید</string>
+    <string name="search_message">جستجو در فروشگاه آنلاین</string>
 </resources>
