@@ -58,4 +58,9 @@
     <string name="final_price">قیمت نهایی</string>
     <string name="bu_productsmessage">خرید حود را نهایی کنید</string>
     <string name="search_message">جستجو در فروشگاه آنلاین</string>
+    <string name="filter">فیلتر کردن</string>
+    <string name="sort">مرتب سازی</string>
+    <string name="best_sellers">پرفروش ترین ها</string>
+    <string name="price_desc">قیمت از زیاد به کم</string>
+    <string name="price_asc">قیمت از کم به زیاد</string>
 </resources>

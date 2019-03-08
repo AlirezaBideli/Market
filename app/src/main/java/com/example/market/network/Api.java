@@ -19,6 +19,8 @@ public interface Api {
     static final String PRODUCT_CATEGORY_K = "category";
     static final String TYPE_CONDITION_K = "orderby";
     static final String AUTHENTICATION = CONSUMER_KEY + "&" + CONSUMER_SECRET;
+    static final String PAGE_CONDITION = "";
+
 
 
     @GET("products/categories?" + AUTHENTICATION+ "&" + CATEGORY_CONDITION + "=0")
@@ -27,24 +29,30 @@ public interface Api {
     @GET("products/categories?" + AUTHENTICATION+ "&" + CATEGORY_CONDITION + "!=0")
     Call<List<Category>> getSubCategories(@Query("page") int page);
 
-    @GET("products?" + AUTHENTICATION)
-    Call<List<Product>> getCatProducts(@Query("category") int category, @Query("page") int page);
+    @GET("products?" + AUTHENTICATION+"&"+PAGE_CONDITION)
+    Call<List<Product>> getCatProducts(@Query("category") int category
+            ,@Query("orderby")String orderby,@Query("order")String order);
 
     @GET("products/{id}?" + AUTHENTICATION)
     Call<Product> getProduct(@Path("id") int id);
 
-    @GET("products?" + AUTHENTICATION)
-    Call<List<Product>> getNewestProduct(@Query("page") int page);
+    @GET("products?" + AUTHENTICATION+"&"+PAGE_CONDITION)
+    Call<List<Product>> getNewestProduct();
 
-    @GET("products?" + AUTHENTICATION+ "&" + TYPE_CONDITION_K + "=popularity")
-    Call<List<Product>> getMVisitedProducts(@Query("page") int page);
+    @GET("products"+AUTHENTICATION)
+    Call<List<Product>> getProducts(@Query("orderby")String orderby,@Query("order")String order);
 
-    @GET("products?" + AUTHENTICATION+"&" + TYPE_CONDITION_K + "=rating")
-    Call<List<Product>> getBestProducts(@Query("page") int page);
+    @GET("products?" + AUTHENTICATION+ "&" + TYPE_CONDITION_K + "=popularity"+"&"+PAGE_CONDITION)
+    Call<List<Product>> getMVisitedProducts();
 
-    @GET("products?" + AUTHENTICATION+ "&" + "featured=true")
+    @GET("products?" + AUTHENTICATION+"&"+ TYPE_CONDITION_K + "=rating"+"&"+PAGE_CONDITION)
+    Call<List<Product>> getBestProducts();
+
+    @GET("products?" + AUTHENTICATION+ "&"+"featured=true")
     Call<List<Product>> getFeaturedProducts();
 
     @GET("products?" +AUTHENTICATION)
     Call<List<Product>> getResultProducts(@Query("search") String search);
+
+
 }

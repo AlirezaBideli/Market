@@ -12,10 +12,12 @@ import com.example.market.controllers.fragmnet.ParentCatFragment;
 import com.example.market.controllers.fragmnet.ProductFragment;
 import com.example.market.controllers.fragmnet.ProductListFragment;
 import com.example.market.controllers.fragmnet.ShoppingCartFragment;
+import com.example.market.controllers.fragmnet.SortDialogFragment;
 import com.example.market.model.ActivityStart;
-import com.example.market.model.LoadingCallBack;
 import com.example.market.model.DetailCallBack;
+import com.example.market.model.LoadingCallBack;
 import com.example.market.model.ProductLab;
+import com.example.market.model.SortType;
 
 import java.util.List;
 
@@ -27,18 +29,20 @@ import androidx.fragment.app.FragmentManager;
 
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
         , CategoryListFragment.CallBacks, DetailCallBack,
-        ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks {
+        ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, SortDialogFragment.CallBacks {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
     //widgets Variables
     private Toolbar mToolbar;
-    //Widgets Variables
+    //Simple Variables
     private FrameLayout mLoadingCover;
     private ProductLab mProductLab;
     private boolean mIsDownloadable = true;
+    private FragmentManager mFragmentManager;
     //AsyncTasks
     private Runnable mCategoriesRunnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +67,9 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     @Override
     public void variableInit() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .replace(R.id.container_CategoryA, ParentCatFragment.newInstance())
                 .commit();
         setUpNavigation();
@@ -127,7 +131,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     public void showShoppingCart() {
 
 
-        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container_CategoryA, ShoppingCartFragment.newInstance())
                 .commit();
@@ -168,13 +172,18 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     @Override
     public void goPreviousFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.container_CategoryA);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.container_CategoryA);
 
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .detach(fragment)
                 .attach(fragment)
                 .commit();
 
+    }
+
+    @Override
+    public void sort(SortType sortType) {
+        ProductListFragment currentFragmnet = (ProductListFragment) mFragmentManager.findFragmentById(R.id.container_CategoryA);
+        currentFragmnet.refreshList(sortType);
     }
 }

@@ -156,9 +156,11 @@ public class ParentCatFragment extends ParentFragment {
                             mSubCategories.addAll(result);
                             getSubCategory(++mSubCatPage);
                         } else if (mSubCategories != null && mLoadingCallBack != null) {
-                            mLoadingCallBack.hideLoading();
-                            ProductLab.getInstance().setSubCategories(mSubCategories);
-                            setPagerWithTabLayout(mCategories);
+                            if (getActivity()!=null) {
+                                ProductLab.getInstance().setSubCategories(mSubCategories);
+                                mLoadingCallBack.hideLoading();
+                                setPagerWithTabLayout(mCategories);
+                            }
                         }
                     } else {
                         if (getActivity() != null)

@@ -27,6 +27,7 @@
 
 
 
+
     <!--Splash Screen-->
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
         <item name="android:layoutDirection">rtl</item>

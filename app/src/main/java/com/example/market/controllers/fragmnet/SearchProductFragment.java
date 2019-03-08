@@ -125,12 +125,16 @@ public class SearchProductFragment extends ParentFragment {
                                 if (response.isSuccessful()) {
                                     if (getActivity() != null) {
                                         mProducts = response.body();
-                                        if (mProducts != null && mProducts.size() > 0) {
-                                            setUpRecyclerView(mProducts);
-                                            mTxtNotFound.setVisibility(View.INVISIBLE);
-                                        } else
-                                            mTxtNotFound.setVisibility(View.VISIBLE);
-                                        mLoadingCallBack.hideLoading();
+
+                                        if (getActivity()!=null) {
+                                            if (mProducts != null && mProducts.size() > 0) {
+                                                setUpRecyclerView(mProducts);
+                                                mTxtNotFound.setVisibility(View.INVISIBLE);
+                                            } else
+                                                mTxtNotFound.setVisibility(View.VISIBLE);
+                                            mLoadingCallBack.hideLoading();
+                                        }
+
                                     } else if (getActivity() != null)
                                         NetworkConnection.warnConnection(getActivity(), mFragmentManager);
                                 }

@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.example.market.R;
 import com.example.market.controllers.fragmnet.ConnectionDialog;
 import com.example.market.controllers.fragmnet.DetailFragment;
@@ -34,7 +33,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
-        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, DetailCallBack {
+        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, DetailCallBack  {
 
 
     //simple Variables
@@ -111,12 +110,9 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         List<Fragment> fragments = mFragmentManager.getFragments();
         Fragment currentFragment = fragments.get(fragments.size() - 1);
 
-
         if (currentFragment instanceof MarketFragment)
             super.onBackPressed();
         else {
-
-
             int size = fragments.size();
             int onBeforeTheLAstFragment = size - 2;
             if (size >= 2) {
@@ -124,10 +120,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
                     getSupportActionBar().show();
             } else
                 getSupportActionBar().hide();
-
             mLoadingCover.setVisibility(View.INVISIBLE);
-
-
+            removeCurrentFragment(currentFragment);
         }
 
 
@@ -136,7 +130,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     private void removeCurrentFragment(Fragment currentFragment) {
         mFragmentManager.beginTransaction()
                 .remove(currentFragment)
-                .commit();
+                .commitNow();
     }
 
     @Override
@@ -229,7 +223,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
                 changePage(SearchProductFragment.newInstance());
                 break;
             case R.id.shop_marketA:
-
                 showShoppingCart();
                 break;
         }
@@ -248,4 +241,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
                 .commit();
 
     }
+
+
+
 }

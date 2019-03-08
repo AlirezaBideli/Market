@@ -12,13 +12,15 @@ import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
-import com.example.market.model.LoadingCallBack;
 import com.example.market.model.DetailCallBack;
+import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
+import com.example.market.model.SortType;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
+import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,34 +28,39 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProductListFragment extends ParentFragment {
+public class ProductListFragment extends ParentFragment implements View.OnClickListener {
 
 
     //Arguments Tag
     private static final String ARG_SUBCAT_ID = "subCatId";
     private static final String STATE_PAGE = "page";
     private static final String TAG = "ProductListFragment";
+    private static final String SORT_DIALOG_TAG = "SortDialogTag";
     //CallBack
     private DetailCallBack mDetailCallBack;
     private LoadingCallBack mLoadingCallBack;
     //Widgets variables
-    private RecyclerView mRecyProducts;
+    public RecyclerView mRecyProducts;
     private TextView mTxtNotFound;
+    private MaterialButton mBtnSort;
     //Simple Variables
     private List<Product> mProducts;
     private ProductLab mProductLab;
     private ProductAdapter mProductAdapter;
     private int mPage = 1;
     private Call<List<Product>> mProductCall;
+    private int mSubcatId;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -95,7 +102,7 @@ public class ProductListFragment extends ParentFragment {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         findViewByIds(view);
         variableInit();
-
+        setListeners();
         return view;
     }
 
@@ -104,12 +111,15 @@ public class ProductListFragment extends ParentFragment {
 
         mRecyProducts = view.findViewById(R.id.recy_product_list);
         mTxtNotFound = view.findViewById(R.id.notFound_txt_productListF);
+        mBtnSort=view.findViewById(R.id.sort_btn);
     }
 
     @Override
     protected void variableInit() {
         mProducts = new ArrayList<>();
         mProductLab = ProductLab.getInstance();
+        SortDialogFragment.misFirstTime=true;
+        SortDialogFragment.mRadioCheckedPosition=0;
 
 
     }
@@ -118,37 +128,40 @@ public class ProductListFragment extends ParentFragment {
     @Override
     public void onResume() {
         super.onResume();
-        int subCatId = getArguments().getInt(ARG_SUBCAT_ID);
-        getProducts(subCatId);
-        Log.i(TAG,"on Resume");
+        mSubcatId = getArguments().getInt(ARG_SUBCAT_ID);
+        getProducts(mSubcatId,SortType.NEWEST);
+    }
+    public void refreshList(SortType sortType)
+    {
+        getProducts(mSubcatId,sortType);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mProductCall.cancel();
-        Log.i(TAG,"on Pause");
+        Log.i(TAG, "on Pause");
     }
 
-    private void getProducts(int subCatId) {
+    private void getProducts(int subCatId,SortType sortType) {
 
         if (mLoadingCallBack != null) {
             mLoadingCallBack.showLoading();
 
-            mProductCall = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
-                    .getCatProducts(subCatId, mPage);
+
+            mProductCall = getProductListCall(subCatId,sortType);
             mProductCall.enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
                         List<Product> result = response.body();
-                        if (result != null && result.size() > 0) {
-                            mProducts.addAll(result);
-                            getProducts(++mPage);
-
-                        } else if (mProducts != null && mLoadingCallBack != null) {
-                            checkCount();
+                        if (getActivity()!=null &&result != null && result.size() > 0) {
+                            mProducts=result;
                             setUpRecyclerView();
+                            mLoadingCallBack.hideLoading();
+                        }
+                        else if (getActivity()!=null  && result!=null){
+                            checkCount();
                             mLoadingCallBack.hideLoading();
 
                         }
@@ -159,9 +172,9 @@ public class ProductListFragment extends ParentFragment {
 
                 @Override
                 public void onFailure(Call<List<Product>> call, Throwable t) {
-                    if (getActivity()!=null)
-                    NetworkConnection.warnConnection
-                            (getActivity(), getFragmentManager());
+                    if (getActivity() != null)
+                        NetworkConnection.warnConnection
+                                (getActivity(), getFragmentManager());
                 }
             });
         }
@@ -169,7 +182,7 @@ public class ProductListFragment extends ParentFragment {
 
     @Override
     protected void setListeners() {
-
+        mBtnSort.setOnClickListener(this);
     }
 
     private void checkCount() {
@@ -189,7 +202,18 @@ public class ProductListFragment extends ParentFragment {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.sort_btn:
 
+                FragmentManager fragmentManager = getFragmentManager();
+                SortDialogFragment sortDialogFragment = SortDialogFragment.newInstance();
+                sortDialogFragment.show(fragmentManager, SORT_DIALOG_TAG);
+                break;
+
+        }
+    }
 
 
     private class ProductHolder extends RecyclerView.ViewHolder {
@@ -259,4 +283,64 @@ public class ProductListFragment extends ParentFragment {
             return mProducts.size();
         }
     }
+
+    private Call getProductListCall(int subCatId,SortType sortType)
+    {
+        Call productCall=null;
+        Api api=RetrofitClientInstance.getRetrofitInstance().create(Api.class);
+        switch (sortType)
+        {
+            case NEWEST:
+                productCall=api.getCatProducts(subCatId,OrderBy.DATE.getName(),Order.DeCENDING.getName());
+                break;
+            case BEST_SELLERS:
+                productCall=api.getCatProducts(subCatId,OrderBy.POPULARITY.getName(),Order.DeCENDING.getName());
+                break;
+            case PRICE_ASC:
+                productCall=api.getCatProducts(subCatId,OrderBy.PRICE.getName(),Order.ASCENDING.getName());
+                break;
+            case PRICE_DESC:
+                productCall=api.getCatProducts(subCatId,OrderBy.PRICE.getName(),Order.DeCENDING.getName());
+                break;
+        }
+        return productCall;
+    }
+
+
+    private enum OrderBy
+    {
+        DATE("date"),
+        POPULARITY("popularity"),
+        PRICE("price");
+
+        public String getName() {
+            return name;
+        }
+
+        private String name;
+
+        OrderBy(String name)
+        {
+           this.name=name;
+        }
+
+    }
+    private enum Order
+    {
+        ASCENDING("asc"),
+        DeCENDING("desc");
+
+
+        public String getName() {
+            return name;
+        }
+
+        private String name;
+
+        Order(String name)
+        {
+            this.name=name;
+        }
+    }
+
 }

@@ -12,7 +12,7 @@ public class KeyBoardUtils {
         if (view == null) {
             view = new View(activity);
         }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     }
     public static void showKeyBoard(Activity activity) {
