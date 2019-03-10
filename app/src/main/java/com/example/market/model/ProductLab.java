@@ -1,6 +1,6 @@
 package com.example.market.model;
 
-import com.example.market.App;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,8 @@ import java.util.List;
 public class ProductLab {
     public static final byte mCatagoryNum = 0;
     public static final byte mSubCatagoryNum = 1;
-    private static final ProductLab ourInstance = new ProductLab();
+    private static ProductLab ourInstance;
+    private final Context mContext;
     //Lists
     private List<Category> mCatagories;
     private List<Category> mSubCategories;
@@ -16,24 +17,24 @@ public class ProductLab {
     private List<Product> mNewestProducts;
     private List<Product> mMVisitedProducts;
     private List<Product> mBProducts;
-    private List<String> mCatagoryTitles;
-    private ProductDao mProductDao = (new App()).getDaoSession().getProductDao();
+    private List<String> mCategoryTitles;
+
     //Uniques
     private Product CurrentProduct;
-    private List<String> mFeaturedProductImg=new ArrayList<>();
+    private List<String> mFeaturedProductImg = new ArrayList<>();
 
-    private ProductLab() {
-
+    private ProductLab(Context context) {
+        mContext = context;
         mNewestProducts = new ArrayList<>();
         mBProducts = new ArrayList<>();
         mMVisitedProducts = new ArrayList<>();
-        mCatagoryTitles = new ArrayList<>();
+        mCategoryTitles = new ArrayList<>();
         mCatagories = new ArrayList<>();
-
-
     }
 
-    public static ProductLab getInstance() {
+    public static ProductLab getInstance(Context context) {
+        if (ourInstance == null)
+            ourInstance = new ProductLab(context);
         return ourInstance;
     }
 
@@ -63,10 +64,10 @@ public class ProductLab {
         return mProducts;
     }
 
-    public List<String> getCatagoryTitles() {
+    public List<String> getCategoryTitles() {
 
 
-        return mCatagoryTitles;
+        return mCategoryTitles;
     }
 
     public int getParentId(int catIndex) {
@@ -125,42 +126,11 @@ public class ProductLab {
         mBProducts = BProducts;
     }
 
-
-    //Products Shopping Cart Methods
-
-    public void insertShoppingCart(Product product) {
-        if (product.getImages() != null) {
-            String url=product.getImages().get(0).getSrc();
-            product.setFirstImgUrl(url);
-        }
-        mProductDao.insertOrReplace(product);
+    public void setFeaturedProductsImags(List<String> featuredProducts) {
+        mFeaturedProductImg = featuredProducts;
     }
 
-    public List<Product> getShopingCartPro() {
-
-        return mProductDao.queryBuilder().list();
-    }
-
-    public boolean checkProductExist(int apiId) {
-
-        Product result = mProductDao.queryBuilder().
-                where(ProductDao.Properties.MId.eq(apiId))
-                .unique();
-
-        return result != null;
-
-    }
-
-    public void deleteOrderedProduct(Product product)
-    {
-        mProductDao.delete(product);
-    }
-
-    public void setFeaturedProductsImgs(List<String> featuredProducts) {
-        mFeaturedProductImg=featuredProducts;
-    }
-    public List<String> getFeaturedProductImg()
-    {
+    public List<String> getFeaturedProductImg() {
         return mFeaturedProductImg;
     }
 

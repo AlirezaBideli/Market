@@ -14,6 +14,8 @@ import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.LoadingCallBack;
+import com.example.market.model.Order;
+import com.example.market.model.OrderLab;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;
@@ -45,6 +47,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     //simple Variables
     private static final int DEFAULT_CHAR_COUNT = 300;
     private static final int WRAP_CONTENT_SIZE = -1;
+    public static final int DEFAULT_COUNT = 1;
     //DetailCallBack
     private LoadingCallBack mLoadingCallBack;
     //CallBack
@@ -182,7 +185,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
 
     private void fillPage(Product product) {
-        ProductLab.getInstance().setCurrentProduct(product);
+        ProductLab.getInstance(getActivity()).setCurrentProduct(product);
 
         String productName = product.getName();
         String productDescription = product.getDescription();
@@ -269,12 +272,15 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     }
 
     private void addToShoppingCart() {
-        ProductLab productLab = ProductLab.getInstance();
-        boolean isExsisted = productLab.checkProductExist(mProduct.getMId());
+        OrderLab orderLab = OrderLab.getInstance(getActivity());
+        Order order=new Order();
+        order.set_id((long) mProduct.getId());
+        order.setCount(DEFAULT_COUNT);
+        boolean isExsisted = orderLab.checkProductExist(order);
         if (isExsisted)
             Toast.makeText(getActivity(), R.string.shoping_cart_warning, Toast.LENGTH_SHORT).show();
         else {
-            ProductLab.getInstance().insertShoppingCart(mProduct);
+            orderLab.insertToShoppingCart(order);
             mCallBacks.showShoppingCart();
         }
     }

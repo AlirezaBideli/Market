@@ -82,7 +82,7 @@ public class MarketFragment extends ParentFragment {
 
 
     private void setUpViewPager() {
-        mFeaturedProductImages=ProductLab.getInstance().getFeaturedProductImg();
+        mFeaturedProductImages=ProductLab.getInstance(getActivity()).getFeaturedProductImg();
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @NonNull
             @Override
@@ -168,7 +168,7 @@ public class MarketFragment extends ParentFragment {
     private void fillRecyclerView(LinearLayoutManager layoutManager
             , ProductType type, RecyclerView recyclerView) {
 
-        ProductLab productLab = ProductLab.getInstance();
+        ProductLab productLab = ProductLab.getInstance(getActivity());
         List<Product> products = getProducts(type, productLab);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);

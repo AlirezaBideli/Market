@@ -66,7 +66,7 @@ public class DetailFragment extends ParentFragment {
     }
 
     private void setUpRecyclerView() {
-        Product product =ProductLab.getInstance().getCurrentProduct();
+        Product product =ProductLab.getInstance(getActivity()).getCurrentProduct();
         List<Product.Attributes> attributes = product.getAttributes();
 
         mDetailAdapter = new DetailAdapter(attributes,product);

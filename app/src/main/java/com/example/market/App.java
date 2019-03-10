@@ -8,19 +8,30 @@ import com.example.market.model.DaoSession;
 
 public class App extends Application {
 
-    private static DaoSession mDaoSession;
+    private DaoSession mDaoSession;
+    private  static  App app;
 
+    public DaoSession getDaoSession() {
+        return mDaoSession;
+    }
+
+
+    public static App getApp()
+    {
+        return app;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Bought_Products", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Orders_db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         mDaoSession = daoMaster.newSession();
-
+        app=this;
     }
 
-    public static DaoSession getDaoSession() {
-        return mDaoSession;
-    }
+
+
+
+
 }

@@ -2,22 +2,12 @@ package com.example.market.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Transient;
-
 import java.util.List;
 
 
-@Entity
 public class Product {
 
 
-    //DataBase ID
-    @Id(autoincrement = true)
-    private Long _id;
 
     //Product Id in Api
     @SerializedName("id")
@@ -27,57 +17,106 @@ public class Product {
     private String mName;
     @SerializedName("price")
     private String mPrice;
-
-    @Transient
     @SerializedName("images")
     private List<Image> mImages;
-    @Transient
     @SerializedName("attributes")
     private List<Attributes> mAttributes;
-    @Transient
     @SerializedName("average_rating")
     private String mAverage_rating;
-    @Transient
     @SerializedName("rating_count")
     private String mRating_count;
-    @Transient
     @SerializedName("weight")
     private String mWeight;
-    @Transient
     @SerializedName("dimensions")
     private Dimensions mDimensions;
-    @Transient
     @SerializedName("description")
     private String mDescription;
 
     @Expose()
     @SerializedName("firstImgUrl")
     private String mFirstImgUrl;
-    @Expose()
-    @SerializedName("productCount")
-    private int mProductCount = 1;
 
-    @Generated(hash = 1032023407)
-    public Product(Long _id, int mId, String mName, String mPrice,
-                   String mFirstImgUrl, int mProductCount) {
-        this._id = _id;
-        this.mId = mId;
-        this.mName = mName;
-        this.mPrice = mPrice;
-        this.mFirstImgUrl = mFirstImgUrl;
-        this.mProductCount = mProductCount;
+
+
+
+    public int getId() {
+        return mId;
     }
 
-    @Generated(hash = 1890278724)
-    public Product() {
+    public void setId(int id) {
+        mId = id;
     }
 
-    public int getProductCount() {
-        return mProductCount;
+    public String getName() {
+        return mName;
     }
 
-    public void setProductCount(int productCount) {
-        mProductCount = productCount;
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public String getPrice() {
+        return mPrice;
+    }
+
+    public void setPrice(String price) {
+        mPrice = price;
+    }
+
+    public List<Image> getImages() {
+        return mImages;
+    }
+
+    public void setImages(List<Image> images) {
+        mImages = images;
+    }
+
+    public List<Attributes> getAttributes() {
+        return mAttributes;
+    }
+
+    public void setAttributes(List<Attributes> attributes) {
+        mAttributes = attributes;
+    }
+
+    public String getAverage_rating() {
+        return mAverage_rating;
+    }
+
+    public void setAverage_rating(String average_rating) {
+        mAverage_rating = average_rating;
+    }
+
+    public String getRating_count() {
+        return mRating_count;
+    }
+
+    public void setRating_count(String rating_count) {
+        mRating_count = rating_count;
+    }
+
+    public String getWeight() {
+        return mWeight;
+    }
+
+    public void setWeight(String weight) {
+        mWeight = weight;
+    }
+
+    public Dimensions getDimensions() {
+        return mDimensions;
+    }
+
+    public void setDimensions(Dimensions dimensions) {
+        mDimensions = dimensions;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
     }
 
     public String getFirstImgUrl() {
@@ -88,94 +127,6 @@ public class Product {
         mFirstImgUrl = firstImgUrl;
     }
 
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public List<Attributes> getAttributes() {
-        return mAttributes;
-    }
-
-    public String getWeight() {
-        return mWeight;
-    }
-
-    public Dimensions getDimensions() {
-        return mDimensions;
-    }
-
-    public String getAverage_rating() {
-        return mAverage_rating;
-    }
-
-    public String getRating_count() {
-        return mRating_count;
-    }
-
-    public String getPrice() {
-
-        return mPrice;
-    }
-
-    public List<Image> getImages() {
-        return mImages;
-    }
-
-    public int getId() {
-        return mId;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public Long get_id() {
-        return this._id;
-    }
-
-    public void set_id(Long _id) {
-        this._id = _id;
-    }
-
-    public int getMId() {
-        return this.mId;
-    }
-
-    public void setMId(int mId) {
-        this.mId = mId;
-    }
-
-    public String getMName() {
-        return this.mName;
-    }
-
-    public void setMName(String mName) {
-        this.mName = mName;
-    }
-
-    public String getMPrice() {
-        return this.mPrice;
-    }
-
-    public void setMPrice(String mPrice) {
-        this.mPrice = mPrice;
-    }
-
-    public String getMFirstImgUrl() {
-        return this.mFirstImgUrl;
-    }
-
-    public void setMFirstImgUrl(String mFirstImgUrl) {
-        this.mFirstImgUrl = mFirstImgUrl;
-    }
-
-    public int getMProductCount() {
-        return this.mProductCount;
-    }
-
-    public void setMProductCount(int mProductCount) {
-        this.mProductCount = mProductCount;
-    }
 
 
     public class Dimensions {

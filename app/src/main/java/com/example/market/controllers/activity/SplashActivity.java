@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
 
     private static byte mSuccessCounter = 0;
     FragmentManager mFragmentManager;
-    private ProductLab mProductLab = ProductLab.getInstance();
+    private ProductLab mProductLab ;
     private int mDefaultSuccessCount = 4;
     private boolean isStarted = false;
     private List<Product> mBProducts = new ArrayList<>();
@@ -45,6 +45,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mFragmentManager = getSupportFragmentManager();
+        mProductLab=ProductLab.getInstance(SplashActivity.this);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectionDialo
                     int size = products.size();
                     List<String> featuredProducts = new ArrayList<>();
                     getProductImages(products, size, featuredProducts);
-                    mProductLab.setFeaturedProductsImgs(featuredProducts);
+                    mProductLab.setFeaturedProductsImags(featuredProducts);
                     mSuccessCounter++;
                     checkSuccessfulDownload();
                     Log.i(TAG,"Featured DownLoaded");

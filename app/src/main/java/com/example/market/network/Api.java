@@ -19,7 +19,7 @@ public interface Api {
     static final String PRODUCT_CATEGORY_K = "category";
     static final String TYPE_CONDITION_K = "orderby";
     static final String AUTHENTICATION = CONSUMER_KEY + "&" + CONSUMER_SECRET;
-    static final String PAGE_CONDITION = "";
+    static final String PAGE_CONDITION = "per_page=30";
 
 
 
@@ -53,6 +53,9 @@ public interface Api {
 
     @GET("products?" +AUTHENTICATION)
     Call<List<Product>> getResultProducts(@Query("search") String search);
+
+    @GET("products?"+AUTHENTICATION)
+    Call<List<Product>>getOrders(@Query("include") String include);
 
 
 }

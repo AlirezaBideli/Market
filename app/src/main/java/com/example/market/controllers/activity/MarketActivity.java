@@ -167,10 +167,11 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     @Override
     public void showShoppingCart() {
-        getSupportActionBar().hide();
         mFragmentManager.beginTransaction()
                 .add(R.id.container_MarkerA, ShoppingCartFragment.newInstance())
                 .commit();
+        getSupportActionBar().hide();
+
     }
 
 
@@ -188,8 +189,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     public void showLoading() {
         if (mLoadingCover != null) {
             mLoadingCover.setVisibility(View.VISIBLE);
-            getSupportActionBar().hide();
             KeyBoardUtils.hideKeyboard(MarketActivity.this);
+            getSupportActionBar().hide();
 
         }
 

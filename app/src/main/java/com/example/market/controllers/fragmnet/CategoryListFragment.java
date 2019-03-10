@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -32,7 +31,7 @@ public class CategoryListFragment extends ParentFragment {
     //Position of category tab
     private static final String ARG_TAB_POSITION = "tab_position";
     private static final String TAG = "CategoryList";
-    private ProductLab mProductLab = ProductLab.getInstance();
+    private ProductLab mProductLab;
     private List<Category> mSubCategories;
     private RecyclerView mRecyclerView;
     private CallBacks mCallBacks;
@@ -90,7 +89,7 @@ public class CategoryListFragment extends ParentFragment {
 
     @Override
     public void variableInit() {
-
+        mProductLab = ProductLab.getInstance(getActivity());
 
     }
 
@@ -104,6 +103,10 @@ public class CategoryListFragment extends ParentFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mCategoryAdapter);
+    }
+
+    public interface CallBacks {
+        void gotToProductList(int subCatId);
     }
 
     private class CategoryHolder extends RecyclerView.ViewHolder {
@@ -174,9 +177,6 @@ public class CategoryListFragment extends ParentFragment {
         public int getItemCount() {
             return mCategories.size();
         }
-    }
-    public interface CallBacks {
-        void gotToProductList(int subCatId);
     }
 
 }

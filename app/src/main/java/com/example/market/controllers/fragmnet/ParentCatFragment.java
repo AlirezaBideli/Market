@@ -121,7 +121,7 @@ public class ParentCatFragment extends ParentFragment {
                                     mCategories.addAll(result);
                                     getCategories(++mCatPage);
                                 } else if (mCategories != null && mLoadingCallBack != null) {
-                                    ProductLab.getInstance().setCatagories(mCategories);
+                                    ProductLab.getInstance(getActivity()).setCatagories(mCategories);
                                     getSubCategory(mSubCatPage);
 
                                 }
@@ -157,7 +157,7 @@ public class ParentCatFragment extends ParentFragment {
                             getSubCategory(++mSubCatPage);
                         } else if (mSubCategories != null && mLoadingCallBack != null) {
                             if (getActivity()!=null) {
-                                ProductLab.getInstance().setSubCategories(mSubCategories);
+                                ProductLab.getInstance(getActivity()).setSubCategories(mSubCategories);
                                 mLoadingCallBack.hideLoading();
                                 setPagerWithTabLayout(mCategories);
                             }

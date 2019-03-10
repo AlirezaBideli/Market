@@ -117,7 +117,7 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     @Override
     protected void variableInit() {
         mProducts = new ArrayList<>();
-        mProductLab = ProductLab.getInstance();
+        mProductLab = ProductLab.getInstance(getActivity());
         SortDialogFragment.misFirstTime=true;
         SortDialogFragment.mRadioCheckedPosition=0;
 

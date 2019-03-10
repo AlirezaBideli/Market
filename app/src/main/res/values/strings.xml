@@ -63,4 +63,6 @@
     <string name="best_sellers">پرفروش ترین ها</string>
     <string name="price_desc">قیمت از زیاد به کم</string>
     <string name="price_asc">قیمت از کم به زیاد</string>
+    <string name="order_not_found">سفارشی یافت نشد</string>
+    <string name="default_price">0</string>
 </resources>
