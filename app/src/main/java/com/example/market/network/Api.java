@@ -1,12 +1,19 @@
 package com.example.market.network;
 
 import com.example.market.model.Category;
+import com.example.market.model.Customer;
+import com.example.market.model.Order;
 import com.example.market.model.Product;
+import com.example.market.model.Billing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -56,6 +63,23 @@ public interface Api {
 
     @GET("products?"+AUTHENTICATION)
     Call<List<Product>>getOrders(@Query("include") String include);
+
+
+    @POST("customers?"+AUTHENTICATION)
+    @FormUrlEncoded
+    Call<Customer> createCustomer(@Field("first_name") String first_name,
+                                  @Field("last_name")String last_name,
+                                  @Field("username") String username,
+                                  @Field("email")String email);
+
+
+    @POST("orders?"+AUTHENTICATION)
+    @FormUrlEncoded
+    Call<Customer> sendOrder(@Field("billing") Billing billing,
+                             @Field("line_items") ArrayList<Order> line_items);
+
+
+
 
 
 }

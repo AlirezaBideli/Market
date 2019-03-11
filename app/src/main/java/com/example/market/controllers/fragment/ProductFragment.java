@@ -1,4 +1,4 @@
-package com.example.market.controllers.fragmnet;
+package com.example.market.controllers.fragment;
 
 
 import android.content.Context;
@@ -254,22 +254,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mBtnAddCart.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View view) {
 
-        switch (view.getId()) {
-            case R.id.detail_btn_productF:
-                mCallBacks.showDetails();
-                break;
-            case R.id.btn_add_cart:
-                addToShoppingCart();
-                break;
-            case R.id.text_remaining_ProductF:
-                handleDescription();
-                break;
-
-        }
-    }
 
     private void addToShoppingCart() {
         OrderLab orderLab = OrderLab.getInstance(getActivity());
@@ -278,7 +263,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         order.setCount(DEFAULT_COUNT);
         boolean isExsisted = orderLab.checkProductExist(order);
         if (isExsisted)
-            Toast.makeText(getActivity(), R.string.shoping_cart_warning, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.shopping_cart_warning, Toast.LENGTH_SHORT).show();
         else {
             orderLab.insertToShoppingCart(order);
             mCallBacks.showShoppingCart();
@@ -319,14 +304,25 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
     }
 
-    private void checkProduct(int productId) {
 
+    @Override
+    public void onClick(View view) {
 
+        switch (view.getId()) {
+            case R.id.detail_btn_productF:
+                mCallBacks.showDetails();
+                break;
+            case R.id.btn_add_cart:
+                addToShoppingCart();
+                break;
+            case R.id.text_remaining_ProductF:
+                handleDescription();
+                break;
+
+        }
     }
-
     public interface CallBacks {
         void showDetails();
-
         void showShoppingCart();
     }
 }

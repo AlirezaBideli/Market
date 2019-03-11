@@ -51,12 +51,12 @@
     <string name="try_again_text">تلاش دوباره</string>
     <string name="splash_message">فروشگاه آنلاین</string>
     <string name="total_shopping_sum">جمع کل خرید</string>
-    <string name="shoping_cart_warning">این محصول قبلاً به سبد خرید شما اضافه شده است</string>
+    <string name="shopping_cart_warning">این محصول قبلاً به سبد خرید شما اضافه شده است</string>
     <string name="count">تعداد</string>
     <string name="delete">حدف</string>
     <string name="total_price">قیمت کلی</string>
     <string name="final_price">قیمت نهایی</string>
-    <string name="bu_productsmessage">خرید حود را نهایی کنید</string>
+    <string name="order_message">خرید حود را نهایی کنید</string>
     <string name="search_message">جستجو در فروشگاه آنلاین</string>
     <string name="filter">فیلتر کردن</string>
     <string name="sort">مرتب سازی</string>
@@ -65,4 +65,20 @@
     <string name="price_asc">قیمت از کم به زیاد</string>
     <string name="order_not_found">سفارشی یافت نشد</string>
     <string name="default_price">0</string>
+    <string name="receiver_first_name">نام گیرنده</string>
+    <string name="cellular_phone_receiver">شماره تلفن همراه گیرنده</string>
+    <string name="phone_receiver">تلفن ثابت گیرنده</string>
+    <string name="city_receiver">شهر</string>
+    <string name="country_receiver">کشور</string>
+    <string name="postal_code">کدپستی</string>
+    <string name="address">آدرس</string>
+    <string name="receiver_last_name">نام خانوادگی گیرنده</string>
+    <string name="input_error">لطفا فیلد های خالی را پر کنید</string>
+    <string name="unique_input_error">%1$s را وارد کنید</string>
+    <string name="first_name">نام</string>
+    <string name="last_name">نام خانوادگی</string>
+    <string name="user_name">نام کاربری</string>
+    <string name="password">رمز عبور</string>
+    <string name="email">ایمیل</string>
+    <string name="submit">ثبت مشخصات</string>
 </resources>

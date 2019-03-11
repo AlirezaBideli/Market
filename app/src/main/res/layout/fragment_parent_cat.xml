@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
-    tools:context=".controllers.fragmnet.ParentCatFragment">
+    tools:context=".controllers.fragment.ParentCatFragment">
 
 
     <com.google.android.material.tabs.TabLayout

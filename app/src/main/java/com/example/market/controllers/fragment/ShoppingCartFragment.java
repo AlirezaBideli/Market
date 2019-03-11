@@ -1,4 +1,4 @@
-package com.example.market.controllers.fragmnet;
+package com.example.market.controllers.fragment;
 
 
 import android.content.Context;
@@ -14,10 +14,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.market.R;
+import com.example.market.model.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
+import com.example.market.model.OrderCalllBack;
 import com.example.market.model.OrderLab;
 import com.example.market.model.Product;
+import com.example.market.model.RegisterCallBack;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -26,7 +29,6 @@ import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,16 +44,19 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShoppingCartFragment extends ParentFragment {
+public class ShoppingCartFragment extends ParentFragment implements View.OnClickListener {
 
 
     public static final int ITEM_COUNT = 5;
     private static final boolean IS_NEW_LIST = false;
     private static int mTotalFinalPrice = 0;
+    //CallBack
+    private RegisterCallBack mRegisterCallBack;
+    private OrderCalllBack mOrderCalllBack;
     //Widgets Variables
     private RecyclerView mRecyOrdered;
     private TextView mTxtTotalPriceSum;
-    private Button mBtnFinishPurchasing;
+    private Button mBtnOrder;
     private TextView mTxtNotFound;
     //SimpleVariables
     private List<Product> mOrderedProducts;
@@ -93,12 +98,18 @@ public class ShoppingCartFragment extends ParentFragment {
         super.onAttach(context);
         if (context instanceof LoadingCallBack)
             mLoadingCallBack = (LoadingCallBack) context;
+        if (context instanceof RegisterCallBack)
+            mRegisterCallBack = (RegisterCallBack) context;
+        if (context instanceof OrderCalllBack)
+            mOrderCalllBack= (OrderCalllBack) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mLoadingCallBack = null;
+        mRegisterCallBack=null;
+        mOrderCalllBack=null;
     }
 
     @Override
@@ -108,13 +119,16 @@ public class ShoppingCartFragment extends ParentFragment {
 
         View view = inflater.inflate(R.layout.fragment_shoping_cart, container, false);
         findViewByIds(view);
+        setListeners();
         return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
         getOrderedProducts();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -133,9 +147,6 @@ public class ShoppingCartFragment extends ParentFragment {
         mRecyOrdered.setAdapter(mAdapter);
     }
 
-
-
-
     private void getOrderedProducts() {
         mLoadingCallBack.showLoading();
         String ids = mOrderLab.getOrderIds();
@@ -146,7 +157,7 @@ public class ShoppingCartFragment extends ParentFragment {
         if (ids.isEmpty()) {
             mTxtNotFound.setVisibility(View.VISIBLE);
             mLoadingCallBack.hideLoading();
-            mBtnFinishPurchasing.setEnabled(false);
+            mBtnOrder.setEnabled(false);
         } else
             mOrdersCall.enqueue(new Callback<List<Product>>() {
                 @Override
@@ -188,7 +199,7 @@ public class ShoppingCartFragment extends ParentFragment {
     protected void findViewByIds(View view) {
         mRecyOrdered = view.findViewById(R.id.recy_bought_products);
         mTxtTotalPriceSum = view.findViewById(R.id.total_price_txt);
-        mBtnFinishPurchasing = view.findViewById(R.id.finish_purchasing_btn);
+        mBtnOrder = view.findViewById(R.id.comfirm_order_btn);
         mTxtNotFound = view.findViewById(R.id.txt_not_found);
     }
 
@@ -198,13 +209,14 @@ public class ShoppingCartFragment extends ParentFragment {
         mOrderLab = OrderLab.getInstance(getActivity());
         mOrders = mOrderLab.getOrders();
         mOrderedProducts = new ArrayList<>();
-        mOrderCounts=mOrderLab.getOrderCounts();
+        mOrderCounts = mOrderLab.getOrderCounts();
 
     }
 
     @Override
     protected void setListeners() {
 
+        mBtnOrder.setOnClickListener(this);
     }
 
     private List<Integer> getSpinnerItems() {
@@ -244,18 +256,33 @@ public class ShoppingCartFragment extends ParentFragment {
     }
 
 
-
     private void checkOrderedProductsSize() {
         if (mOrderedProducts.size() == 0)
-            mBtnFinishPurchasing.setEnabled(false);
+            mBtnOrder.setEnabled(false);
         else
-            mBtnFinishPurchasing.setEnabled(true);
+            mBtnOrder.setEnabled(true);
     }
 
     private int getCorrectPrice(String rawPrice) {
         Double p = (Double.parseDouble(rawPrice));
         return p.intValue();
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.comfirm_order_btn:
+
+                CustomerLab customerLab = CustomerLab.getInstance(getActivity());
+                if (customerLab.isUserRegistered())
+                    mOrderCalllBack.showOrderPage();
+                else
+                    mRegisterCallBack.showRegisterPage();
+                break;
+        }
+    }
+
+
 
     private class OrderedProductHolder extends RecyclerView.ViewHolder {
 
@@ -279,21 +306,21 @@ public class ShoppingCartFragment extends ParentFragment {
             mBtnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int orderPosition=getAdapterPosition();
-                    Long productId=mOrders.get(orderPosition).get_id();
-                    int count=mOrders.get(orderPosition).getCount();
-                    Order order=new Order();
+                    int orderPosition = getAdapterPosition();
+                    Long productId = mOrders.get(orderPosition).get_id();
+                    int count = mOrders.get(orderPosition).getCount();
+                    Order order = new Order();
                     order.set_id(productId);
                     order.setCount(count);
 
-                    removeProduct(order,orderPosition);
+                    removeProduct(order, orderPosition);
                     setTxtTotalSumPrice();
 
                 }
             });
         }
 
-        private void removeProduct(Order order,int orderPosition) {
+        private void removeProduct(Order order, int orderPosition) {
             Product currentProduct = mOrderedProducts.get(orderPosition);
             mOrderedProducts.remove(currentProduct);
             mOrderLab.deleteOrderedProduct(order);
@@ -330,7 +357,7 @@ public class ShoppingCartFragment extends ParentFragment {
                     String finalPrice = PriceUtils.getCurrencyFormat(totalPrice, getActivity());
                     mTxtFinalPrice.setText(finalPrice);
 
-                    Order order=new Order();
+                    Order order = new Order();
                     order.set_id((long) product.getId());
                     order.setCount(productCount);
                     mOrderLab.insertToShoppingCart(order);
@@ -348,7 +375,7 @@ public class ShoppingCartFragment extends ParentFragment {
             String title = product.getName();
             String rawPrice = product.getPrice();
             String formattedTotalPrice = PriceUtils.getCurrencyFormat(rawPrice, getActivity());
-            int productCount =mOrderCounts.get(position);
+            int productCount = mOrderCounts.get(position);
             int price = getCorrectPrice(rawPrice);
             String rawFinalPrice = (price * productCount) + "";
             String formattedFinalInt = PriceUtils.getCurrencyFormat(rawFinalPrice, getActivity());
@@ -402,5 +429,4 @@ public class ShoppingCartFragment extends ParentFragment {
             return mProducts.size();
         }
     }
-
 }

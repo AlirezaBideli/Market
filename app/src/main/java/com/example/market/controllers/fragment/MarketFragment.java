@@ -1,4 +1,4 @@
-package com.example.market.controllers.fragmnet;
+package com.example.market.controllers.fragment;
 
 
 import android.app.Fragment;
@@ -14,9 +14,6 @@ import com.example.market.R;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
-import com.example.market.network.Api;
-import com.example.market.network.RetrofitClientInstance;
-import com.example.market.utils.NetworkConnection;
 import com.example.market.utils.PriceUtils;
 import com.rd.PageIndicatorView;
 import com.squareup.picasso.Picasso;
@@ -30,9 +27,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -256,7 +250,7 @@ public class MarketFragment extends ParentFragment {
             mTxtName.setText(product.getName());
 
 
-            if (product.getImages() == null)
+            if (product.getImages() == null || product.getImages().isEmpty())
                 mImgProduct.setImageResource(R.drawable.shop_placeholder);
             else {
                 String src = product.getImages().get(0).getSrc();

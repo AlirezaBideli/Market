@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".controllers.fragmnet.ConnectionDialog"
+    tools:context=".controllers.fragment.ConnectionDialog"
     android:gravity="center">
 
 

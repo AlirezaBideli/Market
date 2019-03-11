@@ -5,18 +5,23 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
-import com.example.market.controllers.fragmnet.CategoryListFragment;
-import com.example.market.controllers.fragmnet.ConnectionDialog;
-import com.example.market.controllers.fragmnet.DetailFragment;
-import com.example.market.controllers.fragmnet.ParentCatFragment;
-import com.example.market.controllers.fragmnet.ProductFragment;
-import com.example.market.controllers.fragmnet.ProductListFragment;
-import com.example.market.controllers.fragmnet.ShoppingCartFragment;
-import com.example.market.controllers.fragmnet.SortDialogFragment;
+import com.example.market.controllers.fragment.CategoryListFragment;
+import com.example.market.controllers.fragment.ConnectionDialog;
+import com.example.market.controllers.fragment.DetailFragment;
+import com.example.market.controllers.fragment.OrderFragment;
+import com.example.market.controllers.fragment.ParentCatFragment;
+import com.example.market.controllers.fragment.ProductFragment;
+import com.example.market.controllers.fragment.ProductListFragment;
+import com.example.market.controllers.fragment.RegisterFragment;
+import com.example.market.controllers.fragment.ShoppingCartFragment;
+import com.example.market.controllers.fragment.SortDialogFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
+import com.example.market.model.Order;
+import com.example.market.model.OrderCalllBack;
 import com.example.market.model.ProductLab;
+import com.example.market.model.RegisterCallBack;
 import com.example.market.model.SortType;
 
 import java.util.List;
@@ -29,7 +34,8 @@ import androidx.fragment.app.FragmentManager;
 
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
         , CategoryListFragment.CallBacks, DetailCallBack,
-        ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, SortDialogFragment.CallBacks {
+        ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
+        SortDialogFragment.CallBacks, OrderCalllBack, RegisterCallBack {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -138,6 +144,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     }
 
+
     @Override
     public void onBackPressed() {
 
@@ -185,5 +192,15 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     public void sort(SortType sortType) {
         ProductListFragment currentFragmnet = (ProductListFragment) mFragmentManager.findFragmentById(R.id.container_CategoryA);
         currentFragmnet.refreshList(sortType);
+    }
+
+    @Override
+    public void showOrderPage() {
+        changePage(OrderFragment.newInstance());
+    }
+
+    @Override
+    public void showRegisterPage() {
+        changePage(RegisterFragment.newInstance());
     }
 }

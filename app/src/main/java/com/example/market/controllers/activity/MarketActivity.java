@@ -7,16 +7,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.example.market.R;
-import com.example.market.controllers.fragmnet.ConnectionDialog;
-import com.example.market.controllers.fragmnet.DetailFragment;
-import com.example.market.controllers.fragmnet.MarketFragment;
-import com.example.market.controllers.fragmnet.ProductFragment;
-import com.example.market.controllers.fragmnet.SearchProductFragment;
-import com.example.market.controllers.fragmnet.ShoppingCartFragment;
+import com.example.market.controllers.fragment.ConnectionDialog;
+import com.example.market.controllers.fragment.DetailFragment;
+import com.example.market.controllers.fragment.MarketFragment;
+import com.example.market.controllers.fragment.OrderFragment;
+import com.example.market.controllers.fragment.ProductFragment;
+import com.example.market.controllers.fragment.RegisterFragment;
+import com.example.market.controllers.fragment.SearchProductFragment;
+import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
+import com.example.market.model.Order;
+import com.example.market.model.OrderCalllBack;
+import com.example.market.model.RegisterCallBack;
 import com.example.market.utils.ActivityHeper;
 import com.example.market.utils.KeyBoardUtils;
 import com.google.android.material.navigation.NavigationView;
@@ -33,7 +39,8 @@ import androidx.fragment.app.FragmentManager;
 
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
-        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks, DetailCallBack  {
+        , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
+        DetailCallBack, OrderCalllBack, RegisterCallBack {
 
 
     //simple Variables
@@ -244,5 +251,13 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     }
 
 
+    @Override
+    public void showOrderPage() {
+        changePage(OrderFragment.newInstance());
+    }
 
+    @Override
+    public void showRegisterPage() {
+        changePage(RegisterFragment.newInstance());
+    }
 }

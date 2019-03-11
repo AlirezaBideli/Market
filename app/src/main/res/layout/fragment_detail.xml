@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
-    tools:context=".controllers.fragmnet.DetailFragment">
+    tools:context=".controllers.fragment.DetailFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detailList_recy_detailF"

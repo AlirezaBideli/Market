@@ -2,9 +2,8 @@ package com.example.market.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
-import com.example.market.controllers.fragmnet.ConnectionDialog;
+import com.example.market.controllers.fragment.ConnectionDialog;
 
 import androidx.fragment.app.FragmentManager;
 

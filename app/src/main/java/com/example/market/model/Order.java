@@ -1,5 +1,7 @@
 package com.example.market.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -7,7 +9,9 @@ import org.greenrobot.greendao.annotation.Id;
 @Entity
 public class Order {
     @Id
+    @SerializedName("product_id")
     private Long _id;
+    @SerializedName("quantity")
     private int mCount;
 
     @Generated(hash = 1477403839)

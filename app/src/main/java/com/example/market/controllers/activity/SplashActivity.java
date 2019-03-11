@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.market.R;
-import com.example.market.controllers.fragmnet.ConnectionDialog;
+import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.model.Product;
 import com.example.market.model.ProductLab;
 import com.example.market.network.Api;

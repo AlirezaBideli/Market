@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
-    tools:context=".controllers.fragmnet.CategoryListFragment"
+    tools:context=".controllers.fragment.CategoryListFragment"
     style="?android:attr/listSeparatorTextViewStyle"
 
     >

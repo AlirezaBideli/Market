@@ -1,7 +1,6 @@
-package com.example.market.controllers.fragmnet;
+package com.example.market.controllers.fragment;
 
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,8 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.example.market.R;
-import com.example.market.controllers.activity.CategoryActivity;
-import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.utils.NetworkConnection;
 import com.google.android.material.button.MaterialButton;
 

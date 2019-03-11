@@ -1,4 +1,4 @@
-package com.example.market.controllers.fragmnet;
+package com.example.market.controllers.fragment;
 
 
 import android.content.Context;
@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
