@@ -18,7 +18,6 @@ public class ProductLab {
     private List<Product> mMVisitedProducts;
     private List<Product> mBProducts;
     private List<String> mCategoryTitles;
-
     //Uniques
     private Product CurrentProduct;
     private List<String> mFeaturedProductImg = new ArrayList<>();
@@ -38,6 +37,24 @@ public class ProductLab {
         return ourInstance;
     }
 
+
+    public List<Product.Attributes> getMostCompletedAttribute() {
+        int productsSize=mProducts.size();
+        int maxAttributeSize=0;
+        int currentAttributeSize=
+                mProducts.get(0).getAttributes().size();
+        List<Product.Attributes> attributes=new ArrayList<>();
+        for (int i=0;i<productsSize;i++)
+        {
+            currentAttributeSize=mProducts.get(i).getAttributes().size();
+            if (currentAttributeSize>maxAttributeSize) {
+                maxAttributeSize = currentAttributeSize;
+                attributes=mProducts.get(i).getAttributes();
+            }
+        }
+        return attributes;
+    }
+
     public Product getCurrentProduct() {
         return CurrentProduct;
     }
@@ -45,7 +62,6 @@ public class ProductLab {
     public void setCurrentProduct(Product currentProduct) {
         CurrentProduct = currentProduct;
     }
-
 
     //Products List Methods
     public List<Category> getCatagories() {
@@ -62,6 +78,10 @@ public class ProductLab {
 
     public List<Product> getProducts() {
         return mProducts;
+    }
+
+    public void setProducts(List<Product> products) {
+        mProducts = products;
     }
 
     public List<String> getCategoryTitles() {

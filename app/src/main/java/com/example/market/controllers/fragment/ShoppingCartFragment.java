@@ -101,15 +101,15 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
         if (context instanceof RegisterCallBack)
             mRegisterCallBack = (RegisterCallBack) context;
         if (context instanceof OrderCalllBack)
-            mOrderCalllBack= (OrderCalllBack) context;
+            mOrderCalllBack = (OrderCalllBack) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mLoadingCallBack = null;
-        mRegisterCallBack=null;
-        mOrderCalllBack=null;
+        mRegisterCallBack = null;
+        mOrderCalllBack = null;
     }
 
     @Override
@@ -133,7 +133,8 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
     public void onPause() {
         super.onPause();
         mTotalFinalPrice = 0;
-        mOrdersCall.cancel();
+        if (mOrdersCall != null)
+            mOrdersCall.cancel();
     }
 
 
@@ -281,7 +282,6 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
                 break;
         }
     }
-
 
 
     private class OrderedProductHolder extends RecyclerView.ViewHolder {

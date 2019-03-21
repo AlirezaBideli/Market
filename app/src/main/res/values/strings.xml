@@ -81,4 +81,7 @@
     <string name="password">رمز عبور</string>
     <string name="email">ایمیل</string>
     <string name="submit">ثبت مشخصات</string>
+    <string name="perform_filtering">فیلترکردن</string>
+    <string name="order_sended_text_1">سفارش شما با شماره سفارش </string>
+    <string name="order_sended_text_2"> ثبت شد</string>
 </resources>

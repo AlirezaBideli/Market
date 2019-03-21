@@ -11,8 +11,10 @@ import android.widget.Toast;
 import com.example.market.R;
 import com.example.market.model.Billing;
 import com.example.market.model.Customer;
+import com.example.market.model.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
+import com.example.market.model.OrderJsonBody;
 import com.example.market.model.OrderLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
@@ -40,6 +42,7 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
     private MaterialButton mBtnOrder;
     private Call<Customer> mCallSendOrder;
     private LoadingCallBack mLoadingCallBack;
+    private CallBacks mCallBacks;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -71,12 +74,15 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
         super.onAttach(context);
         if (context instanceof LoadingCallBack)
             mLoadingCallBack = (LoadingCallBack) context;
+        if (context instanceof CallBacks)
+            mCallBacks= (CallBacks) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mLoadingCallBack = null;
+        mCallBacks=null;
     }
 
     @Override
@@ -150,13 +156,16 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
         String address = mEdtAddress.getText().toString();
 
 
-        OrderLab orderLab = OrderLab.getInstance(getActivity());
-        Billing billing = new Billing(firstName, lastName, address, city, postCode, country);
+        final OrderLab orderLab = OrderLab.getInstance(getActivity());
+        CustomerLab customerLab=CustomerLab.getInstance(getActivity());
+        int customer_id=customerLab.getCustomerId();
+        Billing billing = new Billing(customer_id,firstName, lastName, address, city, postCode, country,phone);
         ArrayList<Order> orders = (ArrayList<Order>) orderLab.getOrders();
 
         mLoadingCallBack.showLoading();
+        OrderJsonBody orderJsonBody=new OrderJsonBody(billing,orders,customer_id);
         mCallSendOrder = RetrofitClientInstance.getRetrofitInstance()
-                .create(Api.class).sendOrder(billing, orders);
+                .create(Api.class).sendOrder(orderJsonBody);
 
         mCallSendOrder.enqueue(new Callback<Customer>() {
             @Override
@@ -165,7 +174,13 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
                 if (response.isSuccessful()) {
                     if (getActivity() != null) {
                         mLoadingCallBack.hideLoading();
-                        Toast.makeText(getActivity(), "" + response.body().get_id(), Toast.LENGTH_SHORT).show();
+                        String message=getString(R.string.order_sended_text_1)+
+                                response.body().get_id()+
+                                getString(R.string.order_sended_text_2);
+
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        orderLab.deleteAllOrders();
+                        mCallBacks.goToShoppingCart();
                     }
 
                 } else if (getActivity() != null)
@@ -187,5 +202,11 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
         super.onPause();
         if (mCallSendOrder != null)
             mCallSendOrder.cancel();
+    }
+
+
+    public interface CallBacks
+    {
+        void goToShoppingCart();
     }
 }

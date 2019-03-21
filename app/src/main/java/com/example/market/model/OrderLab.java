@@ -81,4 +81,9 @@ public class OrderLab {
 
     }
 
+    public void deleteAllOrders()
+    {
+        mOrderDao.deleteAll();
+    }
+
 }

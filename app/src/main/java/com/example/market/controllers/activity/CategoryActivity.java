@@ -8,6 +8,7 @@ import com.example.market.R;
 import com.example.market.controllers.fragment.CategoryListFragment;
 import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.controllers.fragment.DetailFragment;
+import com.example.market.controllers.fragment.FilterFragment;
 import com.example.market.controllers.fragment.OrderFragment;
 import com.example.market.controllers.fragment.ParentCatFragment;
 import com.example.market.controllers.fragment.ProductFragment;
@@ -18,7 +19,6 @@ import com.example.market.controllers.fragment.SortDialogFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.Order;
 import com.example.market.model.OrderCalllBack;
 import com.example.market.model.ProductLab;
 import com.example.market.model.RegisterCallBack;
@@ -35,7 +35,9 @@ import androidx.fragment.app.FragmentManager;
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
         , CategoryListFragment.CallBacks, DetailCallBack,
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
-        SortDialogFragment.CallBacks, OrderCalllBack, RegisterCallBack {
+        SortDialogFragment.CallBacks, OrderCalllBack, RegisterCallBack,
+        ProductListFragment.CallBacks, FilterFragment.CallBacks,
+        OrderFragment.CallBacks {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -203,4 +205,35 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     public void showRegisterPage() {
         changePage(RegisterFragment.newInstance());
     }
+
+    @Override
+    public void showFilterPage() {
+        changePage(new FilterFragment());
+    }
+
+    @Override
+    public void showProductList(FilterFragment filterFragment) {
+        mFragmentManager.beginTransaction().remove(filterFragment).commit();
+
+    }
+
+
+    @Override
+    public void goToShoppingCart() {
+        int fragmentExictedsize = mFragmentManager.getFragments().size();
+        OrderFragment currentFragment = (OrderFragment) mFragmentManager.getFragments()
+                .get(fragmentExictedsize - 1);
+        ShoppingCartFragment previousFragment = (ShoppingCartFragment) mFragmentManager.getFragments()
+                .get(fragmentExictedsize - 2);
+        mFragmentManager.beginTransaction()
+                .remove(currentFragment)
+                .commit();
+        mFragmentManager.beginTransaction()
+                .detach(previousFragment)
+                .attach(previousFragment)
+                .commit();
+
+    }
+
+
 }

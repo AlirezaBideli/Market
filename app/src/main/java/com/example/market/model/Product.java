@@ -2,11 +2,11 @@ package com.example.market.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 
 public class Product {
-
 
 
     //Product Id in Api
@@ -35,8 +35,6 @@ public class Product {
     @Expose()
     @SerializedName("firstImgUrl")
     private String mFirstImgUrl;
-
-
 
 
     public int getId() {
@@ -128,7 +126,6 @@ public class Product {
     }
 
 
-
     public class Dimensions {
         @SerializedName("length")
         private String mLength;
@@ -178,6 +175,19 @@ public class Product {
 
         public String getName() {
             return mName;
+        }
+    }
+
+    public class Terms {
+        @SerializedName("name")
+        private String mName;
+
+        public String getName() {
+            return mName;
+        }
+
+        public void setName(String name) {
+            mName = name;
         }
     }
 

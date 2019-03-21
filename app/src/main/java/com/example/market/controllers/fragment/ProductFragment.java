@@ -42,12 +42,12 @@ import retrofit2.Response;
 public class ProductFragment extends ParentFragment implements View.OnClickListener {
 
 
+    public static final int DEFAULT_COUNT = 1;
     //Argument Tags
     private static final String ARG_ID = "productId";
     //simple Variables
     private static final int DEFAULT_CHAR_COUNT = 300;
     private static final int WRAP_CONTENT_SIZE = -1;
-    public static final int DEFAULT_COUNT = 1;
     //DetailCallBack
     private LoadingCallBack mLoadingCallBack;
     //CallBack
@@ -145,7 +145,8 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     @Override
     public void onPause() {
         super.onPause();
-        mCallProduct.cancel();
+        if (mCallProduct != null)
+            mCallProduct.cancel();
     }
 
     private void getProducts() {
@@ -255,10 +256,9 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     }
 
 
-
     private void addToShoppingCart() {
         OrderLab orderLab = OrderLab.getInstance(getActivity());
-        Order order=new Order();
+        Order order = new Order();
         order.set_id((long) mProduct.getId());
         order.setCount(DEFAULT_COUNT);
         boolean isExsisted = orderLab.checkProductExist(order);
@@ -321,8 +321,10 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
         }
     }
+
     public interface CallBacks {
         void showDetails();
+
         void showShoppingCart();
     }
 }

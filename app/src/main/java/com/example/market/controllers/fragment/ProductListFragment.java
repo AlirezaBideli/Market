@@ -3,7 +3,6 @@ package com.example.market.controllers.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.market.R;
-import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Product;
@@ -46,13 +44,14 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     private static final String STATE_PAGE = "page";
     private static final String TAG = "ProductListFragment";
     private static final String SORT_DIALOG_TAG = "SortDialogTag";
+    //Widgets variables
+    public RecyclerView mRecyProducts;
     //CallBack
     private DetailCallBack mDetailCallBack;
     private LoadingCallBack mLoadingCallBack;
-    //Widgets variables
-    public RecyclerView mRecyProducts;
     private TextView mTxtNotFound;
     private MaterialButton mBtnSort;
+    private MaterialButton  mBtnFilter;
     //Simple Variables
     private List<Product> mProducts;
     private ProductLab mProductLab;
@@ -60,6 +59,7 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     private int mPage = 1;
     private Call<List<Product>> mProductCall;
     private int mSubcatId;
+    private CallBacks mCallBack;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -75,13 +75,23 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     }
 
 
+    public void setProducts(List<Product> products) {
+        mProducts = products;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CategoryActivity) {
+        if (context instanceof DetailCallBack) {
             mDetailCallBack = (DetailCallBack) context;
-            mLoadingCallBack = (LoadingCallBack) context;
         }
+
+        if (context instanceof LoadingCallBack)
+            mLoadingCallBack = (LoadingCallBack) context;
+
+        if (context instanceof CallBacks)
+            mCallBack = (CallBacks) context;
+
     }
 
     @Override
@@ -89,6 +99,7 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
         super.onDetach();
         mDetailCallBack = null;
         mLoadingCallBack = null;
+        mCallBack = null;
     }
 
 
@@ -110,15 +121,16 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
 
         mRecyProducts = view.findViewById(R.id.recy_product_list);
         mTxtNotFound = view.findViewById(R.id.notFound_txt_productListF);
-        mBtnSort=view.findViewById(R.id.sort_btn);
+        mBtnSort = view.findViewById(R.id.sort_btn);
+        mBtnFilter = view.findViewById(R.id.filter_btn);
     }
 
     @Override
     protected void variableInit() {
         mProducts = new ArrayList<>();
         mProductLab = ProductLab.getInstance(getActivity());
-        SortDialogFragment.misFirstTime=true;
-        SortDialogFragment.mRadioCheckedPosition=0;
+        SortDialogFragment.misFirstTime = true;
+        SortDialogFragment.mRadioCheckedPosition = 0;
 
 
     }
@@ -128,38 +140,36 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         mSubcatId = getArguments().getInt(ARG_SUBCAT_ID);
-        getProducts(mSubcatId,SortType.NEWEST);
+        getProducts(mSubcatId, SortType.NEWEST);
     }
-    public void refreshList(SortType sortType)
-    {
-        getProducts(mSubcatId,sortType);
+
+    public void refreshList(SortType sortType) {
+        getProducts(mSubcatId, sortType);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mProductCall.cancel();
-        Log.i(TAG, "on Pause");
+        if (mProductCall != null)
+            mProductCall.cancel();
     }
 
-    private void getProducts(int subCatId,SortType sortType) {
+    private void getProducts(int subCatId, SortType sortType) {
 
         if (mLoadingCallBack != null) {
             mLoadingCallBack.showLoading();
-
-
-            mProductCall = getProductListCall(subCatId,sortType);
+            mProductCall = getProductListCall(subCatId, sortType);
             mProductCall.enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
                         List<Product> result = response.body();
-                        if (getActivity()!=null &&result != null && result.size() > 0) {
-                            mProducts=result;
+                        if (getActivity() != null && result != null && result.size() > 0) {
+                            mProducts = result;
+                            mProductLab.setProducts(mProducts);
                             setUpRecyclerView();
                             mLoadingCallBack.hideLoading();
-                        }
-                        else if (getActivity()!=null  && result!=null){
+                        } else if (getActivity() != null && result != null) {
                             checkCount();
                             mLoadingCallBack.hideLoading();
 
@@ -182,11 +192,15 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     @Override
     protected void setListeners() {
         mBtnSort.setOnClickListener(this);
+        mBtnFilter.setOnClickListener(this);
     }
 
     private void checkCount() {
-        if (mProducts.size() == 0)
+        if (mProducts.size() == 0) {
             mTxtNotFound.setVisibility(View.VISIBLE);
+            mBtnFilter.setEnabled(false);
+            mBtnSort.setEnabled(false);
+        }
         else
             mTxtNotFound.setVisibility(View.INVISIBLE);
     }
@@ -205,15 +219,73 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sort_btn:
-
                 FragmentManager fragmentManager = getFragmentManager();
                 SortDialogFragment sortDialogFragment = SortDialogFragment.newInstance();
                 sortDialogFragment.show(fragmentManager, SORT_DIALOG_TAG);
                 break;
 
+            case R.id.filter_btn:
+                mCallBack.showFilterPage();
+                break;
         }
     }
 
+    private Call getProductListCall(int subCatId, SortType sortType) {
+        Call productCall = null;
+        Api api = RetrofitClientInstance.getRetrofitInstance().create(Api.class);
+        switch (sortType) {
+            case NEWEST:
+                productCall = api.getCatProducts(subCatId, OrderBy.DATE.getName(), Order.DeCENDING.getName());
+                break;
+            case BEST_SELLERS:
+                productCall = api.getCatProducts(subCatId, OrderBy.POPULARITY.getName(), Order.DeCENDING.getName());
+                break;
+            case PRICE_ASC:
+                productCall = api.getCatProducts(subCatId, OrderBy.PRICE.getName(), Order.ASCENDING.getName());
+                break;
+            case PRICE_DESC:
+                productCall = api.getCatProducts(subCatId, OrderBy.PRICE.getName(), Order.DeCENDING.getName());
+                break;
+        }
+        return productCall;
+    }
+
+    private enum OrderBy {
+        DATE("date"),
+        POPULARITY("popularity"),
+        PRICE("price");
+
+        private String name;
+
+        OrderBy(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+    }
+
+    private enum Order {
+        ASCENDING("asc"),
+        DeCENDING("desc");
+
+
+        private String name;
+
+        Order(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public interface CallBacks {
+        void showFilterPage();
+    }
 
     private class ProductHolder extends RecyclerView.ViewHolder {
 
@@ -283,63 +355,5 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
         }
     }
 
-    private Call getProductListCall(int subCatId,SortType sortType)
-    {
-        Call productCall=null;
-        Api api=RetrofitClientInstance.getRetrofitInstance().create(Api.class);
-        switch (sortType)
-        {
-            case NEWEST:
-                productCall=api.getCatProducts(subCatId,OrderBy.DATE.getName(),Order.DeCENDING.getName());
-                break;
-            case BEST_SELLERS:
-                productCall=api.getCatProducts(subCatId,OrderBy.POPULARITY.getName(),Order.DeCENDING.getName());
-                break;
-            case PRICE_ASC:
-                productCall=api.getCatProducts(subCatId,OrderBy.PRICE.getName(),Order.ASCENDING.getName());
-                break;
-            case PRICE_DESC:
-                productCall=api.getCatProducts(subCatId,OrderBy.PRICE.getName(),Order.DeCENDING.getName());
-                break;
-        }
-        return productCall;
-    }
-
-
-    private enum OrderBy
-    {
-        DATE("date"),
-        POPULARITY("popularity"),
-        PRICE("price");
-
-        public String getName() {
-            return name;
-        }
-
-        private String name;
-
-        OrderBy(String name)
-        {
-           this.name=name;
-        }
-
-    }
-    private enum Order
-    {
-        ASCENDING("asc"),
-        DeCENDING("desc");
-
-
-        public String getName() {
-            return name;
-        }
-
-        private String name;
-
-        Order(String name)
-        {
-            this.name=name;
-        }
-    }
 
 }

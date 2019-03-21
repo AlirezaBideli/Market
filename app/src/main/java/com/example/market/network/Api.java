@@ -3,6 +3,7 @@ package com.example.market.network;
 import com.example.market.model.Category;
 import com.example.market.model.Customer;
 import com.example.market.model.Order;
+import com.example.market.model.OrderJsonBody;
 import com.example.market.model.Product;
 import com.example.market.model.Billing;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -73,11 +75,16 @@ public interface Api {
                                   @Field("email")String email);
 
 
-    @POST("orders?"+AUTHENTICATION)
-    @FormUrlEncoded
-    Call<Customer> sendOrder(@Field("billing") Billing billing,
-                             @Field("line_items") ArrayList<Order> line_items);
 
+    @POST("orders?"+AUTHENTICATION)
+    Call<Customer> sendOrder(@Body OrderJsonBody orderjsonBody);
+
+
+
+
+
+    @GET("products/attributes/{id}/terms?"+AUTHENTICATION)
+    Call<List<Product.Terms>> getAttributeTerms(@Path("id") int id);
 
 
 

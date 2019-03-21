@@ -4,6 +4,7 @@ package com.example.market.controllers.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,13 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
 
 
     private static final int EDITTEXT_COUNT = 5;
+    private static final String TAG = "RegisterFragmentTag";
     private TextInputEditText mEdtFirstName, mEdtLastName, mEdtUserName, mEdtPassword, mEdtEmail;
     private MaterialButton mBtnSubmit;
     private Call<Customer> mCallCustomer;
     private LoadingCallBack mLoadingCallBack;
     private OrderCalllBack mOrderCallBack;
+    private CustomerLab mCustomerLab;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -60,6 +63,7 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
             mLoadingCallBack = (LoadingCallBack) context;
         if (context instanceof OrderCalllBack)
             mOrderCallBack = (OrderCalllBack) context;
+
     }
 
     @Override
@@ -112,7 +116,7 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
     }
 
     private void submitCustomer() {
-        CustomerLab customerLab = CustomerLab.getInstance(getActivity());
+        mCustomerLab = CustomerLab.getInstance(getActivity());
         boolean isValid = warnUserForInputs();
         if (isValid) {
             String firstName = mEdtFirstName.getText().toString();
@@ -123,8 +127,10 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
             Customer customer = new Customer(Customer.DEFAULT_CUSTOMER_ID,
                     firstName, lastName, userName
                     , password, email);
-            customerLab.storeCustomer(customer);
+            mCustomerLab.storeCustomer(customer);
             createCustomer(firstName, lastName, userName, email);
+            Log.i(TAG, email + "");
+
 
         } else {
             Toast.makeText(getActivity(), R.string.input_error, Toast.LENGTH_SHORT).show();
@@ -141,17 +147,26 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
             @Override
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 if (response.isSuccessful()) {
+                    int id = response.body().get_id();
+                    String customerName=response.body().getUserName();
+                    mCustomerLab.storeCustomerId(id);
+                    Log.i(TAG, response.body().get_id() + "");
                     mLoadingCallBack.hideLoading();
                     mOrderCallBack.showOrderPage();
 
-                } else if (getActivity() != null)
+                } else if (getActivity() != null) {
                     NetworkConnection.warnConnection(getActivity(), getFragmentManager());
+                    Log.i(TAG, response.errorBody() + "");
+
+                }
             }
 
             @Override
             public void onFailure(Call<Customer> call, Throwable t) {
                 if (getActivity() != null)
                     NetworkConnection.warnConnection(getActivity(), getFragmentManager());
+                Log.i(TAG, t.getMessage());
+
             }
         });
     }
@@ -180,5 +195,10 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
         super.onPause();
         if (mCallCustomer != null)
             mCallCustomer.cancel();
+    }
+
+
+    public interface CallBacks {
+        void changeCustomerNameHeader(String CustomerName);
     }
 }

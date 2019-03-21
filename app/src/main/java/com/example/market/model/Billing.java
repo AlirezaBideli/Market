@@ -17,14 +17,19 @@ public class Billing {
     private String mPostCode;
     @SerializedName("country")
     private String mCountry;
+    @SerializedName("phone")
+    private String mPhone;
 
-    public Billing(String firstName, String lastName, String address_1, String city, String postCode, String country) {
+
+    public Billing(int customerId,String firstName, String lastName, String address_1,
+                   String city, String postCode, String country,String phone) {
         mFirstName = firstName;
         mLastName = lastName;
         mAddress_1 = address_1;
         mCity = city;
         mPostCode = postCode;
         mCountry = country;
+        mPhone=phone;
     }
 
     public String getFirstName() {

@@ -14,5 +14,6 @@
     <color name="gray_50">#fafafa</color>
     <color name="gray_300">#e0e0e0</color>
     <color name="green_light">#00C853</color>
+    <color name="gray_800">#424242</color>
 
 </resources>

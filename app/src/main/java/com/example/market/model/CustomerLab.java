@@ -49,4 +49,13 @@ public class CustomerLab {
     {
         return mCustomerPrefs.getBoolean(IS_USER_REGISTERED,false);
     }
+
+    public int getCustomerId()
+    {
+        return mCustomerPrefs.getInt(ID_KEY,0);
+    }
+
+    public void storeCustomerId(int id) {
+        mCustomerPrefs.edit().putInt(ID_KEY,id).apply();
+    }
 }

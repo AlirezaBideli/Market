@@ -7,20 +7,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.controllers.fragment.DetailFragment;
+import com.example.market.controllers.fragment.FilterFragment;
 import com.example.market.controllers.fragment.MarketFragment;
 import com.example.market.controllers.fragment.OrderFragment;
 import com.example.market.controllers.fragment.ProductFragment;
+import com.example.market.controllers.fragment.ProductListFragment;
 import com.example.market.controllers.fragment.RegisterFragment;
 import com.example.market.controllers.fragment.SearchProductFragment;
 import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.Order;
 import com.example.market.model.OrderCalllBack;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.utils.ActivityHeper;
@@ -40,7 +42,8 @@ import androidx.fragment.app.FragmentManager;
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
         , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
-        DetailCallBack, OrderCalllBack, RegisterCallBack {
+        DetailCallBack, OrderCalllBack, RegisterCallBack, ProductListFragment.CallBacks,
+        OrderFragment.CallBacks {
 
 
     //simple Variables
@@ -238,6 +241,22 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     }
 
+    @Override
+    public void goToShoppingCart() {
+        int fragmentExictedsize = mFragmentManager.getFragments().size();
+        OrderFragment currentFragment = (OrderFragment) mFragmentManager.getFragments()
+                .get(fragmentExictedsize - 1);
+        ShoppingCartFragment previousFragment = (ShoppingCartFragment) mFragmentManager.getFragments()
+                .get(fragmentExictedsize - 2);
+        mFragmentManager.beginTransaction()
+                .remove(currentFragment)
+                .commit();
+        mFragmentManager.beginTransaction()
+                .detach(previousFragment)
+                .attach(previousFragment)
+                .commit();
+
+    }
 
     @Override
     public void goPreviousFragment() {
@@ -260,4 +279,11 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     public void showRegisterPage() {
         changePage(RegisterFragment.newInstance());
     }
+
+    @Override
+    public void showFilterPage() {
+        changePage(FilterFragment.newInstance());
+    }
+
+
 }
