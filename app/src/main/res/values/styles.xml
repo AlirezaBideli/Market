@@ -7,8 +7,8 @@
         <item name="colorPrimaryDark">@color/PrimaryDarkColor</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:layoutDirection">rtl</item>
         <item name="android:fontFamily">@font/iran_sans</item>
+        <item name="android:layoutDirection">rtl</item>
     </style>
 
 
@@ -25,14 +25,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-
-
-
     <!--Splash Screen-->
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
         <item name="android:layoutDirection">rtl</item>
         <item name="android:background">@color/black_overlay</item>
     </style>
+
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:layoutDirection">rtl</item>
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
@@ -43,5 +41,14 @@
     </style>
 
 
+    <style name="chip_style" parent="AppTheme">
+        <item name="android:backgroundTint">@color/green_light</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layoutDirection">ltr</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
 
 </resources>

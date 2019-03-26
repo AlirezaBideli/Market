@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.market.R;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.Product;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.example.market.utils.PriceUtils;
 import com.rd.PageIndicatorView;
 import com.squareup.picasso.Picasso;
@@ -45,8 +45,10 @@ public class MarketFragment extends ParentFragment {
     private ViewPager mPagerFeaturesProducts;
     private PageIndicatorView mPageIndicatorView;
     //Simple Variables
-    private int mDeafaultCount = 20;
     private List<Product> mProducts;
+
+    public MarketFragment() {
+    }
 
 
     public static MarketFragment newInstance() {
@@ -73,10 +75,8 @@ public class MarketFragment extends ParentFragment {
     }
 
 
-
-
     private void setUpViewPager() {
-        mFeaturedProductImages=ProductLab.getInstance(getActivity()).getFeaturedProductImg();
+        mFeaturedProductImages = ProductLab.getInstance(getActivity()).getFeaturedProductImg();
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @NonNull
             @Override
@@ -124,10 +124,9 @@ public class MarketFragment extends ParentFragment {
     }
 
 
-
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         findViewByIds(view);
@@ -150,13 +149,16 @@ public class MarketFragment extends ParentFragment {
                 new LinearLayoutManager(getActivity(),
                         LinearLayoutManager.HORIZONTAL, false);
 
+        LinearLayoutManager layoutManager4 =
+                new LinearLayoutManager(getActivity(),
+                        LinearLayoutManager.HORIZONTAL, false);
+
         //Newest RecyclerView
         fillRecyclerView(layoutManager, ProductType.NEWEST, mRecyNewest);
         //Best Sellers
         fillRecyclerView(layoutManager2, ProductType.MOST_VISITED, mRecyMostVisited);
         //Most Visited RecyclerView
         fillRecyclerView(layoutManager3, ProductType.BESTS, mRectBestSellers);
-
     }
 
     private void fillRecyclerView(LinearLayoutManager layoutManager
@@ -169,6 +171,7 @@ public class MarketFragment extends ParentFragment {
         ProductAdapter adapter = new ProductAdapter(products);
         recyclerView.setAdapter(adapter);
     }
+
 
     private List<Product> getProducts(ProductType type, ProductLab productLab) {
         List<Product> products = new ArrayList<>();
@@ -213,6 +216,7 @@ public class MarketFragment extends ParentFragment {
         NEWEST,
         MOST_VISITED,
         BESTS,
+
     }
 
     public interface CallBacks {
@@ -296,10 +300,11 @@ public class MarketFragment extends ParentFragment {
 
         @Override
         public int getItemCount() {
-            if (mProductList.size() < mDeafaultCount)
+            int deafaultCount = 20;
+            if (mProductList.size() < deafaultCount)
                 return mProductList.size();
 
-            return mDeafaultCount;
+            return deafaultCount;
         }
 
 

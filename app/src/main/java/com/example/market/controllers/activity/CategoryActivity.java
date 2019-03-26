@@ -3,6 +3,7 @@ package com.example.market.controllers.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.fragment.CategoryListFragment;
@@ -20,9 +21,9 @@ import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.OrderCalllBack;
-import com.example.market.model.ProductLab;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.model.SortType;
+import com.example.market.model.repositories.ProductLab;
 
 import java.util.List;
 
@@ -43,13 +44,12 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     public static final String TAG = "CategoryActivity";
     //widgets Variables
     private Toolbar mToolbar;
+    private TextView mTxtSortDesc;
     //Simple Variables
     private FrameLayout mLoadingCover;
     private ProductLab mProductLab;
     private boolean mIsDownloadable = true;
     private FragmentManager mFragmentManager;
-    //AsyncTasks
-    private Runnable mCategoriesRunnable;
 
 
     @Override
@@ -70,6 +70,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
         mLoadingCover = findViewById(R.id.cover_CategoryA);
         mToolbar = findViewById(R.id.toolbar_CategoryA);
+        mTxtSortDesc = findViewById(R.id.txt_sort_desc);
 
     }
 
@@ -78,7 +79,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         mFragmentManager = getSupportFragmentManager();
 
         mFragmentManager.beginTransaction()
-                .replace(R.id.container_CategoryA, ParentCatFragment.newInstance())
+                .add(R.id.container_CategoryA, ParentCatFragment.newInstance())
                 .commit();
         setUpNavigation();
 
@@ -141,7 +142,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container_CategoryA, ShoppingCartFragment.newInstance())
+                .add(R.id.container_CategoryA, ShoppingCartFragment.newInstance())
                 .commit();
 
     }
@@ -192,8 +193,26 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     @Override
     public void sort(SortType sortType) {
+
+        mTxtSortDesc = findViewById(R.id.txt_sort_desc);
+
+        switch (sortType) {
+            case BEST_SELLERS:
+                mTxtSortDesc.setText(R.string.best_sellers);
+                break;
+            case PRICE_ASC:
+                mTxtSortDesc.setText(R.string.price_asc);
+                break;
+            case NEWEST:
+                mTxtSortDesc.setText(R.string.newest);
+                break;
+            case PRICE_DESC:
+                mTxtSortDesc.setText(R.string.price_desc);
+                break;
+        }
         ProductListFragment currentFragmnet = (ProductListFragment) mFragmentManager.findFragmentById(R.id.container_CategoryA);
         currentFragmnet.refreshList(sortType);
+
     }
 
     @Override

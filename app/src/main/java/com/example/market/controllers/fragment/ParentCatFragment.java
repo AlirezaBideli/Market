@@ -11,7 +11,7 @@ import com.example.market.R;
 import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.model.Category;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -75,17 +75,14 @@ public class ParentCatFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_parent_cat, container, false);
         findViewByIds(view);
+        variableInit();
 
 
         return view;
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        variableInit();
-    }
+
 
     @Override
     protected void findViewByIds(View view) {
@@ -192,7 +189,7 @@ public class ParentCatFragment extends ParentFragment {
             mCategoryTitles.add(categories.get(i).getName());
         }
         mTabLayout.setVisibility(View.VISIBLE);
-        mCategoryPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
+        mCategoryPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager() ) {
             @Override
             public Fragment getItem(int position) {
                 mTabPosition = position;

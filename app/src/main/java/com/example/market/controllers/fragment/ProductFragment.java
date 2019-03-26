@@ -15,9 +15,9 @@ import com.example.market.controllers.activity.CategoryActivity;
 import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
-import com.example.market.model.OrderLab;
+import com.example.market.model.repositories.OrderLab;
 import com.example.market.model.Product;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -133,13 +133,8 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
 
     @Override
     protected void variableInit() {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         getProducts();
+
     }
 
     @Override

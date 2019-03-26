@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.model.Product;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -46,7 +46,6 @@ public class FilterFragment extends ParentFragment implements View.OnClickListen
     private FrameLayout mLoadingBar;
     private MaterialCardView mBtnFilter;
     private CallBacks mCallBacks;
-
     private ArrayList<String> mFilterNames = new ArrayList<>();
     private ArrayList<ArrayList<String>> mFilterValues = new ArrayList<>();
     private Product.Attributes mCurrentAttribute;

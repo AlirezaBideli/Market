@@ -8,17 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.market.R;
-import com.example.market.model.CustomerLab;
+import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
 import com.example.market.model.OrderCalllBack;
-import com.example.market.model.OrderLab;
+import com.example.market.model.repositories.OrderLab;
 import com.example.market.model.Product;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.network.Api;
@@ -26,6 +25,7 @@ import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
 import com.example.market.utils.PriceUtils;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShoppingCartFragment extends ParentFragment implements View.OnClickListener {
+public class  ShoppingCartFragment extends ParentFragment implements View.OnClickListener {
 
 
     public static final int ITEM_COUNT = 5;
@@ -56,7 +56,7 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
     //Widgets Variables
     private RecyclerView mRecyOrdered;
     private TextView mTxtTotalPriceSum;
-    private Button mBtnOrder;
+    private MaterialCardView mBtnOrder;
     private TextView mTxtNotFound;
     //SimpleVariables
     private List<Product> mOrderedProducts;
@@ -120,14 +120,10 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_shoping_cart, container, false);
         findViewByIds(view);
         setListeners();
+        getOrderedProducts();
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getOrderedProducts();
-    }
 
     @Override
     public void onPause() {
@@ -158,7 +154,7 @@ public class ShoppingCartFragment extends ParentFragment implements View.OnClick
         if (ids.isEmpty()) {
             mTxtNotFound.setVisibility(View.VISIBLE);
             mLoadingCallBack.hideLoading();
-            mBtnOrder.setEnabled(false);
+            mBtnOrder.setVisibility(View.GONE);
         } else
             mOrdersCall.enqueue(new Callback<List<Product>>() {
                 @Override

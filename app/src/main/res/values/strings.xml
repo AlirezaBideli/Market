@@ -13,15 +13,12 @@
 
     <string name="products_categories">دسته بندی محصولات</string>
     <string name="digital_product">کالای دیجیتال</string>
-    <string name="camera">دوربین</string>
-    <string name="mobile">گوشی موبایل</string>
-    <string name="laptop">لپ تاپ</string>
     <string name="cloths_and_fashion">مد و پوشاک</string>
-    <string name="feminine">زنانه</string>
     <string name="sport">ورزش</string>
-    <string name="sport_shoes">کفش ورزشی</string>
     <string name="bicycle_and_peripherals">دوچرخه و لوازم حانبی</string>
     <string name="mountaineering_and_camping">کوه نوردی و کمپینگ</string>
+    <string name="no_classification">بدون دسته بندی</string>
+
     <string name="home">خانه</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -84,4 +81,10 @@
     <string name="perform_filtering">فیلترکردن</string>
     <string name="order_sended_text_1">سفارش شما با شماره سفارش </string>
     <string name="order_sended_text_2"> ثبت شد</string>
+    <string name="setting">تنظیمات</string>
+    <string name="exit">خروج</string>
+    <string name="complete_list">لیست کامل</string>
+    <string name="filter_desc">رنگ، نوع، قیمت و ...</string>
+    <string name="sort_desc">جدیدترین</string>
+
 </resources>

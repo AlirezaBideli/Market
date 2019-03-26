@@ -16,4 +16,9 @@
     <color name="green_light">#00C853</color>
     <color name="gray_800">#424242</color>
 
+    <color name="secondaryColor">#d50000</color>
+    <color name="secondaryLightColor">#ff5131</color>
+    <color name="secondaryDarkColor">#9b0000</color>
+    <color name="transparent">#00000000</color>
+
 </resources>

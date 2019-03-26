@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.market.R;
 import com.example.market.model.Customer;
-import com.example.market.model.CustomerLab;
+import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.OrderCalllBack;
 import com.example.market.network.Api;

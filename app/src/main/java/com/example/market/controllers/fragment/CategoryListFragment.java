@@ -12,13 +12,14 @@ import android.widget.TextView;
 import com.example.market.R;
 import com.example.market.model.Category;
 import com.example.market.model.Image;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -98,11 +99,19 @@ public class CategoryListFragment extends ParentFragment {
 
     }
 
+
     private void setUpRecyclerView() {
+
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
         mCategoryAdapter = new CategoryAdapter(mSubCategories);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mCategoryAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+
     }
 
     public interface CallBacks {

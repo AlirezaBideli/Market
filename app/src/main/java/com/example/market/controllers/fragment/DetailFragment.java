@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.model.Product;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 
 import java.util.List;
 

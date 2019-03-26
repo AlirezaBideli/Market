@@ -1,6 +1,10 @@
-package com.example.market.model;
+package com.example.market.model.repositories;
 
 import android.content.Context;
+import android.text.TextUtils;
+
+import com.example.market.model.Category;
+import com.example.market.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +42,29 @@ public class ProductLab {
     }
 
 
+    private List<Product> filterProducts(List<Product> products) {
+
+        int productSize = products.size()-1;
+        String price;
+        for (int i = 0; i < productSize; i++) {
+             price = products.get(i).getPrice();
+            if (TextUtils.isEmpty(price))
+                products.remove(i);
+        }
+        return products;
+    }
+
     public List<Product.Attributes> getMostCompletedAttribute() {
-        int productsSize=mProducts.size();
-        int maxAttributeSize=0;
-        int currentAttributeSize=
+        int productsSize = mProducts.size();
+        int maxAttributeSize = 0;
+        int currentAttributeSize =
                 mProducts.get(0).getAttributes().size();
-        List<Product.Attributes> attributes=new ArrayList<>();
-        for (int i=0;i<productsSize;i++)
-        {
-            currentAttributeSize=mProducts.get(i).getAttributes().size();
-            if (currentAttributeSize>maxAttributeSize) {
+        List<Product.Attributes> attributes = new ArrayList<>();
+        for (int i = 0; i < productsSize; i++) {
+            currentAttributeSize = mProducts.get(i).getAttributes().size();
+            if (currentAttributeSize > maxAttributeSize) {
                 maxAttributeSize = currentAttributeSize;
-                attributes=mProducts.get(i).getAttributes();
+                attributes = mProducts.get(i).getAttributes();
             }
         }
         return attributes;
@@ -81,7 +96,7 @@ public class ProductLab {
     }
 
     public void setProducts(List<Product> products) {
-        mProducts = products;
+        mProducts = filterProducts(products);
     }
 
     public List<String> getCategoryTitles() {
@@ -127,7 +142,7 @@ public class ProductLab {
     }
 
     public void setNewestProducts(List<Product> newestProducts) {
-        mNewestProducts = newestProducts;
+        mNewestProducts = filterProducts(newestProducts);
     }
 
     public List<Product> getMVisitedProducts() {
@@ -135,7 +150,7 @@ public class ProductLab {
     }
 
     public void setMVisitedProducts(List<Product> MVisitedProducts) {
-        mMVisitedProducts = MVisitedProducts;
+        mMVisitedProducts = filterProducts(MVisitedProducts);
     }
 
     public List<Product> getBProducts() {
@@ -143,7 +158,7 @@ public class ProductLab {
     }
 
     public void setBProducts(List<Product> BProducts) {
-        mBProducts = BProducts;
+        mBProducts = filterProducts(BProducts);
     }
 
     public void setFeaturedProductsImags(List<String> featuredProducts) {
@@ -153,6 +168,7 @@ public class ProductLab {
     public List<String> getFeaturedProductImg() {
         return mFeaturedProductImg;
     }
+
 
     //Product enums
     public enum ProductType {

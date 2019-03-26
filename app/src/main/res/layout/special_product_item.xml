@@ -2,16 +2,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="160dp"
-    android:layout_height="250dp"
-    android:layout_margin="8dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:orientation="vertical"
     app:cardCornerRadius="4dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-      >
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/image_img_specialItem"
@@ -30,8 +29,8 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@color/detail_seperator"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="16dp"
+            android:background="@color/detail_seperator" />
 
         <TextView
             android:id="@+id/price_txt_specialItem"

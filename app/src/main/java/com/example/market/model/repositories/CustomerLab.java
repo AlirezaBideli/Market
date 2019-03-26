@@ -1,8 +1,10 @@
-package com.example.market.model;
+package com.example.market.model.repositories;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.example.market.model.Customer;
 
 public class CustomerLab {
 

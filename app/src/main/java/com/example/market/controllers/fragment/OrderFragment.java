@@ -11,15 +11,15 @@ import android.widget.Toast;
 import com.example.market.R;
 import com.example.market.model.Billing;
 import com.example.market.model.Customer;
-import com.example.market.model.CustomerLab;
+import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
 import com.example.market.model.OrderJsonBody;
-import com.example.market.model.OrderLab;
+import com.example.market.model.repositories.OrderLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
     private TextInputEditText mEdtFirstName, mEdtLastName, mEdtPhone, mEdtCountry,
             mEdtCity, mEdtAddress, mEdtPostCode;
 
-    private MaterialButton mBtnOrder;
+    private MaterialCardView mBtnOrder;
     private Call<Customer> mCallSendOrder;
     private LoadingCallBack mLoadingCallBack;
     private CallBacks mCallBacks;

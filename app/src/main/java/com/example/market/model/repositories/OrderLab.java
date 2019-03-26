@@ -1,8 +1,10 @@
-package com.example.market.model;
+package com.example.market.model.repositories;
 
 import android.content.Context;
 
 import com.example.market.App;
+import com.example.market.model.Order;
+import com.example.market.model.OrderDao;
 
 import java.util.ArrayList;
 import java.util.List;

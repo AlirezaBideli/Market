@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-
-
-
-    app:strokeWidth="1dp">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +13,7 @@
             android:id="@+id/name_txt_Productitem"
             style="@style/Txt_items"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="29dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
@@ -32,9 +28,12 @@
 
         <ImageView
             android:id="@+id/image_img_Producttem"
-            android:layout_width="@dimen/image_item"
-            android:layout_height="@dimen/image_item"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/name_txt_Productitem"

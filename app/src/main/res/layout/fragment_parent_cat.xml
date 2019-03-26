@@ -14,10 +14,12 @@
         android:layout_height="wrap_content"
         android:background="@color/PrimaryColor"
         android:visibility="visible"
+        app:tabMinWidth="80dp"
         app:layout_constraintBottom_toTopOf="@+id/pager_category_ParentCategoryF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorColor="@color/secondaryColor"
         app:tabSelectedTextColor="@color/primaryTextColor">
 
 

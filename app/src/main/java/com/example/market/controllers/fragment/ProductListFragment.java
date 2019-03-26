@@ -13,12 +13,13 @@ import com.example.market.R;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Product;
-import com.example.market.model.ProductLab;
+import com.example.market.model.repositories.ProductLab;
 import com.example.market.model.SortType;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
@@ -50,8 +52,8 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
     private DetailCallBack mDetailCallBack;
     private LoadingCallBack mLoadingCallBack;
     private TextView mTxtNotFound;
-    private MaterialButton mBtnSort;
-    private MaterialButton  mBtnFilter;
+    private MaterialCardView mBtnSort;
+    private MaterialCardView  mBtnFilter;
     //Simple Variables
     private List<Product> mProducts;
     private ProductLab mProductLab;
@@ -113,6 +115,7 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
         findViewByIds(view);
         variableInit();
         setListeners();
+
         return view;
     }
 
@@ -132,16 +135,14 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
         SortDialogFragment.misFirstTime = true;
         SortDialogFragment.mRadioCheckedPosition = 0;
 
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
         mSubcatId = getArguments().getInt(ARG_SUBCAT_ID);
         getProducts(mSubcatId, SortType.NEWEST);
+
+
     }
+
+
+
 
     public void refreshList(SortType sortType) {
         getProducts(mSubcatId, sortType);
@@ -207,9 +208,13 @@ public class ProductListFragment extends ParentFragment implements View.OnClickL
 
     private void setUpRecyclerView() {
 
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
         mProductAdapter = new ProductAdapter(mProducts);
-        mRecyProducts.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyProducts.setLayoutManager(layoutManager);
         mRecyProducts.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
+                layoutManager.getOrientation());
+        mRecyProducts.addItemDecoration(dividerItemDecoration);
         mRecyProducts.setAdapter(mProductAdapter);
 
 

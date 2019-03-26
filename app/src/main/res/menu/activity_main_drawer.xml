@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    >
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_main"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/home"
             android:icon="@drawable/home"
@@ -14,6 +17,38 @@
             android:title="@string/products_categories" />
 
 
+
+    </group>
+    <group
+        android:id="@+id/group_favourites"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/mostVisited"
+            android:icon="@drawable/star"
+            android:title="@string/most_visited" />
+        <item
+            android:id="@+id/bestSellers"
+            android:icon="@drawable/star"
+            android:title="@string/best_sellers" />
+        <item
+            android:id="@+id/newest"
+            android:icon="@drawable/star"
+            android:title="@string/newest" />
+    </group>
+
+    <group
+        android:id="@+id/group_etc"
+        android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/setting"
+            android:title="@string/setting" />
+        <item
+            android:id="@+id/exit"
+            android:icon="@drawable/exit"
+            android:title="@string/exit" />
 
     </group>
 
