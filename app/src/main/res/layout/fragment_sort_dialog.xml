@@ -6,7 +6,9 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".controllers.fragment.SortDialogFragment">
+    tools:context=".controllers.fragment.SortDialogFragment"
+    style="@style/root_layout_styles"
+    >
 
     <RadioGroup
         android:id="@+id/sort_radioGroup"

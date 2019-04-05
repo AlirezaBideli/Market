@@ -3,6 +3,7 @@ package com.example.market.controllers.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     //simple Variables
     private static final int DEFAULT_CHAR_COUNT = 300;
     private static final int WRAP_CONTENT_SIZE = -1;
+    public static final String INVALID_PRICE = "0";
     //DetailCallBack
     private LoadingCallBack mLoadingCallBack;
     //CallBack
@@ -147,6 +149,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     private void getProducts() {
         if (mLoadingCallBack != null) {
             mId = getArguments().getInt(ARG_ID);
+            Log.i(this.getClass().getSimpleName(),"Product Id: "+mId);
             mLoadingCallBack.showLoading();
 
             mCallProduct = RetrofitClientInstance.getRetrofitInstance().create(Api.class)
@@ -192,6 +195,9 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         checkProductDesc(productDescription);
         mTxtDesc.setText(productDescription);
 
+        if(productPrice.isEmpty())
+            mBtnAddCart.setEnabled(false);
+
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @NonNull
             @Override
@@ -224,7 +230,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mImgPager.setAdapter(pagerAdapter);
 
 
-        //Sync PAgeIndicatorView with ViewPager
+        //Sync PageIndicatorView with ViewPager
         mImgPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".controllers.fragment.SelectHourDialog"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_hour_message"
+        android:textSize="18sp"
+        />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <RadioButton
+        android:id="@+id/rd_hours_3"
+        style="@style/notify_chp_hours"
+        android:text="@string/hours_3"
+/>
+
+    <RadioButton
+        android:id="@+id/rd_hours_5"
+        style="@style/notify_chp_hours"
+        android:text="@string/hours_5"
+/>
+
+    <RadioButton
+        android:id="@+id/rd_hours_8"
+        style="@style/notify_chp_hours"
+        android:text="@string/hours_8"
+/>
+
+    <RadioButton
+        android:id="@+id/rd_hours_12"
+        style="@style/notify_chp_hours"
+        android:text="@string/hours_12"
+/>
+
+    </RadioGroup>
+
+</LinearLayout>

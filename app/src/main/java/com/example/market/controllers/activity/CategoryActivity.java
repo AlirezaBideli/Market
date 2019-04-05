@@ -1,5 +1,7 @@
 package com.example.market.controllers.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,9 +23,11 @@ import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.OrderCalllBack;
+import com.example.market.model.Product;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.model.SortType;
 import com.example.market.model.repositories.ProductLab;
+import com.example.market.utils.ActivityHeper;
 
 import java.util.List;
 
@@ -50,6 +54,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     private ProductLab mProductLab;
     private boolean mIsDownloadable = true;
     private FragmentManager mFragmentManager;
+    public static boolean mCalledByNotification;
 
 
     @Override
@@ -78,11 +83,22 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     public void variableInit() {
         mFragmentManager = getSupportFragmentManager();
 
-        mFragmentManager.beginTransaction()
-                .add(R.id.container_CategoryA, ParentCatFragment.newInstance())
-                .commit();
+        initialFirstFragment();
         setUpNavigation();
 
+    }
+
+    private void initialFirstFragment() {
+        Intent intent=getIntent();
+        boolean isCalledByNotification=getIntent()
+                .getBooleanExtra(ActivityHeper.EXTRA_BY_NOTIFICATION,false);
+        int productId=getIntent()
+                .getIntExtra(ActivityHeper.EXTRA_PRODUCT_ID,0);
+
+        if (isCalledByNotification)
+            changePage(ProductFragment.newInstance(productId));
+        else
+            changePage(ParentCatFragment.newInstance());
     }
 
     private void setUpNavigation() {
@@ -151,6 +167,9 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     @Override
     public void onBackPressed() {
 
+        if (mCalledByNotification)
+            super.onBackPressed();
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         Fragment currentFragmnet = fragments.get(fragments.size() - 1);
@@ -210,7 +229,8 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
                 mTxtSortDesc.setText(R.string.price_desc);
                 break;
         }
-        ProductListFragment currentFragmnet = (ProductListFragment) mFragmentManager.findFragmentById(R.id.container_CategoryA);
+        ProductListFragment currentFragmnet =
+                (ProductListFragment) mFragmentManager.findFragmentById(R.id.container_CategoryA);
         currentFragmnet.refreshList(sortType);
 
     }

@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout2"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
-    tools:context=".controllers.activity.MarketActivity">
+    tools:context=".controllers.activity.MarketActivity"
+    style="@style/root_layout_styles"
+    >
 
 
     <ScrollView
@@ -49,12 +50,12 @@
                     android:id="@+id/pageIndicatorView_MarketA"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:layout_gravity="bottom|center"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:scrollIndicators="start"
-                    android:layout_gravity="bottom|center"
 
                     app:layout_constraintBottom_toBottomOf="@+id/pager_featured_products"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,77 +76,77 @@
 
 
             <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:scrollbars="none"
-                android:scrollbarSize="0dp"
                 android:fadeScrollbars="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:scrollbarSize="0dp"
-                android:scrollbars="none"
+                android:scrollbars="none">
 
-             >
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chp_no_classification"
-                    style="@style/chip_style"
-                    android:textSize="30sp"
+                <com.google.android.material.chip.ChipGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/no_classification"
-               />
+                    android:scrollbarSize="0dp"
+                    android:scrollbars="none"
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chp_digital"
-                    style="@style/chip_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/digital_product"
+                    >
 
-                    />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chp_no_classification"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/no_classification"
+                        android:textSize="30sp" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chp_clothes_and_fashion"
-                    style="@style/chip_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cloths_and_fashion"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chp_digital"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/digital_product"
 
-                    />
+                        />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chp_sport"
-                    style="@style/chip_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sport"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chp_clothes_and_fashion"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cloths_and_fashion"
 
-                    />
+                        />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/bicycle_and_peripherals"
-                    style="@style/chip_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bicycle_and_peripherals"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chp_sport"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sport"
 
-                    />
+                        />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/mountaineering_and_camping"
-                    style="@style/chip_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mountaineering_and_camping"
-                    />
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/bicycle_and_peripherals"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bicycle_and_peripherals"
+
+                        />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/mountaineering_and_camping"
+                        style="@style/chip_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mountaineering_and_camping" />
+                </com.google.android.material.chip.ChipGroup>
 
             </HorizontalScrollView>
+
             <LinearLayout
                 android:id="@+id/linearLayout_best"
                 android:layout_width="match_parent"

@@ -7,24 +7,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.example.market.R;
 import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.controllers.fragment.DetailFragment;
 import com.example.market.controllers.fragment.FilterFragment;
 import com.example.market.controllers.fragment.MarketFragment;
+import com.example.market.controllers.fragment.NotifyNewestProductsFragment;
 import com.example.market.controllers.fragment.OrderFragment;
 import com.example.market.controllers.fragment.ProductFragment;
 import com.example.market.controllers.fragment.ProductListFragment;
 import com.example.market.controllers.fragment.RegisterFragment;
 import com.example.market.controllers.fragment.SearchProductFragment;
+import com.example.market.controllers.fragment.SettingFragment;
 import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.OrderCalllBack;
 import com.example.market.model.RegisterCallBack;
+import com.example.market.prefs.AlarmManagerPrefs;
+import com.example.market.prefs.NotifyHourPrefs;
+import com.example.market.services.NotifyNewestService;
 import com.example.market.utils.ActivityHeper;
 import com.example.market.utils.KeyBoardUtils;
 import com.google.android.material.navigation.NavigationView;
@@ -43,9 +47,11 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
         , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         DetailCallBack, OrderCalllBack, RegisterCallBack, ProductListFragment.CallBacks,
-        OrderFragment.CallBacks {
+        OrderFragment.CallBacks, SettingFragment.CallBacks {
 
 
+    public static final boolean IS_NOT_BY_NOTIFICATION = false;
+    private static final int DEFAULT_PRODUCT_ID = 0;
     //simple Variables
     Handler mHandler = new Handler();
     //Widgets Variables
@@ -77,9 +83,25 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         variableInit();
         setListeners();
 
+    }
+
+    private void scheduleAlarmOn() {
+        //interval is the selected user hour notifyNewestProduct Fragment
+        int interval = NotifyHourPrefs.getInstance().retriveHour();
+        boolean isNotifyRunning = NotifyNewestService.isAlarmOn(this);
+        boolean isNotifyStarted = AlarmManagerPrefs.isAlarmOn(this);
+        if (isNotifyStarted && !isNotifyRunning) {
+            NotifyNewestService.setServiceAlarm(this, isNotifyRunning, interval);
+        }
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        scheduleAlarmOn();
+
+    }
 
     @Override
     public void findViewByIds() {
@@ -148,18 +170,27 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         int id = menuItem.getItemId();
 
         switch (id) {
-
             case R.id.categories_list:
                 goToCategories();
+                break;
+            case R.id.setting:
+                goToSetting();
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    private void goToSetting() {
+        changePage(SettingFragment.newInstance());
+    }
+
 
     private void goToCategories() {
-        Intent intent = ActivityHeper.Intent_CategoryA(MarketActivity.this);
+        CategoryActivity.mCalledByNotification = false;
+
+        Intent intent = ActivityHeper.Intent_CategoryA(MarketActivity.this,
+                IS_NOT_BY_NOTIFICATION, DEFAULT_PRODUCT_ID);
         startActivity(intent);
     }
 
@@ -213,7 +244,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
             getSupportActionBar().hide();
             KeyBoardUtils.hideKeyboard(MarketActivity.this);
 
-
         }
 
     }
@@ -230,7 +260,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
         switch (item.getItemId()) {
             case R.id.search_marketA:
-
                 changePage(SearchProductFragment.newInstance());
                 break;
             case R.id.shop_marketA:
@@ -240,6 +269,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         return true;
 
     }
+
 
     @Override
     public void goToShoppingCart() {
@@ -285,5 +315,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         changePage(FilterFragment.newInstance());
     }
 
-
+    @Override
+    public void ShowNotifyNewestSetting() {
+        changePage(NotifyNewestProductsFragment.newInstance());
+    }
 }

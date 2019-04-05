@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryTextColor"
-    tools:context=".controllers.fragment.ParentCatFragment">
+    tools:context=".controllers.fragment.ParentCatFragment"
+    style="@style/root_layout_styles"
+    >
 
 
     <com.google.android.material.tabs.TabLayout

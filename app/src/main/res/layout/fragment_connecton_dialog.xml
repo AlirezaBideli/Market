@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".controllers.fragment.ConnectionDialog"
+    style="@style/root_layout_styles"
     android:gravity="center">
 
 

@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".controllers.fragment.ShoppingCartFragment">
+    tools:context=".controllers.fragment.ShoppingCartFragment"
+    style="@style/root_layout_styles"
+    >
 
 
     <com.google.android.material.card.MaterialCardView

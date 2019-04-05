@@ -8,13 +8,20 @@ import com.example.market.controllers.activity.MarketActivity;
 import com.example.market.controllers.activity.SplashActivity;
 
 public class ActivityHeper {
+    public static final String EXTRA_BY_NOTIFICATION = "com.example.market.utils.calledByNotification";
+    public static final String EXTRA_PRODUCT_ID = "com.example.market.utils.ProductId";
 
     //This class is used for Activities Intent
 
 
-    public static  Intent Intent_CategoryA(Context context)
+
+    //This Activity be Called by 2 way First User Click on Category in drawer menu
+    //Second By User Click on Newest product Notification
+    public static  Intent Intent_CategoryA(Context context,boolean isByNotification,int productId)
     {
         Intent intent=new Intent(context, CategoryActivity.class);
+        intent.putExtra(EXTRA_BY_NOTIFICATION,isByNotification);
+        intent.putExtra(EXTRA_PRODUCT_ID,productId);
         return intent;
     }
 
@@ -29,4 +36,6 @@ public class ActivityHeper {
         Intent intent=new Intent(context, SplashActivity.class);
         return intent;
     }
+
+
 }

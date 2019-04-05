@@ -86,5 +86,25 @@
     <string name="complete_list">لیست کامل</string>
     <string name="filter_desc">رنگ، نوع، قیمت و ...</string>
     <string name="sort_desc">جدیدترین</string>
+    <string name="alarm_newest">اعلان محصولات جدید</string>
+    <string name="hours_3"> 3 ساعت</string>
+    <string name="hours_8"> 8 ساعت</string>
+    <string name="hours_12"> 12 ساعت</string>
+    <string name="hours_5"> 5 ساعت</string>
+    <string name="selected_custom_hour">ساعت انتخابی شما:</string>
+    <string name="default_custom_hour">1</string>
+    <string name="select_custom_time">انتخاب مدت زمان دلخواه</string>
+    <string name="select_hour_message">فاصله زمانی هر اعلان را انتخاب کنید</string>
+    <string name="default_hours">انتخاب زمان های پیش فرض</string>
+    <string name="customize_selected_time">انتخاب زمان سفارشی</string>
+    <string name="un_selected">انتخاب نشده</string>
+    <string name="channel_id">1</string>
+    <string name="new_product_picture">محصول جدید اضافه شد!!!</string>
+    <string name="new_product_text">هم اکنون محصول جدیدی به فروشگاه اضافه شد!!!</string>
+    <string name="channel_name">جدید ترین محصولات</string>
+    <string name="channel_description">توضیحات کانال</string>
+    <string name="default_notify_hour">هر 12 ساعت یکبار</string>
+    <string name="notify_hour_text_part_1">هر </string>
+    <string name="notify_hour_text_part_2">ساعت یکبار </string>
 
 </resources>

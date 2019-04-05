@@ -9,8 +9,14 @@
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/iran_sans</item>
         <item name="android:layoutDirection">rtl</item>
+
     </style>
 
+    <style name="root_layout_styles" parent="AppTheme">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@color/background</item>
+    </style>
 
     <!--items-->
     <style name="Txt_items">
@@ -49,6 +55,15 @@
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:layout_marginEnd">4dp</item>
         <item name="android:padding">8dp</item>
+    </style>
+
+
+    <style name="notify_chp_hours" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:layoutDirection">ltr</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
 </resources>
