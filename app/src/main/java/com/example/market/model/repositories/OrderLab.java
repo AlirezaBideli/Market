@@ -20,6 +20,7 @@ public class OrderLab {
     private static OrderLab ourInstance;
     private OrderDao mOrderDao;
     private Context mContext;
+    private long mTotalPrice;
 
     private OrderLab(Context context) {
         mContext = context;
@@ -35,6 +36,13 @@ public class OrderLab {
         return ourInstance;
     }
 
+    public long getTotalPrice() {
+        return mTotalPrice;
+    }
+
+    public void setTotalPrice(long totalPrice) {
+        mTotalPrice = totalPrice;
+    }
 
     //Products Shopping Cart Methods
     public void insertToShoppingCart(Order order) {
@@ -83,8 +91,7 @@ public class OrderLab {
 
     }
 
-    public void deleteAllOrders()
-    {
+    public void deleteAllOrders() {
         mOrderDao.deleteAll();
     }
 

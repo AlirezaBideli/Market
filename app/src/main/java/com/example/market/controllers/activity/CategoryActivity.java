@@ -1,7 +1,6 @@
 package com.example.market.controllers.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,8 +21,7 @@ import com.example.market.controllers.fragment.SortDialogFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.OrderCalllBack;
-import com.example.market.model.Product;
+import com.example.market.model.OrderCallBack;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.model.SortType;
 import com.example.market.model.repositories.ProductLab;
@@ -40,7 +38,7 @@ import androidx.fragment.app.FragmentManager;
 public class CategoryActivity extends AppCompatActivity implements ActivityStart
         , CategoryListFragment.CallBacks, DetailCallBack,
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
-        SortDialogFragment.CallBacks, OrderCalllBack, RegisterCallBack,
+        SortDialogFragment.CallBacks, OrderCallBack, RegisterCallBack,
         ProductListFragment.CallBacks, FilterFragment.CallBacks,
         OrderFragment.CallBacks {
 

@@ -1,6 +1,6 @@
 package com.example.market.model;
 
-public interface OrderCalllBack {
+public interface OrderCallBack {
         void showOrderPage();
 
 }

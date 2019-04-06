@@ -24,7 +24,7 @@ import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.OrderCalllBack;
+import com.example.market.model.OrderCallBack;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.prefs.AlarmManagerPrefs;
 import com.example.market.prefs.NotifyHourPrefs;
@@ -46,7 +46,7 @@ import androidx.fragment.app.FragmentManager;
 public class MarketActivity extends SingleFragmentActivity implements ActivityStart
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
         , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
-        DetailCallBack, OrderCalllBack, RegisterCallBack, ProductListFragment.CallBacks,
+        DetailCallBack, OrderCallBack, RegisterCallBack, ProductListFragment.CallBacks,
         OrderFragment.CallBacks, SettingFragment.CallBacks {
 
 

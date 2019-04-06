@@ -106,5 +106,9 @@
     <string name="default_notify_hour">هر 12 ساعت یکبار</string>
     <string name="notify_hour_text_part_1">هر </string>
     <string name="notify_hour_text_part_2">ساعت یکبار </string>
+    <string name="coupons_text">کد تخفیف دارم</string>
+    <string name="coupons_edt_hint">کد تخفیف خود را وارد کنید</string>
+    <string name="submit_coupons">ثبت کد تخفیف</string>
+    <string name="invalide_coupon_text">کد تخفیف شما نامعتبر است</string>
 
 </resources>

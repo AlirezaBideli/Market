@@ -1,7 +1,6 @@
 package com.example.market.model;
 
 import com.google.gson.annotations.SerializedName;
-
 public class Billing {
 
 

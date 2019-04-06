@@ -14,7 +14,7 @@ import com.example.market.R;
 import com.example.market.model.Customer;
 import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.LoadingCallBack;
-import com.example.market.model.OrderCalllBack;
+import com.example.market.model.OrderCallBack;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -38,7 +38,7 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
     private MaterialButton mBtnSubmit;
     private Call<Customer> mCallCustomer;
     private LoadingCallBack mLoadingCallBack;
-    private OrderCalllBack mOrderCallBack;
+    private OrderCallBack mOrderCallBack;
     private CustomerLab mCustomerLab;
 
     public RegisterFragment() {
@@ -61,8 +61,8 @@ public class RegisterFragment extends ParentFragment implements View.OnClickList
         super.onAttach(context);
         if (context instanceof LoadingCallBack)
             mLoadingCallBack = (LoadingCallBack) context;
-        if (context instanceof OrderCalllBack)
-            mOrderCallBack = (OrderCalllBack) context;
+        if (context instanceof OrderCallBack)
+            mOrderCallBack = (OrderCallBack) context;
 
     }
 

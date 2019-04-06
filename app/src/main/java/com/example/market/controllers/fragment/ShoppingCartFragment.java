@@ -13,13 +13,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.market.R;
-import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.LoadingCallBack;
 import com.example.market.model.Order;
-import com.example.market.model.OrderCalllBack;
-import com.example.market.model.repositories.OrderLab;
+import com.example.market.model.OrderCallBack;
 import com.example.market.model.Product;
 import com.example.market.model.RegisterCallBack;
+import com.example.market.model.repositories.CustomerLab;
+import com.example.market.model.repositories.OrderLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
 import com.example.market.utils.NetworkConnection;
@@ -44,7 +44,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class  ShoppingCartFragment extends ParentFragment implements View.OnClickListener {
+public class ShoppingCartFragment extends ParentFragment implements View.OnClickListener {
 
 
     public static final int ITEM_COUNT = 5;
@@ -52,7 +52,7 @@ public class  ShoppingCartFragment extends ParentFragment implements View.OnClic
     private static int mTotalFinalPrice = 0;
     //CallBack
     private RegisterCallBack mRegisterCallBack;
-    private OrderCalllBack mOrderCalllBack;
+    private OrderCallBack mOrderCalllBack;
     //Widgets Variables
     private RecyclerView mRecyOrdered;
     private TextView mTxtTotalPriceSum;
@@ -100,8 +100,8 @@ public class  ShoppingCartFragment extends ParentFragment implements View.OnClic
             mLoadingCallBack = (LoadingCallBack) context;
         if (context instanceof RegisterCallBack)
             mRegisterCallBack = (RegisterCallBack) context;
-        if (context instanceof OrderCalllBack)
-            mOrderCalllBack = (OrderCalllBack) context;
+        if (context instanceof OrderCallBack)
+            mOrderCalllBack = (OrderCallBack) context;
     }
 
     @Override
@@ -224,14 +224,19 @@ public class  ShoppingCartFragment extends ParentFragment implements View.OnClic
     }
 
     private void setTxtTotalSumPrice() {
+        int result = getTotalSumPrice();
+        String totalPrice = PriceUtils.getCurrencyFormat(result + "", getActivity());
+        mTxtTotalPriceSum.setText(totalPrice);
+    }
+
+    private int getTotalSumPrice() {
         int result = 0;
         int size = mCalculatedTotalPrices.length;
         for (int i = 0; i < size; i++) {
             String price = mCalculatedTotalPrices[i] + "";
             result += Integer.parseInt(price);
         }
-        String totalPrice = PriceUtils.getCurrencyFormat(result + "", getActivity());
-        mTxtTotalPriceSum.setText(totalPrice);
+        return result;
     }
 
     private void setTotalPrices() {
@@ -271,9 +276,13 @@ public class  ShoppingCartFragment extends ParentFragment implements View.OnClic
             case R.id.comfirm_order_btn:
 
                 CustomerLab customerLab = CustomerLab.getInstance(getActivity());
-                if (customerLab.isUserRegistered())
+                if (customerLab.isUserRegistered()) {
+                    long totalPrice =
+                            Long.parseLong(getTotalSumPrice()+"");
+                    OrderLab.getInstance(getActivity())
+                            .setTotalPrice(totalPrice);
                     mOrderCalllBack.showOrderPage();
-                else
+                } else
                     mRegisterCallBack.showRegisterPage();
                 break;
         }
