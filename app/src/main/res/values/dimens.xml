@@ -13,4 +13,8 @@
     <dimen name="product_view">200dp</dimen>
     <dimen name="spinner_width">60dp</dimen>
     <dimen name="category_shoertcut_recy">60dp</dimen>
+
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
 </resources>

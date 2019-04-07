@@ -110,5 +110,19 @@
     <string name="coupons_edt_hint">کد تخفیف خود را وارد کنید</string>
     <string name="submit_coupons">ثبت کد تخفیف</string>
     <string name="invalide_coupon_text">کد تخفیف شما نامعتبر است</string>
+    <string name="title_activity_comment_list">CommentListActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="action_example">Example action</string>
+    <string name="no_review_message">نظری در مورد این محصول هنوز ثبت نشده است</string>
+    <string name="send_review_btn">ثبت نقد و بررسی شما</string>
+    <string name="review_hint">نظر خود درباره این محصول را وارد کنید</string>
+    <string name="submit_rating_text">امتیاز خود را ثبت کنید</string>
+    <string name="invalid_review_text">لطفا متن نقد و بررسی خود را وارد کنید</string>
+    <string name="send_review_message" >نظر شما ارسال شد</string>
+    <string name="unsuccessful_send_review_message">متاسفانه نظر شما ارسال نشد</string>
 
 </resources>

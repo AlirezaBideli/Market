@@ -5,6 +5,8 @@ import com.example.market.model.Coupon;
 import com.example.market.model.Customer;
 import com.example.market.model.OrderJsonBody;
 import com.example.market.model.Product;
+import com.example.market.model.Review;
+import com.example.market.model.ReviewJsonBody;
 
 import java.util.List;
 
@@ -78,8 +80,14 @@ public interface Api {
     Call<List<Product.Terms>> getAttributeTerms(@Path("id") int id);
 
 
-    @GET("coupons?"+AUTHENTICATION)
+    @GET("coupons?" + AUTHENTICATION)
     Call<List<Coupon>> getAllCoupons();
+
+    @GET("products/reviews?" + AUTHENTICATION)
+    Call<List<Review>> getReviews(@Query("product") int product);
+
+    @POST("products/reviews?"+AUTHENTICATION)
+    Call<Review> sendProductReview(@Body ReviewJsonBody jsonBody);
 
 
 }

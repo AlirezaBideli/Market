@@ -61,6 +61,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     private ViewPager mImgPager;
     private MaterialCardView mReviewLayout;
     private PageIndicatorView mIndicatorView;
+    private MaterialButton mBtnReview;
     private View mSeperator;
     private Product mProduct;
     private int mId;
@@ -90,11 +91,10 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if ((context instanceof CategoryActivity)
-                || (context instanceof MarketActivity)) {
-            mCallBacks = (CallBacks) context;
-            mLoadingCallBack = (LoadingCallBack) context;
-        }
+        if (context instanceof CallBacks)
+            mCallBacks= (CallBacks) context;
+        if (context instanceof  LoadingCallBack)
+            mLoadingCallBack= (LoadingCallBack) context;
 
 
     }
@@ -131,6 +131,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mIndicatorView = view.findViewById(R.id.pageIndicatorView_ProductF);
         mSeperator = view.findViewById(R.id.separator_ProductF);
         mBtnAddCart = view.findViewById(R.id.btn_add_cart);
+        mBtnReview=view.findViewById(R.id.btn_review);
     }
 
     @Override
@@ -254,6 +255,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         mBtnDetail.setOnClickListener(this);
         mBtnRemain.setOnClickListener(this);
         mBtnAddCart.setOnClickListener(this);
+        mBtnReview.setOnClickListener(this);
     }
 
 
@@ -319,6 +321,10 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
             case R.id.text_remaining_ProductF:
                 handleDescription();
                 break;
+            case R.id.btn_review:
+                int productId=mProduct.getId();
+                mCallBacks.showReviews(productId);
+                break;
 
         }
     }
@@ -327,5 +333,7 @@ public class ProductFragment extends ParentFragment implements View.OnClickListe
         void showDetails();
 
         void showShoppingCart();
+
+        void showReviews(int productId);
     }
 }

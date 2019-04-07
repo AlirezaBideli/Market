@@ -103,11 +103,11 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/materialButton"
+                    app:layout_constraintStart_toEndOf="@+id/btn_review"
                     app:layout_constraintTop_toBottomOf="@+id/name_txt_productF" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/materialButton"
+                    android:id="@+id/btn_review"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

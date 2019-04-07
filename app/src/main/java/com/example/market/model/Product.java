@@ -37,6 +37,7 @@ public class Product {
     private String mFirstImgUrl;
 
 
+
     public int getId() {
         return mId;
     }

@@ -6,10 +6,12 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
 import com.example.market.controllers.fragment.ConnectionDialog;
+import com.example.market.controllers.fragment.CreateReviewFragment;
 import com.example.market.controllers.fragment.DetailFragment;
 import com.example.market.controllers.fragment.FilterFragment;
 import com.example.market.controllers.fragment.MarketFragment;
@@ -18,6 +20,7 @@ import com.example.market.controllers.fragment.OrderFragment;
 import com.example.market.controllers.fragment.ProductFragment;
 import com.example.market.controllers.fragment.ProductListFragment;
 import com.example.market.controllers.fragment.RegisterFragment;
+import com.example.market.controllers.fragment.ReviewListFragment;
 import com.example.market.controllers.fragment.SearchProductFragment;
 import com.example.market.controllers.fragment.SettingFragment;
 import com.example.market.controllers.fragment.ShoppingCartFragment;
@@ -47,19 +50,21 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
         , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         DetailCallBack, OrderCallBack, RegisterCallBack, ProductListFragment.CallBacks,
-        OrderFragment.CallBacks, SettingFragment.CallBacks {
+        OrderFragment.CallBacks, SettingFragment.CallBacks ,ReviewListFragment.CallBacks{
 
 
     public static final boolean IS_NOT_BY_NOTIFICATION = false;
     private static final int DEFAULT_PRODUCT_ID = 0;
     //simple Variables
-    Handler mHandler = new Handler();
+    private Handler mHandler = new Handler();
+    private FragmentManager mFragmentManager;
     //Widgets Variables
     private Toolbar mToolbar;
     private FrameLayout mLoadingCover;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private FragmentManager mFragmentManager;
+
+
 
     @Override
     public Fragment createFragment() {
@@ -215,6 +220,11 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
 
     }
 
+    @Override
+    public void showReviews(int productId) {
+        changePage(ReviewListFragment.newInstance(productId));
+    }
+
 
     private void changePage(Fragment fragment) {
 
@@ -318,5 +328,10 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     @Override
     public void ShowNotifyNewestSetting() {
         changePage(NotifyNewestProductsFragment.newInstance());
+    }
+
+    @Override
+    public void showCreateReviewFragment() {
+        changePage(CreateReviewFragment.newInstance());
     }
 }

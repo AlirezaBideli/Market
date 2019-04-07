@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.market.R;
 import com.example.market.controllers.fragment.CategoryListFragment;
 import com.example.market.controllers.fragment.ConnectionDialog;
+import com.example.market.controllers.fragment.CreateReviewFragment;
 import com.example.market.controllers.fragment.DetailFragment;
 import com.example.market.controllers.fragment.FilterFragment;
 import com.example.market.controllers.fragment.OrderFragment;
@@ -16,6 +17,7 @@ import com.example.market.controllers.fragment.ParentCatFragment;
 import com.example.market.controllers.fragment.ProductFragment;
 import com.example.market.controllers.fragment.ProductListFragment;
 import com.example.market.controllers.fragment.RegisterFragment;
+import com.example.market.controllers.fragment.ReviewListFragment;
 import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.controllers.fragment.SortDialogFragment;
 import com.example.market.model.ActivityStart;
@@ -40,7 +42,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         SortDialogFragment.CallBacks, OrderCallBack, RegisterCallBack,
         ProductListFragment.CallBacks, FilterFragment.CallBacks,
-        OrderFragment.CallBacks {
+        OrderFragment.CallBacks ,ReviewListFragment.CallBacks{
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -161,6 +163,11 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     }
 
+    @Override
+    public void showReviews(int productId) {
+        changePage(ReviewListFragment.newInstance(productId));
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -273,4 +280,8 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     }
 
 
+    @Override
+    public void showCreateReviewFragment() {
+        changePage(CreateReviewFragment.newInstance());
+    }
 }
