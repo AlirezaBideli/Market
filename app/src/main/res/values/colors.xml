@@ -20,5 +20,6 @@
     <color name="secondaryLightColor">#ff5131</color>
     <color name="secondaryDarkColor">#9b0000</color>
     <color name="transparent">#00000000</color>
+    <color name="tv_cta_light_blue">#DC0289A7</color>
 
 </resources>

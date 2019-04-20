@@ -15,7 +15,11 @@ public class OrderJsonBody {
         this.line_items = line_items;
         this.customer_id = customer_id;
         this.coupon_lines = new ArrayList<>();
-        this.coupon_lines.add(coupon);
+
+        if (coupon == null)
+            this.coupon_lines = new ArrayList<>(1);
+        else
+            this.coupon_lines.add(coupon);
     }
 
 

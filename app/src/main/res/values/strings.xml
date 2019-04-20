@@ -65,7 +65,7 @@
     <string name="receiver_first_name">نام گیرنده</string>
     <string name="cellular_phone_receiver">شماره تلفن همراه گیرنده</string>
     <string name="phone_receiver">تلفن ثابت گیرنده</string>
-    <string name="city_receiver">شهر</string>
+    <string name="city_receiver">شهر :</string>
     <string name="country_receiver">کشور</string>
     <string name="postal_code">کدپستی</string>
     <string name="address">آدرس</string>
@@ -79,8 +79,7 @@
     <string name="email">ایمیل</string>
     <string name="submit">ثبت مشخصات</string>
     <string name="perform_filtering">فیلترکردن</string>
-    <string name="order_sended_text_1">سفارش شما با شماره سفارش </string>
-    <string name="order_sended_text_2"> ثبت شد</string>
+    <string name="order_sended_text_1">سفارش شما ثبت شد </string>
     <string name="setting">تنظیمات</string>
     <string name="exit">خروج</string>
     <string name="complete_list">لیست کامل</string>
@@ -122,7 +121,17 @@
     <string name="review_hint">نظر خود درباره این محصول را وارد کنید</string>
     <string name="submit_rating_text">امتیاز خود را ثبت کنید</string>
     <string name="invalid_review_text">لطفا متن نقد و بررسی خود را وارد کنید</string>
-    <string name="send_review_message" >نظر شما ارسال شد</string>
+    <string name="send_review_message">نظر شما ارسال شد</string>
     <string name="unsuccessful_send_review_message">متاسفانه نظر شما ارسال نشد</string>
+    <string name="select_address_poster_text">ثبت نشانی از روی نقشه</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="default_address_2">شناخته نشده</string>
+    <string name="permission_denied_text">برای استفاده از نقشه به مکان شما نیاز داریم</string>
+    <string name="default_billing_country">Iran</string>
+    <string name="state">استان</string>
+    <string name="necessary_phone">شماره تلفن ضروری</string>
+    <string name="address_btn_text">ثبت نشانی</string>
+    <string name="map_ardderss_txt">آدرس انتخاب شده :</string>
+    <string name="add_new_address">افرودن آدرس حدید</string>
 
 </resources>

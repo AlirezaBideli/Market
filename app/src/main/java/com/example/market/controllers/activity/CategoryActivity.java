@@ -7,6 +7,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.market.R;
+import com.example.market.adapters.BillingAdapter;
+import com.example.market.controllers.fragment.BillingFragment;
 import com.example.market.controllers.fragment.CategoryListFragment;
 import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.controllers.fragment.CreateReviewFragment;
@@ -27,7 +29,7 @@ import com.example.market.model.OrderCallBack;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.model.SortType;
 import com.example.market.model.repositories.ProductLab;
-import com.example.market.utils.ActivityHeper;
+import com.example.market.utils.ActivityHelper;
 
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         SortDialogFragment.CallBacks, OrderCallBack, RegisterCallBack,
         ProductListFragment.CallBacks, FilterFragment.CallBacks,
-        OrderFragment.CallBacks ,ReviewListFragment.CallBacks{
+        OrderFragment.CallBacks, ReviewListFragment.CallBacks, BillingFragment.CallBacks, BillingAdapter.Callbacks {
 
     //Argument Tags
     public static final String TAG = "CategoryActivity";
@@ -89,11 +91,11 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
     }
 
     private void initialFirstFragment() {
-        Intent intent=getIntent();
-        boolean isCalledByNotification=getIntent()
-                .getBooleanExtra(ActivityHeper.EXTRA_BY_NOTIFICATION,false);
-        int productId=getIntent()
-                .getIntExtra(ActivityHeper.EXTRA_PRODUCT_ID,0);
+        Intent intent = getIntent();
+        boolean isCalledByNotification = getIntent()
+                .getBooleanExtra(ActivityHelper.EXTRA_BY_NOTIFICATION, false);
+        int productId = getIntent()
+                .getIntExtra(ActivityHelper.EXTRA_PRODUCT_ID, 0);
 
         if (isCalledByNotification)
             changePage(ProductFragment.newInstance(productId));
@@ -279,9 +281,40 @@ public class CategoryActivity extends AppCompatActivity implements ActivityStart
 
     }
 
+    @Override
+    public void goToBillingForm(boolean isEdit, long billingId) {
+        changePage(BillingFragment.newInstance(isEdit, billingId));
+    }
+
 
     @Override
     public void showCreateReviewFragment() {
         changePage(CreateReviewFragment.newInstance());
+    }
+
+    @Override
+    public void refreshOrderFragment() {
+
+        List<Fragment> fragmentList = mFragmentManager.getFragments();
+        int previousFragmentIndex = fragmentList.size() - 2;
+        Fragment previousFragment = fragmentList.get(previousFragmentIndex);
+
+        mFragmentManager.beginTransaction()
+                .detach(previousFragment)
+                .attach(previousFragment)
+                .commit();
+    }
+
+    @Override
+    public void updateAddressSelectionRecy() {
+        List<Fragment> fragmentList = mFragmentManager.getFragments();
+        int lastIndex = fragmentList.size() - 1;
+
+        Fragment fragment = fragmentList.get(lastIndex);
+
+        if (fragment!=null  && fragment instanceof OrderFragment)
+            ((OrderFragment)(fragment)).updateAddressSelectionRecy();
+
+
     }
 }

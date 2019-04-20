@@ -6,10 +6,11 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.example.market.R;
+import com.example.market.adapters.BillingAdapter;
+import com.example.market.controllers.fragment.BillingFragment;
 import com.example.market.controllers.fragment.ConnectionDialog;
 import com.example.market.controllers.fragment.CreateReviewFragment;
 import com.example.market.controllers.fragment.DetailFragment;
@@ -27,12 +28,13 @@ import com.example.market.controllers.fragment.ShoppingCartFragment;
 import com.example.market.model.ActivityStart;
 import com.example.market.model.DetailCallBack;
 import com.example.market.model.LoadingCallBack;
+import com.example.market.model.Order;
 import com.example.market.model.OrderCallBack;
 import com.example.market.model.RegisterCallBack;
 import com.example.market.prefs.AlarmManagerPrefs;
 import com.example.market.prefs.NotifyHourPrefs;
 import com.example.market.services.NotifyNewestService;
-import com.example.market.utils.ActivityHeper;
+import com.example.market.utils.ActivityHelper;
 import com.example.market.utils.KeyBoardUtils;
 import com.google.android.material.navigation.NavigationView;
 
@@ -50,7 +52,8 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         , NavigationView.OnNavigationItemSelectedListener, MarketFragment.CallBacks
         , ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         DetailCallBack, OrderCallBack, RegisterCallBack, ProductListFragment.CallBacks,
-        OrderFragment.CallBacks, SettingFragment.CallBacks ,ReviewListFragment.CallBacks{
+        OrderFragment.CallBacks, SettingFragment.CallBacks, ReviewListFragment.CallBacks,
+        BillingFragment.CallBacks , BillingAdapter.Callbacks {
 
 
     public static final boolean IS_NOT_BY_NOTIFICATION = false;
@@ -63,7 +66,6 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     private FrameLayout mLoadingCover;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-
 
 
     @Override
@@ -194,7 +196,7 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     private void goToCategories() {
         CategoryActivity.mCalledByNotification = false;
 
-        Intent intent = ActivityHeper.Intent_CategoryA(MarketActivity.this,
+        Intent intent = ActivityHelper.Intent_CategoryA(MarketActivity.this,
                 IS_NOT_BY_NOTIFICATION, DEFAULT_PRODUCT_ID);
         startActivity(intent);
     }
@@ -286,17 +288,24 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
         int fragmentExictedsize = mFragmentManager.getFragments().size();
         OrderFragment currentFragment = (OrderFragment) mFragmentManager.getFragments()
                 .get(fragmentExictedsize - 1);
-        ShoppingCartFragment previousFragment = (ShoppingCartFragment) mFragmentManager.getFragments()
-                .get(fragmentExictedsize - 2);
-        mFragmentManager.beginTransaction()
-                .remove(currentFragment)
-                .commit();
+        Fragment previousFragment =  mFragmentManager.getFragments()
+                  .get(fragmentExictedsize - 2);
+
         mFragmentManager.beginTransaction()
                 .detach(previousFragment)
                 .attach(previousFragment)
                 .commit();
+        mFragmentManager.beginTransaction()
+                .remove(currentFragment)
+                .commit();
 
     }
+
+    @Override
+    public void goToBillingForm(boolean isEdit, long billingId) {
+        changePage(BillingFragment.newInstance(isEdit, billingId));
+    }
+
 
     @Override
     public void goPreviousFragment() {
@@ -333,5 +342,30 @@ public class MarketActivity extends SingleFragmentActivity implements ActivitySt
     @Override
     public void showCreateReviewFragment() {
         changePage(CreateReviewFragment.newInstance());
+    }
+
+
+    @Override
+    public void refreshOrderFragment() {
+        List<Fragment> fragmentList=mFragmentManager.getFragments();
+        int previousFragmentIndex=fragmentList.size()-2;
+        Fragment previousFragment=fragmentList.get(previousFragmentIndex);
+
+        mFragmentManager.beginTransaction()
+                .detach(previousFragment)
+                .attach(previousFragment)
+                .commit();
+    }
+
+    @Override
+    public void updateAddressSelectionRecy() {
+        List<Fragment> fragmentList = mFragmentManager.getFragments();
+        int lastIndex = fragmentList.size() - 1;
+
+        Fragment fragment = fragmentList.get(lastIndex);
+
+        if (fragment!=null  && fragment instanceof OrderFragment)
+            ((OrderFragment)(fragment)).updateAddressSelectionRecy();
+
     }
 }

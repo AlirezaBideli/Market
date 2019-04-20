@@ -9,254 +9,181 @@
     android:orientation="vertical"
     tools:context=".controllers.fragment.OrderFragment">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/receiver_first_name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_first_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="30"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:padding="16dp">
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/receiver_last_name">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_last_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="30"
-                    android:maxLines="1" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/cellular_phone_receiver">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_phone"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recy_billing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="30"
-                android:maxLines="1" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/materialCardView7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loading_order"
+                android:layout_width="@dimen/loading"
+                android:layout_height="@dimen/loading"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/materialCardView7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="loading.json"
+                app:lottie_loop="true" />
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView7"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:hint="@string/city_receiver">
+                app:contentPadding="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/materialCardView8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recy_billing">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_city"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="20"
-                    android:maxLines="1" />
+                    android:layout_height="wrap_content">
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/country_receiver">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="20"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/postal_code">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_post_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="10"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/address">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="150"
-                android:maxLines="3" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentPadding="8dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="4"
-                        android:text="@string/coupons_text" />
-
-                    <Switch
-                        android:id="@+id/swh_coupons"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout6"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:hint="@string/coupons_edt_hint"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edt_coupons"
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="8"
-                        android:maxLines="1" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="4"
+                            android:text="@string/coupons_text" />
 
-                <TextView
-                    android:id="@+id/tv_submit_coumpons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/submit_coupons"
-                    android:textColor="@color/design_default_color_primary"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.971"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
-                    app:layout_constraintVertical_bias="0.0" />
+                        <Switch
+                            android:id="@+id/swh_coupons"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/loading_orderF"
-                    android:layout_width="@dimen/loading"
-                    android:layout_height="22dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_submit_coumpons"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_submit_coumpons"
-                    app:layout_constraintTop_toBottomOf="@id/textInputLayout6"
-                    app:layout_constraintVertical_bias="1.0"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="loading.json"
-                    app:lottie_loop="true" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="@string/coupons_edt_hint"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_coupons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="8"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_submit_coumpons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/submit_coupons"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/design_default_color_primary"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/loading_orderF"
+                        android:layout_width="@dimen/loading"
+                        android:layout_height="22dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_submit_coumpons"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/tv_submit_coumpons"
+                        app:layout_constraintTop_toBottomOf="@id/textInputLayout6"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentPadding="8dp">
-
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView8"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:contentPadding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView7">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/final_price"
-                    android:textColor="@color/green_light"
-                    android:textSize="12sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tv_final_price"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="start"
-                    android:paddingStart="8dp"
-                    android:text="@string/default_price"
-                    android:textColor="@color/green_light" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/final_price"
+                        android:textColor="@color/green_light"
+                        android:textSize="12sp" />
 
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tv_final_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="start"
+                        android:paddingStart="8dp"
+                        android:text="@string/default_price"
+                        android:textColor="@color/green_light" />
+                </LinearLayout>
 
-    </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/billing_btn"

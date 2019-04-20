@@ -27,7 +27,6 @@
             app:title="@string/app_name"
 
             />
-
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -49,6 +48,7 @@
         android:layout_height="0dp"
         android:background="@color/primaryTextColor"
         android:visibility="invisible"
+        style="@style/root_layout_styles"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
