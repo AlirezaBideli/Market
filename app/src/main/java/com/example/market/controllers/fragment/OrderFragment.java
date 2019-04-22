@@ -24,7 +24,6 @@ import com.example.market.model.repositories.CustomerLab;
 import com.example.market.model.repositories.OrderLab;
 import com.example.market.network.Api;
 import com.example.market.network.RetrofitClientInstance;
-import com.example.market.utils.NetworkConnection;
 import com.example.market.utils.PriceUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -191,17 +190,11 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
                 if (response.isSuccessful()) {
                     List<Coupon> coupons = response.body();
                     checkCoupon(coupons);
-
-                } else if (getActivity() != null) {
-                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Coupon>> call, Throwable t) {
-                if (getActivity() != null)
-                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
-
             }
         });
 
@@ -269,8 +262,6 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
                         mCallBacks.goToShoppingCart();
                     }
 
-                } else if (getActivity() != null) {
-                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
                 }
 
             }
@@ -278,8 +269,6 @@ public class OrderFragment extends ParentFragment implements View.OnClickListene
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
                 mLoadingCallBack.hideLoading();
-                if (getActivity() != null)
-                    NetworkConnection.warnConnection(getActivity(), getFragmentManager());
             }
         });
     }

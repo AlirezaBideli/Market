@@ -39,7 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-public class CategoryActivity extends AppCompatActivity implements ActivityStart
+public class CategoryActivity extends BaseActivity implements ActivityStart
         , CategoryListFragment.CallBacks, DetailCallBack,
         ProductFragment.CallBacks, LoadingCallBack, ConnectionDialog.CallBacks,
         SortDialogFragment.CallBacks, OrderCallBack, RegisterCallBack,

@@ -27,7 +27,6 @@ public class OrderLab {
         mOrderDao = App.getApp().
                 getDaoSession().
                 getOrderDao();
-
     }
 
     public static OrderLab getInstance(Context context) {

@@ -3,28 +3,29 @@ package com.example.market;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.util.Log;
 
 import com.example.market.model.DaoMaster;
 import com.example.market.model.DaoSession;
-import com.example.market.model.NotificationEvent;
+import com.example.market.recievers.ConnectionReciever;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import androidx.core.app.NotificationManagerCompat;
 
 public class App extends Application {
 
     public static final boolean isBusEvent = true;
+    private static final String DIALOG_TAG = "warn_connection_dialog_tag";
+    private static final String TAG = "AppTag";
 
     private static Context mContext;
     private static App app;
     private DaoSession mDaoSession;
+    private BroadcastReceiver mConnectionReciever;
+    private IntentFilter mIntentFilter;
 
     public static Context getmContext() {
         return mContext;
@@ -50,14 +51,15 @@ public class App extends Application {
         mContext=getApplicationContext();
         mDaoSession = daoMaster.newSession();
         app = this;
-
         createNotificationChannel();
-        EventBus.getDefault().register(this);
+
+        registerRecievers();
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
+        unregisterReceiver(mConnectionReciever);
         EventBus.getDefault().unregister(this);
     }
 
@@ -73,15 +75,28 @@ public class App extends Application {
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+
+
+
+
+
         }
 
     }
 
-
-    @Subscribe(priority = 1, threadMode = ThreadMode.POSTING)
-    public void onMessageEvent(NotificationEvent notificationEvent) {
-        Log.i("EventBus", "showNotificationEventBus");
-        NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
-        nmc.notify(notificationEvent.getRequestCode(), notificationEvent.getNotification());
+    private void registerRecievers() {
+        mConnectionReciever=new ConnectionReciever();
+        mIntentFilter=new IntentFilter();
+        mIntentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(mConnectionReciever,mIntentFilter);
     }
+
+
+
+
+
+
+
+
+
 }

@@ -95,9 +95,7 @@ public class BillingLab {
         List<Billing> sortedList = new ArrayList<>();
         sortedList.add(exceptionBilling);
         sortedList.addAll(otherBillings);
-
         return sortedList;
-
 
     }
 }

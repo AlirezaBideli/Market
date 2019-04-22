@@ -170,7 +170,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/complete_list"
-                    android:textColor="@color/secondaryDarkColor" />
+                    android:textColor="@color/tv_cta_light_blue" />
             </LinearLayout>
 
 
@@ -208,7 +208,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/complete_list"
-                    android:textColor="@color/secondaryDarkColor" />
+                    android:textColor="@color/tv_cta_light_blue" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -239,14 +239,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/complete_list"
-                    android:textColor="@color/secondaryDarkColor" />
+                    android:textColor="@color/tv_cta_light_blue" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recy_newest_MarketA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteY="903dp" />
+               android:layout_marginBottom="16dp"/>
 
         </LinearLayout>
     </ScrollView>
